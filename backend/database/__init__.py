@@ -1,5 +1,5 @@
 from backend.database.database import Database
-from backend.database.schemas import User
+from backend.database.schemas import Usuario, Categoria, Nivel, Leccion, Habilidad, LeccionHabilidad, Pregunta, ProgresoUsuario, IntentoPregunta, OpcionPregunta, Insignia, InsigniaUsuario
 
 # Instancia de la base de datos PostgreSQL
 db = Database()
@@ -7,7 +7,18 @@ db = Database()
 __all__ = [
     "db",
     "get_db",
-    "User",
+    "Usuario",
+    "Categoria",
+    "Nivel",
+    "Leccion",
+    "Habilidad",
+    "LeccionHabilidad",
+    "Pregunta",
+    "ProgresoUsuario",
+    "IntentoPregunta",
+    "OpcionPregunta",
+    "Insignia",
+    "InsigniaUsuario"
 ]
 
 def get_db():
