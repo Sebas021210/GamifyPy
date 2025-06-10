@@ -1,9 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, Cookie
+from fastapi import APIRouter, Depends, HTTPException, Cookie, Body
 from fastapi.responses import JSONResponse
+from pydantic import EmailStr
 from datetime import timedelta
 from backend.database import get_db, Usuario
-from backend.controllers.auth import create_access_token, create_refresh_token, verify_password, hash_password, SECRET_KEY, ALGORITHM
-from backend.models.auth import LoginRequest, RegisterRequest
+from sqlalchemy.orm import Session
+from backend.controllers.auth import ( create_access_token, create_refresh_token, verify_password, hash_password, 
+                                      send_verification_email, SECRET_KEY, ALGORITHM )
+from backend.models.auth import LoginRequest, RegisterRequest, EmailRequest
+from random import randint
 import jwt
 
 router = APIRouter()
@@ -68,6 +72,31 @@ async def register(register_request: RegisterRequest, db=Depends(get_db)):
         "message": "Usuario registrado correctamente",
         "email": email,
     }
+
+@router.post("/send-pin")
+async def send_pin(request: EmailRequest, db: Session = Depends(get_db)):
+    user = db.query(Usuario).filter(Usuario.email == request.email).first()
+    if user:
+        raise HTTPException(status_code=400, detail="Este correo ya está registrado.")
+
+    pin = str(randint(100000, 999999))
+    verification_codes[request.email] = pin
+
+    await send_verification_email(request.email, pin)
+
+    return {"message": "PIN enviado al correo correctamente."}
+
+@router.post("/verify-pin")
+async def verify_pin(email: EmailStr = Body(...), pin: str = Body(...)):
+    expected_pin = verification_codes.get(email)
+    if not expected_pin:
+        raise HTTPException(status_code=400, detail="No se encontró PIN para este correo.")
+    if pin != expected_pin:
+        raise HTTPException(status_code=400, detail="PIN incorrecto")
+
+    del verification_codes[email]  # eliminar después de verificar
+
+    return {"message": "Correo verificado exitosamente ✅"}
 
 @router.post("/refresh")
 async def refresh_token(refresh_token: str = Cookie(None), db = Depends(get_db)):

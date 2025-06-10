@@ -1,18 +1,34 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from sqlalchemy.orm import Session
+from pydantic import EmailStr
 from backend.database import get_db, Usuario
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
+import os
 
 SECRET_KEY = "clave_secreta_super_segura"
 ALGORITHM = "HS256"
 ph = PasswordHasher()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+
+conf = ConnectionConfig(
+    MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
+    MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),
+    MAIL_FROM=os.getenv("MAIL_FROM"),
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    USE_CREDENTIALS=True
+)
+
+fastmail = FastMail(conf)
 
 def hash_password(password: str) -> str:
     """ Hashea la contraseña con Argon2. """
@@ -67,3 +83,12 @@ def create_refresh_token(data: dict, expires_delta: timedelta | None = None):
     expire = datetime.now() + (expires_delta or timedelta(days=7))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+async def send_verification_email(email: EmailStr, pin: str):
+    message = MessageSchema(
+        subject="Tu código de verificación",
+        recipients=[email],
+        body=f"Tu código de verificación es: {pin}",
+        subtype="plain"
+    )
+    await fastmail.send_message(message)
