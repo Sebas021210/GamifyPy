@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Cookie, Body
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, HTTPException, Cookie, Body, Request
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import EmailStr
 from datetime import timedelta
 from backend.database import get_db, Usuario
@@ -7,10 +7,16 @@ from sqlalchemy.orm import Session
 from backend.controllers.auth import ( create_access_token, create_refresh_token, verify_password, hash_password, 
                                       send_verification_email, SECRET_KEY, ALGORITHM )
 from backend.models.auth import LoginRequest, RegisterRequest, EmailRequest
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from urllib.parse import urlencode
 from random import randint
-import jwt
+import jwt, os, httpx, traceback
 
 router = APIRouter()
+
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 verification_codes = {}
 
 @router.post("/login")
@@ -97,6 +103,87 @@ async def verify_pin(email: EmailStr = Body(...), pin: str = Body(...)):
     del verification_codes[email]  # eliminar después de verificar
 
     return {"message": "Correo verificado exitosamente ✅"}
+
+@router.get("/login/google")
+async def login_google(request: Request):
+    redirect_uri = request.url_for('auth_callback')
+    google_auth_url = (
+        f"https://accounts.google.com/o/oauth2/auth"
+        f"?client_id={GOOGLE_CLIENT_ID}"
+        f"&redirect_uri={redirect_uri}"
+        f"&response_type=code"
+        f"&scope=openid%20email%20profile"
+    )
+    return RedirectResponse(url=google_auth_url)
+
+@router.get("/callback")
+async def auth_callback(code: str, request: Request, db: Session = Depends(get_db)):
+    try:
+        token_request_uri = "https://oauth2.googleapis.com/token"
+        data = {
+            'code': code,
+            'client_id': GOOGLE_CLIENT_ID,
+            'client_secret': GOOGLE_CLIENT_SECRET,
+            'redirect_uri': request.url_for('auth_callback'),
+            'grant_type': 'authorization_code',
+        }
+
+        async with httpx.AsyncClient() as client:
+            response = await client.post(token_request_uri, data=data)
+            response.raise_for_status()
+            token_response = response.json()
+
+        id_token_value = token_response.get('id_token')
+        if not id_token_value:
+            raise HTTPException(status_code=400, detail="No se recibió id_token")
+
+        id_info = id_token.verify_oauth2_token(id_token_value, requests.Request(), GOOGLE_CLIENT_ID)
+
+        email = id_info.get('email')
+        name = id_info.get('name')
+
+        user = db.query(Usuario).filter(Usuario.email == email).first()
+
+        if not user:
+            user = Usuario(
+                email=email,
+                nombre=name,
+                password=None
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+
+        access_token = create_access_token(data={"sub": user.email}, expires_delta=timedelta(minutes=15))
+        refresh_token = create_refresh_token(data={"sub": user.email}, expires_delta=timedelta(days=7))
+
+        frontend_callback_url = os.getenv("FRONTEND_CALLBACK", "http://localhost:5173/auth/callback")
+
+        query_data = {
+            "access_token": access_token,
+            "name": user.nombre,
+            "email": user.email,
+        }
+
+        redirect_url = f"{frontend_callback_url}?{urlencode(query_data)}"
+
+        redirect_response = RedirectResponse(url=redirect_url)
+
+        redirect_response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=False,
+            samesite="lax",
+            max_age=7 * 24 * 60 * 60,
+            path="/auth/refresh"
+        )
+
+        return redirect_response
+
+    except Exception:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="Error en login con Google")
 
 @router.post("/refresh")
 async def refresh_token(refresh_token: str = Cookie(None), db = Depends(get_db)):
