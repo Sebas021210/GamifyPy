@@ -1,6 +1,6 @@
-# 🧠 Nivel 9 – Maestro de Diccionarios
+# 📖 Nivel 9 – Maestro de Diccionarios
 
-## 🔑 Lección 1: ¿Qué es un diccionario?
+## Lección 1: ¿Qué es un diccionario?
 
 ```python
 persona = {
@@ -15,7 +15,7 @@ print(persona["nombre"])  # Luis
 
 🧠 Los diccionarios son ideales para representar objetos o registros, como una persona, un producto o una configuración.
 
-## ✏️ Lección 2: Acceso y modificación
+## Lección 2: Acceso y modificación
 
 ```python
 persona["edad"] = 31                 # Modifica el valor de una clave existente
@@ -25,7 +25,7 @@ persona["profesión"] = "Ingeniero"   # Agrega una nueva clave con su valor
 
 🧠 Las claves deben ser únicas y deben ser de un tipo inmutable como str, int o tuple. Si usas una clave repetida, la más reciente sobrescribe la anterior.
 
-## 🛠️ Lección 3: Métodos útiles
+## Lección 3: Métodos útiles
 
 ```python
 print(persona.get("ciudad"))     # Guatemala
@@ -41,7 +41,7 @@ persona.update({"edad": 32, "ciudad": "Antigua"})
 ```
 ✔️ Útil para evitar errores y mantener el código limpio cuando trabajas con datos que pueden variar.
 
-## 🔁 Lección 4: Recorrido de diccionarios
+## Lección 4: Recorrido de diccionarios
 
 ```python
 for clave in persona:
@@ -54,7 +54,7 @@ for clave, valor in persona.items():
 
 🧠 Esto es muy útil cuando quieres mostrar, modificar o filtrar datos en estructuras más complejas.
 
-## 🧩 Lección 5: Diccionarios anidados
+## Lección 5: Diccionarios anidados
 
 ```python
 alumnos = {

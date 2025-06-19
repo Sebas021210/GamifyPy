@@ -1,13 +1,13 @@
 # 🛡️ Nivel 2: Guardián de la Lógica
 
-## ✅ Lección 1: ¿Qué es un valor booleano?
+## Lección 1: ¿Qué es un valor booleano?
 
-### 🎯 Objetivo:
+### Objetivo:
 Comprender qué son los valores booleanos y cómo se usan para tomar decisiones en programación.
 
 ---
 
-### 🧠 Concepto clave
+### Concepto clave
 Un valor booleano representa solo dos estados posibles:
 - True (Verdadero)
 - False (Falso)
@@ -19,23 +19,25 @@ es_estudiante = True
 termino_tarea = False
 ```
 
-### 🔍 Ejemplos en código
+Los usamos para evaluar condiciones, tomar decisiones o repetir acciones solo cuando se cumpla algo.
+
+### Ejemplos en código
 ```python
 print(10 > 5)      # True
 print(3 == 4)      # False
 print("Ana" != "Ana")  # False
 ```
 
-### 🔄 Uso práctico
+### Uso práctico
 Puedes guardar resultados booleanos en variables:
 ```python
 mayor = 8 > 3
 print(mayor)   # True
 ```
 
-## ✅ Lección 2: Comparaciones entre valores
+## Lección 2: Comparaciones entre valores
 
-### 📌 Objetivo: 
+### Objetivo: 
 Comprender cómo comparar datos usando operadores relacionales.
 
 ---
@@ -51,9 +53,15 @@ Los operadores de comparación permiten verificar relaciones entre valores. El r
 | `<=`     | Menor o igual que  | 5 <= 5    | True      |
 | `>=`     | Mayor o igual que  | 6 >= 7    | False     |
 
-## ✅ Lección 3: Conectores lógicos: and / or
+Comparar textos también es posible:
+```python
+print("gato" == "perro")  # False
+print("Hola" != "hola")   # True (las mayúsculas importan)
+```
 
-## 📌 Objetivo: 
+## Lección 3: Conectores lógicos: and / or
+
+## Objetivo: 
 Combinar varias condiciones para evaluar expresiones compuestas.
 
 ---
@@ -65,16 +73,28 @@ Los conectores lógicos permiten evaluar múltiples condiciones al mismo tiempo.
 | `and`    | Todas deben ser True   | 5 > 3 and 4 < 10         | True      |
 | `or`     | Al menos una True      | 7 < 2 or 9 > 1           | True      |
 
-### 🔍 Ejemplos en código
+### Ejemplos en código
 ```python
 edad = 20
 tiene_carnet = True
 print(edad >= 18 and tiene_carnet)  # True
 ```
 
-## ✅ Lección 4: Negación lógica con not
+Diferencia clave:
+- and necesita que todo sea verdadero.
+- or necesita que al menos una parte sea verdadera.
 
-### 📌 Objetivo: 
+```python
+llueve = False
+hay_paraguas = True
+
+print(llueve and hay_paraguas)  # False
+print(llueve or hay_paraguas)   # True
+```
+
+## Lección 4: Negación lógica con not
+
+### Objetivo: 
 Usar not para invertir valores booleanos.
 
 ---

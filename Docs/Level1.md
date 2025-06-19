@@ -1,27 +1,29 @@
 # 🧩 Nivel 1 – Explorador de Variables
 
-## ✅ Lección 1: ¿Qué es una variable?
+## Lección 1: ¿Qué es una variable?
 
-### 🎯 Objetivo:
+### Objetivo:
 Aprender a declarar variables, nombrarlas correctamente y usarlas para guardar información.
 
 ---
 
-### 🧠 ¿Qué es una variable?
-Una variable es como una caja con una etiqueta: puedes guardar datos dentro, como texto, números o valores booleanos.
+### ¿Qué es una variable?
+Una variable es como una caja con una etiqueta: puedes guardar datos dentro, como texto, números o valores lógicos. Luego puedes abrir esa caja (leer el valor) o cambiar su contenido.
 
 ```python
-edad = 18 # edad es la etiqueta, 18 es el valor
+edad = 18 # "edad" es la etiqueta, 18 es lo que guardamos
 ```
 
-### 📌 Cómo crear variables
+### Cómo crear variables
+Solo escribe un nombre, un signo igual = y el valor que quieras guardar:
+
 ```python
-nombre = "Lucía" # Crear una variable
+nombre = "Lucía"
 ```
 
 ---
 
-### ✅ Reglas para nombrar variables
+### Reglas para nombrar variables
 - Deben comenzar con letra o _
 - Pueden tener letras, números y guiones bajos (_)
 - ❌ No deben empezar con un número
@@ -39,19 +41,19 @@ nombre usuario = "Luis"   # ❌
 print = 10                # ❌
 ```
 
-## ✅ Lección 2: Tipos de datos básicos
+## Lección 2: Tipos de datos básicos
 
-### 📌 Objetivo: 
+### Objetivo: 
 Comprender los tipos básicos en Python: int, float, str, bool.
 
 ---
 
-En Python, cada dato tiene un tipo. Los más comunes son:
+En Python, todo dato tiene un tipo. Algunos ejemplos:
 ```python
-entero = 5             # int
-decimal = 3.14         # float
-texto = "Hola"         # str
-logico = True          # bool
+entero = 5        # int → número entero
+decimal = 3.14    # float → número con decimales
+texto = "Hola"    # str → texto o cadena de caracteres
+logico = True     # bool → lógico (verdadero o falso)
 ```
 
 Podemos verificar su tipo con type():
@@ -65,9 +67,9 @@ edad = "21"
 edad_num = int(edad)   # convierte de str a int
 ```
 
-## ✅ Lección 3: Operaciones aritméticas
+## Lección 3: Operaciones aritméticas
 
-### 📌 Objetivo: 
+### Objetivo: 
 Usar operadores matemáticos básicos en Python.
 
 ---
@@ -83,9 +85,18 @@ Python soporta varias operaciones:
 | `%`      | Módulo (residuo)    | `5 % 2 = 1`    |
 | `**`     | Potencia            | `2 ** 3 = 8`   |
 
-## ✅ Lección 4: Imprimir y mostrar datos
+Ejemplo:
+```python
+a = 10
+b = 3
 
-### 📌 Objetivo: 
+print(a + b)  # 13
+print(a % b)  # 1
+```
+
+## Lección 4: Imprimir y mostrar datos
+
+### Objetivo: 
 Aprender a mostrar información al usuario con print() y a combinar textos.
 
 ---

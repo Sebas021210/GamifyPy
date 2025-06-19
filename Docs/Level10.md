@@ -1,6 +1,6 @@
-# 🧠 Nivel 10 – Invocador de Errores
+# 🧨 Nivel 10 – Invocador de Errores
 
-## ⚠️ Lección 1: ¿Qué es una excepción?
+## Lección 1: ¿Qué es una excepción?
 
 ```python
 print(10 / 0)  # ZeroDivisionError
@@ -11,7 +11,7 @@ print(10 / 0)  # ZeroDivisionError
 
 🧠 Las excepciones no siempre significan que tu código está mal, pero necesitas saber cómo reaccionar cuando ocurren.
 
-## 🧪 Lección 2: Uso básico de try y except
+## Lección 2: Uso básico de try y except
 
 ```python
 try:
@@ -28,7 +28,7 @@ except ValueError:
 
 🧠 Puedes manejar diferentes tipos de error con diferentes bloques except, y así evitar que el programa se cierre de forma inesperada.
 
-## 🧱 Lección 3: Múltiples excepciones
+## Lección 3: Múltiples excepciones
 
 ```python
 try:
@@ -49,7 +49,7 @@ except (ValueError, TypeError):
 
 ✔️ Evita que tu programa se detenga por errores predecibles.
 
-## 🔄 Lección 4: else y finally
+## Lección 4: else y finally
 
 ```python
 try:
@@ -67,7 +67,7 @@ finally:
 
 🧠 Esta estructura te da más control sobre el flujo del programa y te permite actuar según el resultado.
 
-## 🧠 Lección 5: Excepciones comunes
+## Lección 5: Excepciones comunes
 | Excepción           | Cuándo ocurre                                          |
 |---------------------|--------------------------------------------------------|
 | ZeroDivisionError   | Al dividir entre cero                                  |
@@ -78,7 +78,7 @@ finally:
 
 📌 Conocer estas excepciones te permite anticiparte a los errores y hacer programas más robustos.
 
-✅ Recomendaciones finales
+Recomendaciones finales
 - Usa try/except solo donde hay riesgo real de error.
 - No uses except: sin especificar el tipo de error, porque podrías ocultar errores importantes.
 - Siempre prueba tu código con valores incorrectos a propósito para asegurarte de que tu manejo de errores funciona bien.

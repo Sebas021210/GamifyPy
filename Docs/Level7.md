@@ -1,18 +1,19 @@
 # 🧙 Nivel 7 – Mago de Módulos
 
-## 🧱 Lección 1: ¿Qué es un módulo?
-Un módulo es un archivo con funciones que puedes importar para usarlas en tu programa.
+## Lección 1: ¿Qué es un módulo?
+Un módulo es como un cofre lleno de herramientas que puedes usar en tu programa sin tener que construirlas desde cero.
 
 ```python
 import math
 print(math.sqrt(25))  # imprime 5.0
 ```
+math es un módulo que ya viene con Python. Nos da funciones matemáticas listas para usar.
 
-🧠 Beneficios:
+Beneficios:
 - Reutilizas código sin escribirlo tú
 - Organizas mejor tus proyectos
 
-## 🎲 Lección 2: Jugando con el azar (random)
+## Lección 2: Jugando con el azar (random)
 El módulo random te permite trabajar con aleatoriedad.
 
 ```python
@@ -23,7 +24,7 @@ colores = ["rojo", "verde", "azul"]
 print(random.choice(colores))  # elige un color al azar
 ```
 
-## 📐 Lección 3: Matemagia con math
+## Lección 3: Matemagia con math
 math ofrece funciones matemáticas avanzadas.
 
 ```python
@@ -33,7 +34,23 @@ print(math.pow(2, 3))     # 2 elevado a 3
 print(math.pi)            # constante π
 ```
 
-## 🧩 Lección 4: Creando mi propio módulo
+También puedes usar:
+- math.floor(x) → redondea hacia abajo
+- math.ceil(x) → redondea hacia arriba
+- math.sin(x) → seno de un ángulo
+
+Importa solo lo que necesitas:
+```python
+from math import sqrt, pi
+print(sqrt(36))
+print(pi)
+```
+
+## Lección 4: Creando mi propio módulo
+Tú también puedes crear tus propios módulos
+
+Un módulo es solo un archivo .py con funciones que luego puedes importar.
+
 1.	Crea un archivo llamado figuras.py:
 
 ```python
@@ -54,7 +71,12 @@ figuras.estrella(100)
 
 🧠 Puedes organizar tu código por módulos y reutilizarlo.
 
-## 🧪 Lección 5: Proyecto mágico
+Buenas prácticas al crear módulos:
+- Nómbralos con minúsculas (utilidades.py, juego.py)
+- Agrupa funciones que tienen un propósito común
+- Usa import para reutilizar funciones donde quieras
+
+## Lección 5: Proyecto mágico
 Juego: Dibujar una figura aleatoria con un color aleatorio
 
 ```python
@@ -77,7 +99,14 @@ random.choice(figuras)(100)
 turtle.pencolor(random.choice(colores))
 ```
 
-🧠 Aquí aplicamos:
+Aquí aplicamos:
 - Funciones
 - Aleatoriedad
 - Modularidad
+
+Python tiene miles de módulos útiles: datetime, time, os, json, turtle, etc.
+
+Puedes explorarlos e incluso instalarlos con pip.
+```bash
+pip install nombre_del_modulo
+```

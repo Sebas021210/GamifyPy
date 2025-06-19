@@ -1,23 +1,27 @@
 # 🛠️ Nivel 3 – Maestro de Decisiones
 
-## ✅ Lección 1: Tomando decisiones con if
+## Lección 1: Tomando decisiones con if
 
-### 🧠 Idea clave:
-Ejecuta algo solo si se cumple una condición.
+### Idea clave:
+Usamos if para hacer algo solo si se cumple una condición.
 
 ---
+
+📌 if evalúa si la condición es True. Si no, el bloque se omite.
 
 ```python
 edad = 20
 if edad >= 18:
     print("Eres mayor de edad")
 ```
-📌 if evalúa si la condición es True. Si no, el bloque se omite.
 
-## ✅ Lección 2: ¿Y si no se cumple? else
+- Si la condición edad >= 18 es True, se ejecuta el bloque dentro del if.
+- Si es False, no pasa nada (por ahora).
 
-### 🧠 Idea clave:
-Usa else para manejar el caso cuando la condición no se cumple.
+## Lección 2: ¿Y si no se cumple? else
+
+### Idea clave:
+else sirve para dar una respuesta alternativa cuando el if no se cumple.
 
 ---
 
@@ -29,9 +33,9 @@ else:
 ```
 📌 Solo uno de los dos bloques se ejecuta.
 
-## ✅ Lección 3: Más caminos con elif
+## Lección 3: Más caminos con elif
 
-### 🧠 Idea clave:
+### Idea clave:
 Usa elif cuando hay más de dos opciones.
 
 ---
@@ -45,11 +49,15 @@ elif nota >= 70:
 else:
     print("Necesitas mejorar")
 ```
-📌 Se evalúan en orden. Solo un bloque se ejecuta.
+📌 Python evalúa las condiciones de arriba hacia abajo. Cuando encuentra una verdadera, se detiene.
 
-## ✅ Lección 4: Condicionales anidadas
+Consejos:
+- Puedes tener varios elif, pero solo un else.
+- Si ninguna condición se cumple, se ejecuta el else.
 
-### 🧠 Idea clave:
+## Lección 4: Condicionales anidadas
+
+### Idea clave:
 Puedes poner un if dentro de otro para evaluar condiciones más complejas.
 
 ---
@@ -64,11 +72,11 @@ if edad >= 18:
     else:
         print("Trae tu identificación")
 ```
-📌 Cuidado con la sangría y la complejidad.
+📌 La sangría (espacios) te muestra qué condición está dentro de cuál.
 
-## ✅ Lección 5: Buenas prácticas
+## Lección 5: Buenas prácticas
 
-### 🧠 Consejos clave:
+### Consejos clave:
 - Usa sangría correcta (4 espacios).
 - Evita anidaciones profundas innecesarias.
 - Pon las condiciones más probables primero.
@@ -85,7 +93,7 @@ else:
     print("Acceso denegado")
 ```
 
-## ✅ Lección 6: Errores comunes y depuración
+## Lección 6: Errores comunes y depuración
 
 ### Errores frecuentes:
 ❌ Olvidar los dos puntos : en el if

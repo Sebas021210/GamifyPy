@@ -1,8 +1,8 @@
 # 🔁 Nivel 4 – Domador de Bucles
 
-## 🔁 Lección 1: Repeticiones controladas con for
+## Lección 1: Repeticiones controladas con for
 
-### 🧠 Idea clave:
+### Idea clave:
 El ciclo for se usa para repetir una acción un número determinado de veces o sobre elementos de una colección.
 
 ---
@@ -11,7 +11,7 @@ El ciclo for se usa para repetir una acción un número determinado de veces o s
 for i in range(5):
     print("Hola", i)
 ```
-📌 range(5) genera los números del 0 al 4.
+📌 range(5) genera los números del 0 al 4. Se repite 5 veces.
 
 También funciona con listas:
 
@@ -22,9 +22,9 @@ for nombre in nombres:
 ```
 📌 Recorre elemento por elemento de la lista nombres e imprime un saludo para cada uno.
 
-## 🔁 Lección 2: Repeticiones condicionales con while
+## Lección 2: Repeticiones condicionales con while
 
-### 🧠 Idea clave:
+### Idea clave:
 El ciclo while se repite mientras una condición sea verdadera.
 
 ---
@@ -37,9 +37,13 @@ while x < 5:
 ```
 📌 Ojo con actualizar la variable dentro del ciclo para evitar bucles infinitos.
 
-## 🔁 Lección 3: Rompiendo ciclos con break
+Cuándo usar while:
+- Cuando no sabes cuántas veces se repetirá.
+- Por ejemplo, repetir hasta que el usuario escriba algo correcto.
 
-### 🧠 Idea clave:
+## Lección 3: Rompiendo ciclos con break
+
+### Idea clave:
 break detiene el ciclo, aunque la condición siga siendo verdadera.
 
 ---
@@ -52,9 +56,9 @@ while True:
 ```
 📌 Se usa para terminar bucles desde dentro, especialmente en while True.
 
-## 🔁 Lección 4: Saltar iteraciones con continue
+## Lección 4: Saltar iteraciones con continue
 
-### 🧠 Idea clave:
+### Idea clave:
 continue salta la iteración actual y pasa a la siguiente.
 
 ---
@@ -67,14 +71,14 @@ for i in range(5):
 ```
 📌 En este ejemplo se imprime 0, 1, 3, 4 (el 2 se salta).
 
-## 🔁 Lección 5: Combinar bucles y control
+## Lección 5: Combinar bucles y control
 
-### 🧠 Idea clave:
+### Idea clave:
 Se pueden mezclar for, while, break, continue según el problema.
 
 ---
 
-### 🔄 Uso práctico
+### Uso práctico
 Adivinar un número en pocos intentos.
 
 ```python
@@ -89,16 +93,13 @@ for intento in range(3):
 ```
 📌 Permite al usuario adivinar el número secreto con hasta 3 intentos, deteniéndose si lo adivina correctamente.
 
-## 🔁 Lección 6: Errores comunes en bucles
+## Lección 6: Errores comunes en bucles
 
 ### Errores frecuentes:
-🔁 Bucles infinitos: while True sin break
-
-❌ Condiciones que nunca se cumplen
-
-💥 Índices fuera de rango en listas
-
-⚠️ No modificar la variable que controla el ciclo
+- Bucles infinitos: while True sin break
+- Condiciones que nunca se cumplen
+- Índices fuera de rango en listas
+- No modificar la variable que controla el ciclo
 
 ```python
 i = 0

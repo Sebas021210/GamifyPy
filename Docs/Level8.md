@@ -1,6 +1,6 @@
-# 🧠 Nivel 8 – Guardián de Listas y Cadenas
+# 🛡️ Nivel 8 – Guardián de Listas y Cadenas
 
-## 🧩 Lección 1: Introducción a listas y mutabilidad
+## Lección 1: Introducción a listas y mutabilidad
 
 ```python
 mi_lista = [1, 2, 3, "hola", True]
@@ -17,7 +17,7 @@ print(mi_lista)  # También cambia porque apuntan al mismo lugar en memoria
 ```
 🧠 Si asignas una lista a otra variable, ambas apuntan al mismo objeto, no se crea una copia. Esto es clave para evitar errores inesperados.
 
-## 🧰 Lección 2: Métodos importantes de listas
+## Lección 2: Métodos importantes de listas
 
 ```python
 colores = ["rojo", "verde"]
@@ -30,7 +30,7 @@ print(len(colores))                # Muestra cuántos elementos tiene la lista
 
 🧠 Practicar con métodos como append(), insert(), remove() o len() te prepara para manejar datos dinámicamente.
 
-## 📏 Lección 3: Operaciones y slicing con listas
+## Lección 3: Operaciones y slicing con listas
 
 ```python
 numeros = [10, 20, 30, 40, 50]
@@ -41,7 +41,7 @@ print(numeros[::-1])     # Invierte la lista
 
 🧠 La sintaxis general es: lista[inicio:fin:paso]. ¡Una herramienta poderosa para procesar datos!
 
-## 🧵 Lección 4: Cadenas como listas de caracteres
+## Lección 4: Cadenas como listas de caracteres
 
 ```python
 texto = "Python"
@@ -55,7 +55,7 @@ print(len(texto))  # 6
 
 🧠 Pero atención: las cadenas son inmutables. No puedes cambiar un carácter directamente como sí puedes con listas.
 
-## 🧽 Lección 5: Métodos útiles de cadenas
+## Lección 5: Métodos útiles de cadenas
 
 ```python
 mensaje = " Hola Mundo "
@@ -69,7 +69,7 @@ print(mensaje.replace("Hola", "Adiós"))  # " Adiós Mundo "
 
 🧠 Si trabajas con entradas de usuario o textos variables, dominar estos métodos te ahorra muchos problemas.
 
-## 🔄 Lección 6: De cadenas a listas y viceversa
+## Lección 6: De cadenas a listas y viceversa
 
 ```python
 texto = "rojo,verde,azul"
@@ -80,7 +80,7 @@ print("-".join(lista_colores))        # 'rojo-verde-azul'
 
 🧠 Muy útil para procesamiento de texto, CSVs, y manipulación de datos que vienen en forma de texto plano.
 
-## 🔁 Lección 7: Bucles con listas y cadenas
+## Lección 7: Bucles con listas y cadenas
 
 ```python
 palabras = ["python", "código", "lista"]
