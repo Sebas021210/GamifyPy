@@ -116,3 +116,42 @@ También usar f-strings (más recomendado):
 edad = 21
 print(f"Tienes {edad} años")
 ```
+
+## Lección 5: Práctica de variables y operaciones
+
+### Objetivo:
+Aplicar lo aprendido usando variables, tipos de datos y operaciones con entradas (input) y salidas (print).
+
+---
+
+### ¿Qué es input()?
+input() permite al usuario escribir datos cuando el programa está corriendo. El valor ingresado siempre se guarda como texto (str), aunque parezca un número.
+
+```python
+nombre = input("¿Cómo te llamas?")  
+```
+
+📌 Aquí, el programa mostrará el mensaje y esperará que el usuario escriba algo. Eso se guarda en la variable nombre.
+
+### Usar input con operaciones
+Para poder hacer operaciones matemáticas, debemos convertir la entrada a un número con int() o float():
+
+```python
+edad = input("¿Qué edad tienes?")
+edad = int(edad)  # Convertimos el texto a número entero (int)
+print(edad + 1)   # Ahora podemos sumar
+```
+
+También se puede convertir directamente en una sola línea:
+```python
+edad = int(input("¿Qué edad tienes?"))
+```
+
+### Ejemplo completo:
+```python
+nombre = input("¿Cómo te llamas? ")
+edad = int(input("¿Cuántos años tienes? "))
+nueva_edad = edad + 1
+print(f"Hola {nombre}, el próximo año tendrás {nueva_edad} años.")
+```
+
