@@ -1,0 +1,238 @@
+[
+  {
+    "id_leccion": 27,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué palabra clave se usa para crear una función en Python?",
+    "respuesta": "def",
+    "opciones": [
+      {"texto": "func", "correcta": false},
+      {"texto": "define", "correcta": false},
+      {"texto": "def", "correcta": true},
+      {"texto": "function", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 30,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué beneficio tiene usar funciones?",
+    "respuesta": "Permite organizar y reutilizar código",
+    "opciones": [
+      {"texto": "Gasta más memoria", "correcta": false},
+      {"texto": "Hace el código más largo", "correcta": false},
+      {"texto": "Permite organizar y reutilizar código", "correcta": true},
+      {"texto": "Hace dibujos más lentos", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 27,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué hace este código?\ndef dibujar():\n    print(\"Dibujo listo\")\ndibujar()",
+    "respuesta": "Imprime un texto",
+    "opciones": [
+      {"texto": "Dibuja un cuadrado", "correcta": false},
+      {"texto": "Da error", "correcta": false},
+      {"texto": "Imprime un texto", "correcta": true},
+      {"texto": "Nada", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué significa un parámetro en una función?",
+    "respuesta": "Un valor que se pasa a la función",
+    "opciones": [
+      {"texto": "Un error", "correcta": false},
+      {"texto": "Un valor que se pasa a la función", "correcta": true},
+      {"texto": "El nombre de la función", "correcta": false},
+      {"texto": "El color de fondo", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 27,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué pasa si no llamas una función después de definirla?",
+    "respuesta": "No hace nada",
+    "opciones": [
+      {"texto": "Se ejecuta igual", "correcta": false},
+      {"texto": "Da error", "correcta": false},
+      {"texto": "No hace nada", "correcta": true},
+      {"texto": "Imprime el nombre de la función", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 27,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué hace return en una función?",
+    "respuesta": "Devuelve un valor",
+    "opciones": [
+      {"texto": "Repite la función", "correcta": false},
+      {"texto": "Devuelve un valor", "correcta": true},
+      {"texto": "Borra el resultado", "correcta": false},
+      {"texto": "Dibuja en reversa", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 27,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué es def en Python?",
+    "respuesta": "Una palabra clave para definir funciones",
+    "opciones": [
+      {"texto": "Una variable", "correcta": false},
+      {"texto": "Una clase", "correcta": false},
+      {"texto": "Una palabra clave para definir funciones", "correcta": true},
+      {"texto": "Una librería", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué imprime este código?\ndef sumar(a, b):\n    return a + b\nprint(sumar(3, 4))",
+    "respuesta": "7",
+    "opciones": [
+      {"texto": "sumar(3, 4)", "correcta": false},
+      {"texto": "7", "correcta": true},
+      {"texto": "Error", "correcta": false},
+      {"texto": "a + b", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 27,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué sucede si una función no tiene return?",
+    "respuesta": "Devuelve None",
+    "opciones": [
+      {"texto": "Siempre da error", "correcta": false},
+      {"texto": "Devuelve 0", "correcta": false},
+      {"texto": "Devuelve None", "correcta": true},
+      {"texto": "Devuelve el último valor impreso", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 30,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Cuál es un buen motivo para usar funciones en Turtle?",
+    "respuesta": "Para modular el código",
+    "opciones": [
+      {"texto": "Para hacer dibujos aleatorios", "correcta": false},
+      {"texto": "Para evitar importar Turtle", "correcta": false},
+      {"texto": "Para modular el código", "correcta": true},
+      {"texto": "Para hacer que el dibujo sea invisible", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 27,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué significa la indentación dentro de una función?",
+    "respuesta": "Delimita el bloque de la función",
+    "opciones": [
+      {"texto": "Es opcional", "correcta": false},
+      {"texto": "Es un estilo de escritura", "correcta": false},
+      {"texto": "Delimita el bloque de la función", "correcta": true},
+      {"texto": "Se ignora en Turtle", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué permite una función con parámetros?",
+    "respuesta": "Modificar su comportamiento según los valores",
+    "opciones": [
+      {"texto": "Que la función se repita automáticamente", "correcta": false},
+      {"texto": "Modificar su comportamiento según los valores", "correcta": true},
+      {"texto": "Que se llame sola", "correcta": false},
+      {"texto": "Dibujar sin definirla", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 27,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Completa para definir una función que imprima “¡Hola!”:",
+    "codigo_inicial": "___ saludo():\n    print(\"¡Hola!\")",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 28,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Corrige este código para que dibuje un triángulo:",
+    "codigo_inicial": "def dibujar_triangulo()  \n    for _ in range(3):\n        turtle.forward(100)\n        turtle.left(120)",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Completa la función para que acepte un parámetro de color:",
+    "codigo_inicial": "def cuadrado_color(____):\n    turtle.pencolor(____)\n    for _ in range(4):\n        turtle.forward(100)\n        turtle.right(90)",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Modifica esta función para aceptar el tamaño del cuadrado:",
+    "codigo_inicial": "def cuadrado(tamano):\n    for _ in range(4):\n        turtle.forward(____)\n        turtle.right(90)",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 30,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Completa el código para que dibuje dos estrellas de distinto tamaño:",
+    "codigo_inicial": "def estrella(lado):\n    for _ in range(5):\n        turtle.forward(lado)\n        turtle.right(144)\n\nestrella(100)\nturtle.____()\nturtle.goto(____)\nturtle.____()\nestrella(50)",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Completa esta función que combina color y tamaño:",
+    "codigo_inicial": "def figura_personalizada(color, tam):\n    turtle.________(color)\n    for _ in range(4):\n        turtle.forward(tam)\n        turtle.left(90)",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Escribe una función llamada estrella() que reciba un parámetro lado y dibuje una estrella de 5 puntas.",
+    "codigo_inicial": "",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 30,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Define una función bandera() que dibuje dos rectángulos horizontales, uno rojo y uno blanco.",
+    "codigo_inicial": "",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 31,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Escribe una función llamada flor() que use circle() y left() para crear una flor de 6 pétalos.",
+    "codigo_inicial": "",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Crea una función estrella_color(tamano, color) que dibuje una estrella del tamaño y color indicados.",
+    "codigo_inicial": "",
+    "respuesta": ""
+  }
+]
