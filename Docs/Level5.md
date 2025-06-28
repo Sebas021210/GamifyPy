@@ -1,102 +1,109 @@
-# 🎨 Nivel 5 – Aprendiz del Dibujo
+# 🏗️ Nivel 5 – Arquitecto de Funciones
 
-## Lección 0: Instalando turtle
-
-### ¿Qué es turtle?
-turtle es un módulo incluido por defecto en la mayoría de las instalaciones de Python estándar. Sin embargo, hay entornos donde podrías necesitar configurarlo para que funcione correctamente.
-
----
-
-### En consola (Windows, macOS, Linux):
-Normalmente, si tienes Python instalado correctamente desde python.org, no necesitas instalar nada. Solo asegúrate de ejecutar tus programas en un entorno gráfico.
-
-```bash
-# No se necesita instalación, pero si ves errores, puedes reinstalar Python desde:
-# https://www.python.org/downloads/
-```
-
-### En Thonny:
-1. Abre Thonny.
-2. Ve al menú: Herramientas → Configuración del intérprete.
-3. Asegúrate de estar usando Python con soporte gráfico.
-4. No es necesario instalar turtle manualmente si estás en el entorno correcto.
-
-## Lección 1: Conociendo a Turtle
-
-### Idea clave:
-turtle es un módulo que permite dibujar con una tortuga que se mueve en pantalla.
-
----
+## Lección 1: ¿Qué es una función?
+📌 Una función en Python siempre comienza con la palabra clave def, seguida del nombre que le das y unos paréntesis ().
 
 ```python
-import turtle
-t = turtle.Turtle()  # Crea una nueva tortuga llamada 't'
-t.forward(100)  # la tortuga avanza 100 unidades
+def saludar():
+    print("¡Hola, programador!")
+
+saludar()  # Llamamos a la función para que se ejecute
 ```
+🧠 Una función es una porción de código que tiene un nombre y puedes usarla muchas veces sin repetir el mismo código. Si no la llamas, no se ejecuta.
 
-### Conceptos clave:
-- forward(x): avanza x pasos
-- backward(x): retrocede
-- left(90) y right(90): gira en ese ángulo
-
-## Lección 2: Dibujar líneas y formas
+## Lección 2: Mi primera función
 
 ```python
-import turtle
-t = turtle.Turtle()
-for _ in range(4):
-    t.forward(100)
-    t.right(90)
-```
-📌 Esto dibuja un cuadrado. Puedes hacer triángulos, hexágonos, etc.
+def sumar_dos_numeros():
+    resultado = 5 + 3
+    print("La suma es:", resultado)
 
-## Lección 3: Cambiar color de trazo
+sumar_dos_numeros()
+```
+📌 Las funciones ayudan a organizar mejor tu código y a evitar repetir instrucciones.
+
+🧠 Cada vez que llamas sumar_dos_numeros(), se ejecuta el bloque de código que definiste dentro.
+
+## Lección 3: Funciones con parámetros
+📌 Los parámetros permiten que tus funciones sean más flexibles y puedas controlar su comportamiento desde afuera.
 
 ```python
-t.pencolor("blue")
-t.pensize(3)
+def sumar(a, b):
+    resultado = a + b
+    print(f"La suma de {a} y {b} es {resultado}")
+
+sumar(5, 8)  # Llamamos a la función con argumentos
 ```
-📌 Usa pencolor() para cambiar el color del trazo y pensize() para ajustar su grosor.
+📌 Aquí, a y b son parámetros. Cuando llamas a la función, les das un valor (eso se llama argumento).
 
-🧠 Puedes usar colores por nombre ("red", "green", etc.) o códigos hexadecimales.
-
-## Lección 4: Rellenar figuras
+🧠 Puedes hacer funciones que usen parámetros para procesar información variable.
 
 ```python
-t.fillcolor("yellow")
-t.begin_fill()
-for _ in range(3):
-    t.forward(100)
-    t.left(120)
-t.end_fill()
+def repetir_texto(texto, veces):
+    for _ in range(veces):
+        print(texto)
+
+repetir_texto("Python es genial", 3)
 ```
-📌 Usa fillcolor() para definir el color de relleno, begin_fill() para empezar a rellenar la figura que dibujes, y end_fill() para terminar el relleno.
+📌 Esto te permite reutilizar una misma función pero con resultados diferentes. ¡Muy poderoso!
 
-🧠 Esto dibuja un triángulo relleno. El color de relleno puede ser distinto al del borde.
-
-## Lección 5: Dibujo libre guiado
-
-### Ejemplos en código
-Casa simple con cuadrado y triángulo encima.
-
-📌 Copia y pega este código en tu editor y ejecútalo para ver cómo se dibuja la casa simple.
+### Extra: ¿Qué es return?
+📌 Algunas funciones devuelven un resultado con la palabra return. Sirve cuando necesitas usar el valor después.
 
 ```python
-# Cuadrado (base)
-t.fillcolor("orange")
-t.begin_fill()
-for _ in range(4):
-    t.forward(100)
-    t.right(90)
-t.end_fill()
+def sumar(a, b):
+    return a + b
 
-# Techo (triángulo)
-t.fillcolor("brown")
-t.begin_fill()
-t.forward(100)
-t.left(135)
-t.forward(70)
-t.left(90)
-t.forward(70)
-t.end_fill()
+resultado = sumar(5, 3)
+print("La suma es:", resultado)
 ```
+🧠 Usar return es importante cuando la función debe entregar un valor para usarlo luego.
+
+## Lección 4: Modularidad en acción
+📌 Puedes combinar funciones más pequeñas para crear cosas más complejas. Eso se llama modularidad.
+
+```python
+def obtener_doble(numero):
+    return numero * 2
+
+def imprimir_doble(numero):
+    doble = obtener_doble(numero)
+    print(f"El doble de {numero} es {doble}")
+
+imprimir_doble(10)
+```
+🧠 Cada función hace una sola cosa. Al juntarlas, podemos construir procesos más completos.
+
+## Lección 5: Mini proyecto guiado – Calculadora simple
+
+📌 Copia y pega este código en tu editor y ejecútalo para ver cómo funciona la calculadora.
+
+```python
+def sumar(a, b):
+    return a + b
+
+def restar(a, b):
+    return a - b
+
+def calculadora():
+    x = 10
+    y = 5
+    print("Suma:", sumar(x, y))
+    print("Resta:", restar(x, y))
+
+calculadora()
+```
+📌 Usamos funciones con parámetros y funciones que devuelven valores (return).
+
+🧠 Aquí aplicamos:
+- Funciones reutilizables
+- Parámetros de entrada
+- Retorno de valores
+- Organización del código
+
+### Bonus Lección: Buenas prácticas con funciones
+Reglas y consejos al usar funciones:
+- Usa nombres descriptivos (por ejemplo, sumar, no f1)
+- No te olvides de llamar a la función o no pasará nada
+- Usa return si necesitas que la función devuelva un valor
+- Divide problemas grandes en funciones pequeñas (modularidad)

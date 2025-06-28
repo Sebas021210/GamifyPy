@@ -1,116 +1,92 @@
-# 🏗️ Nivel 6 – Arquitecto del Arte
+# 🎛️ Nivel 6 – Creador de Apps con Streamlit
 
-## Lección 1: ¿Qué es una función?
-📌 Una función en Python siempre comienza con la palabra clave def, seguida del nombre que le das y unos paréntesis ().
+## Lección 0: Instalando y ejecutando Streamlit
+```bash
+pip install streamlit
+```
+
+Luego, para ejecutar una app:
+```bash
+streamlit run archivo.py
+```
+📌 Streamlit convierte archivos .py en aplicaciones web interactivas. Asegúrate de tener Python instalado.
+
+## Lección 1: Mostrando texto y datos
+```python
+import streamlit as st
+
+st.title("Mi primera app")         # Título principal
+st.header("Bienvenido/a")          # Encabezado grande
+st.subheader("Este es un subtítulo") # Subtítulo
+st.write("Esto es texto normal.")  # Muestra texto sencillo
+```
+🧠 Estas funciones ayudan a organizar y presentar información visualmente. st.write() es muy versátil: muestra texto, números, listas, DataFrames y más.
+
+## Lección 2: Entrada de texto y números
+```python
+nombre = st.text_input("¿Cómo te llamas?")  # Input de texto
+edad = st.number_input("¿Cuál es tu edad?", min_value=0, max_value=120)  # Input numérico con validación
+
+st.write(f"Hola {nombre}, tienes {edad} años.")  # Respuesta dinámica
+```
+🧠 Estas entradas capturan valores desde la interfaz, permitiendo interactividad. Muy útil para encuestas, formularios o cálculos.
+
+## Lección 3: Sliders y selección de opciones
+```python
+calificacion = st.slider("Califica esta app del 1 al 10", 1, 10)  # Slider con valores enteros
+genero = st.selectbox("Selecciona tu género", ["Masculino", "Femenino", "Otro"])  # Menú desplegable
+
+st.write(f"Calificación: {calificacion}")
+st.write(f"Género: {genero}")
+```
+🧠 Sliders y selectores permiten limitar las opciones disponibles, facilitando el control de entrada.
+
+## Lección 4: Botones e interactividad
+```python
+if st.button("Mostrar saludo"):
+    st.success("¡Hola! Gracias por usar la app.")  # Mensaje en verde si se hace clic
+```
+🧠 Los botones permiten ejecutar código solo cuando el usuario lo decide. Perfecto para condiciones, cálculos o respuestas personalizadas.
+
+## Lección 5: Agregando imágenes y emojis
+```python
+st.image("https://streamlit.io/images/brand/streamlit-logo-primary-colormark-darktext.png", width=200)
+st.caption("Este es el logo de Streamlit")  # Texto pequeño debajo de la imagen
+```
+🧠 Puedes usar imágenes desde URLs o rutas locales. Los emojis también funcionan al incluirlos en strings.
+
+## Lección 6: División en secciones
+```python
+st.header("Sección 1: Entrada de datos")
+st.write("Aquí colocamos los inputs.")
+
+st.markdown("---")  # Línea separadora
+
+st.header("Sección 2: Resultados")
+st.write("Aquí mostramos los resultados.")
+```
+🧠 Organizar visualmente tu app mejora la experiencia del usuario. Usa headers y líneas para dividir partes.
+
+## Lección 7: Proyecto guiado – Mini Calculadora
+📌 Copia y pega este código en tu editor y ejecútalo para crear una calculadora.
 
 ```python
-def saludar():
-    print("Hola, artista de Python!")
+st.title("Calculadora Simple")
 
-saludar()  # Llamamos a la función para que se ejecute
+num1 = st.number_input("Número 1")
+num2 = st.number_input("Número 2")
+op = st.selectbox("Operación", ["Sumar", "Restar", "Multiplicar", "Dividir"])
+
+if st.button("Calcular"):
+    if op == "Sumar":
+        resultado = num1 + num2
+    elif op == "Restar":
+        resultado = num1 - num2
+    elif op == "Multiplicar":
+        resultado = num1 * num2
+    elif op == "Dividir":
+        resultado = num1 / num2 if num2 != 0 else "Error: división entre cero"
+    
+    st.success(f"Resultado: {resultado}")
 ```
-🧠 Una función es una porción de código que tiene un nombre y puedes usarla muchas veces sin repetir el mismo código. Si no la llamas, no se ejecuta.
-
-## Lección 2: Mi primera función de dibujo
-
-```python
-import turtle
-
-def dibujar_cuadrado():
-    for _ in range(4):
-        turtle.forward(100)
-        turtle.right(90)
-
-dibujar_cuadrado()
-```
-📌 Las funciones ayudan a organizar mejor tu código y a evitar repetir instrucciones.
-
-🧠 Cada vez que llamas dibujar_cuadrado(), se dibuja un nuevo cuadrado.
-
-## Lección 3: Funciones con parámetros
-📌 Los parámetros permiten que tus funciones sean más flexibles y puedas controlar su comportamiento desde afuera.
-
-```python
-def dibujar_poligono(lados, longitud):
-    for _ in range(lados):
-        turtle.forward(longitud)
-        turtle.right(360 / lados)
-
-dibujar_poligono(5, 80)  # Dibuja un pentágono
-```
-📌 Aquí, lados y longitud son parámetros. Cuando llamas a la función, les das un valor (eso se llama argumento).
-
-🧠 Puedes combinar parámetros con otros comandos de Turtle, como colores:
-
-```python
-def figura_color(tamano, color):
-    turtle.pencolor(color)
-    for _ in range(4):
-        turtle.forward(tamano)
-        turtle.right(90)
-
-figura_color(120, "orange")
-```
-📌 Esto te permite reutilizar una misma función pero con resultados diferentes. ¡Muy poderoso!
-
-### Extra: ¿Qué es return?
-📌 Algunas funciones devuelven un resultado con la palabra return. Sirve cuando necesitas usar el valor después.
-
-```python
-def sumar(a, b):
-    return a + b
-
-resultado = sumar(5, 3)
-print("La suma es:", resultado)
-```
-🧠 En Turtle, return no se usa tanto para dibujos, pero es muy común en funciones matemáticas o de lógica.
-
-## Lección 4: Modularidad en acción
-📌 Puedes combinar funciones más pequeñas para crear cosas más complejas. Eso se llama modularidad.
-
-```python
-def petalo():
-    for _ in range(2):
-        turtle.circle(100, 60)
-        turtle.left(120)
-
-def flor():
-    for _ in range(6):
-        petalo() # Llamamos a la función 'petalo' dentro de otra función para repetir su dibujo
-        turtle.right(60)
-
-flor()
-```
-🧠 Cada función hace una sola cosa. Al juntarlas, creamos una flor completa.
-
-## Lección 5: Mini proyecto guiado – Estrella de colores
-
-📌 Copia y pega este código en tu editor y ejecútalo para ver cómo se dibuja la casa simple.
-
-```python
-def estrella(lado, color):
-    turtle.pencolor(color)
-    for _ in range(5):
-        turtle.forward(lado)
-        turtle.right(144)
-
-estrella(100, "blue")
-turtle.penup()
-turtle.goto(150, 0)
-turtle.pendown()
-estrella(80, "red")
-```
-📌 Usamos funciones con parámetros y además movemos la tortuga (penup, goto, pendown) para dibujar en distintas partes.
-
-🧠 Aquí aplicamos:
-- Funciones reutilizables
-- Parámetros de entrada
-- Posicionamiento
-- Creatividad
-
-### Bonus Lección: Buenas prácticas con funciones
-Reglas y consejos al usar funciones:
-- Usa nombres descriptivos (por ejemplo, dibujar_estrella, no d1)
-- No te olvides de llamar a la función o no pasará nada
-- Usa return si necesitas que la función devuelva un valor
-- Divide problemas grandes en funciones pequeñas (modularidad)
+🧠 La lógica condicional permite usar Streamlit como herramienta para crear apps interactivas útiles, como calculadoras, formularios o asistentes.

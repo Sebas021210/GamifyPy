@@ -51,22 +51,25 @@ Tú también puedes crear tus propios módulos
 
 Un módulo es solo un archivo .py con funciones que luego puedes importar.
 
-1.	Crea un archivo llamado figuras.py:
+1.	Crea un archivo llamado saludos.py:
 
 ```python
-# figuras.py
-def estrella(tamano):
-    import turtle
-    for _ in range(5):
-        turtle.forward(tamano)
-        turtle.right(144)
+# saludos.py
+def saludo_mago(nombre):
+    return f"Bienvenido, {nombre}, al reino de Python"
+
+def despedida_mago(nombre):
+    return f"Hasta luego, {nombre}. Que el código te acompañe."
 ```
 
 2.	Luego lo usas desde otro archivo:
 
 ```python
-import figuras
-figuras.estrella(100)
+import saludos
+
+nombre = input("¿Cuál es tu nombre, aprendiz? ")
+print(saludos.saludo_mago(nombre))
+print(saludos.despedida_mago(nombre))
 ```
 
 🧠 Puedes organizar tu código por módulos y reutilizarlo.
@@ -77,26 +80,28 @@ Buenas prácticas al crear módulos:
 - Usa import para reutilizar funciones donde quieras
 
 ## Lección 5: Proyecto mágico
-Juego: Dibujar una figura aleatoria con un color aleatorio
+Juego: Generador de hechizos aleatorios
 
 ```python
-import turtle
 import random
-def cuadrado(tam):
-    for _ in range(4):
-        turtle.forward(tam)
-        turtle.right(90)
 
-def triangulo(tam):
-    for _ in range(3):
-        turtle.forward(tam)
-        turtle.right(120)
+nombres = ["Lux", "Umbra", "Ignis", "Glacies", "Aeris"]
+efectos = ["invisibilidad", "fuerza", "curación", "velocidad", "teletransportación"]
+elementos = ["fuego", "agua", "viento", "tierra", "rayo"]
 
-figuras = [cuadrado, triangulo]
-colores = ["red", "blue", "green"]
+def generar_hechizo():
+    nombre = random.choice(nombres)
+    efecto = random.choice(efectos)
+    elemento = random.choice(elementos)
+    return f"Hechizo: {nombre} — otorga {efecto} de {elemento}."
 
-random.choice(figuras)(100)
-turtle.pencolor(random.choice(colores))
+# Ejecutamos el hechizo aleatorio
+print(generar_hechizo())
+```
+
+Salida posible:
+```python
+Hechizo: Ignis — otorga velocidad de rayo.
 ```
 
 Aquí aplicamos:
