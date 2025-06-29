@@ -1,6 +1,6 @@
 [
   {
-    "id_leccion": 38,
+    "id_leccion": 40,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué método agrega un elemento al final de una lista?",
@@ -13,7 +13,7 @@
     ]
   },
   {
-    "id_leccion": 41,
+    "id_leccion": 43,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es el resultado de \"python\".upper()?",
@@ -26,7 +26,7 @@
     ]
   },
   {
-    "id_leccion": 38,
+    "id_leccion": 40,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué devuelve len([1, 2, 3])?",
@@ -39,7 +39,7 @@
     ]
   },
   {
-    "id_leccion": 42,
+    "id_leccion": 44,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace \"uno dos tres\".split()?",
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "id_leccion": 39,
+    "id_leccion": 41,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace lista[::-1]?",
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "id_leccion": 37,
+    "id_leccion": 39,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es un ejemplo de cadena mutable?",
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "id_leccion": 38,
+    "id_leccion": 40,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace el método remove(\"x\") en una lista?",
@@ -91,7 +91,7 @@
     ]
   },
   {
-    "id_leccion": 41,
+    "id_leccion": 43,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué devuelve \"Python\".find(\"t\")?",
@@ -104,7 +104,7 @@
     ]
   },
   {
-    "id_leccion": 41,
+    "id_leccion": 43,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace \"Hola\".replace(\"H\", \"M\")?",
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id_leccion": 42,
+    "id_leccion": 44,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué tipo de datos se obtiene con split()?",
@@ -130,7 +130,7 @@
     ]
   },
   {
-    "id_leccion": 41,
+    "id_leccion": 43,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué método convierte una lista en cadena separada por espacios?",
@@ -143,7 +143,7 @@
     ]
   },
   {
-    "id_leccion": 43,
+    "id_leccion": 45,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es el resultado de [x * 2 for x in [1, 2, 3]]?",
@@ -156,7 +156,7 @@
     ]
   },
   {
-    "id_leccion": 38,
+    "id_leccion": 40,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa el código para agregar “amarillo”:",
@@ -164,7 +164,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 42,
+    "id_leccion": 44,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Usa split() para separar por comas:",
@@ -172,7 +172,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 39,
+    "id_leccion": 41,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Imprime los últimos 3 elementos:",
@@ -180,7 +180,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 40,
+    "id_leccion": 42,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Convierte la cadena \"Python\" a lista de letras:",
@@ -188,7 +188,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 41,
+    "id_leccion": 43,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Usa join() para unir una lista en una cadena con guiones:",
@@ -196,7 +196,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 41,
+    "id_leccion": 43,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Reemplaza los espacios por guiones en una cadena:",
@@ -204,7 +204,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 43,
+    "id_leccion": 45,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Crea una función contar_letras que devuelva la cantidad de letras en una palabra",
@@ -212,7 +212,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 43,
+    "id_leccion": 45,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Crea una función que reciba una lista de palabras y devuelva solo las que tienen más de 4 letras",
@@ -220,7 +220,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 43,
+    "id_leccion": 45,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Escribe un programa que reciba una frase y cuente cuántas veces aparece la palabra “python”",
@@ -228,7 +228,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 42,
+    "id_leccion": 44,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Crea una función que convierta una lista de números en cadena separados por comas",

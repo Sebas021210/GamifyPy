@@ -3,235 +3,211 @@
     "id_leccion": 27,
     "tipo": "opcion_multiple",
     "puntos": 10,
-    "texto": "¿Qué palabra clave se usa para crear una función en Python?",
-    "respuesta": "def",
+    "texto": "¿Qué hace st.title()?",
+    "respuesta": "Agrega un título grande",
     "opciones": [
-      {"texto": "func", "correcta": false},
-      {"texto": "define", "correcta": false},
-      {"texto": "def", "correcta": true},
-      {"texto": "function", "correcta": false}
+      {"texto": "Muestra un botón", "correcta": false},
+      {"texto": "Agrega un título grande", "correcta": true},
+      {"texto": "Inserta una imagen", "correcta": false},
+      {"texto": "Escribe en consola", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 29,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Para qué sirve st.slider()?",
+    "respuesta": "Para elegir un número dentro de un rango",
+    "opciones": [
+      {"texto": "Para crear listas", "correcta": false},
+      {"texto": "Para elegir un número dentro de un rango", "correcta": true},
+      {"texto": "Para mostrar imágenes", "correcta": false},
+      {"texto": "Para cargar archivos", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 31,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué comando permite mostrar imágenes?",
+    "respuesta": "st.image()",
+    "opciones": [
+      {"texto": "st.pic()", "correcta": false},
+      {"texto": "st.img()", "correcta": false},
+      {"texto": "st.image()", "correcta": true},
+      {"texto": "st.show_img()", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 27,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Cuál comando lanza una app en Streamlit desde consola?",
+    "respuesta": "streamlit run archivo.py",
+    "opciones": [
+      {"texto": "python archivo.py", "correcta": false},
+      {"texto": "streamlit run archivo.py", "correcta": true},
+      {"texto": "run archivo.py", "correcta": false},
+      {"texto": "streamlit start archivo.py", "correcta": false}
     ]
   },
   {
     "id_leccion": 30,
     "tipo": "opcion_multiple",
     "puntos": 10,
-    "texto": "¿Qué beneficio tiene usar funciones?",
-    "respuesta": "Permite organizar y reutilizar código",
+    "texto": "¿Cuál es el propósito de st.button()?",
+    "respuesta": "Enviar datos al hacer clic",
     "opciones": [
-      {"texto": "Gasta más memoria", "correcta": false},
-      {"texto": "Hace el código más largo", "correcta": false},
-      {"texto": "Permite organizar y reutilizar código", "correcta": true},
-      {"texto": "Hace dibujos más lentos", "correcta": false}
+      {"texto": "Escribir texto", "correcta": false},
+      {"texto": "Enviar datos al hacer clic", "correcta": true},
+      {"texto": "Crear menús", "correcta": false},
+      {"texto": "Mostrar imágenes", "correcta": false}
     ]
   },
   {
-    "id_leccion": 27,
+    "id_leccion": 28,
     "tipo": "opcion_multiple",
     "puntos": 10,
-    "texto": "¿Qué hace este código?\ndef dibujar():\n    print(\"Dibujo listo\")\ndibujar()",
-    "respuesta": "Imprime un texto",
+    "texto": "¿Qué componente usarías para pedir el nombre del usuario?",
+    "respuesta": "st.text_input()",
     "opciones": [
-      {"texto": "Dibuja un cuadrado", "correcta": false},
-      {"texto": "Da error", "correcta": false},
-      {"texto": "Imprime un texto", "correcta": true},
-      {"texto": "Nada", "correcta": false}
-    ]
-  },
-  {
-    "id_leccion": 29,
-    "tipo": "opcion_multiple",
-    "puntos": 10,
-    "texto": "¿Qué significa un parámetro en una función?",
-    "respuesta": "Un valor que se pasa a la función",
-    "opciones": [
-      {"texto": "Un error", "correcta": false},
-      {"texto": "Un valor que se pasa a la función", "correcta": true},
-      {"texto": "El nombre de la función", "correcta": false},
-      {"texto": "El color de fondo", "correcta": false}
-    ]
-  },
-  {
-    "id_leccion": 27,
-    "tipo": "opcion_multiple",
-    "puntos": 10,
-    "texto": "¿Qué pasa si no llamas una función después de definirla?",
-    "respuesta": "No hace nada",
-    "opciones": [
-      {"texto": "Se ejecuta igual", "correcta": false},
-      {"texto": "Da error", "correcta": false},
-      {"texto": "No hace nada", "correcta": true},
-      {"texto": "Imprime el nombre de la función", "correcta": false}
-    ]
-  },
-  {
-    "id_leccion": 27,
-    "tipo": "opcion_multiple",
-    "puntos": 10,
-    "texto": "¿Qué hace return en una función?",
-    "respuesta": "Devuelve un valor",
-    "opciones": [
-      {"texto": "Repite la función", "correcta": false},
-      {"texto": "Devuelve un valor", "correcta": true},
-      {"texto": "Borra el resultado", "correcta": false},
-      {"texto": "Dibuja en reversa", "correcta": false}
-    ]
-  },
-  {
-    "id_leccion": 27,
-    "tipo": "opcion_multiple",
-    "puntos": 10,
-    "texto": "¿Qué es def en Python?",
-    "respuesta": "Una palabra clave para definir funciones",
-    "opciones": [
-      {"texto": "Una variable", "correcta": false},
-      {"texto": "Una clase", "correcta": false},
-      {"texto": "Una palabra clave para definir funciones", "correcta": true},
-      {"texto": "Una librería", "correcta": false}
-    ]
-  },
-  {
-    "id_leccion": 29,
-    "tipo": "opcion_multiple",
-    "puntos": 10,
-    "texto": "¿Qué imprime este código?\ndef sumar(a, b):\n    return a + b\nprint(sumar(3, 4))",
-    "respuesta": "7",
-    "opciones": [
-      {"texto": "sumar(3, 4)", "correcta": false},
-      {"texto": "7", "correcta": true},
-      {"texto": "Error", "correcta": false},
-      {"texto": "a + b", "correcta": false}
-    ]
-  },
-  {
-    "id_leccion": 27,
-    "tipo": "opcion_multiple",
-    "puntos": 10,
-    "texto": "¿Qué sucede si una función no tiene return?",
-    "respuesta": "Devuelve None",
-    "opciones": [
-      {"texto": "Siempre da error", "correcta": false},
-      {"texto": "Devuelve 0", "correcta": false},
-      {"texto": "Devuelve None", "correcta": true},
-      {"texto": "Devuelve el último valor impreso", "correcta": false}
+      {"texto": "st.input()", "correcta": false},
+      {"texto": "st.ask()", "correcta": false},
+      {"texto": "st.text_input()", "correcta": true},
+      {"texto": "st.entry()", "correcta": false}
     ]
   },
   {
     "id_leccion": 30,
     "tipo": "opcion_multiple",
     "puntos": 10,
-    "texto": "¿Cuál es un buen motivo para usar funciones en Turtle?",
-    "respuesta": "Para modular el código",
+    "texto": "¿Qué hace st.success()?",
+    "respuesta": "Muestra un mensaje destacado en verde",
     "opciones": [
-      {"texto": "Para hacer dibujos aleatorios", "correcta": false},
-      {"texto": "Para evitar importar Turtle", "correcta": false},
-      {"texto": "Para modular el código", "correcta": true},
-      {"texto": "Para hacer que el dibujo sea invisible", "correcta": false}
+      {"texto": "Muestra un texto de error", "correcta": false},
+      {"texto": "Cierra la app", "correcta": false},
+      {"texto": "Muestra un mensaje destacado en verde", "correcta": true},
+      {"texto": "Reinicia los inputs", "correcta": false}
     ]
   },
   {
-    "id_leccion": 27,
+    "id_leccion": 32,
     "tipo": "opcion_multiple",
     "puntos": 10,
-    "texto": "¿Qué significa la indentación dentro de una función?",
-    "respuesta": "Delimita el bloque de la función",
+    "texto": "¿Qué comando permite separar visualmente secciones?",
+    "respuesta": "st.markdown(\"---\")",
     "opciones": [
-      {"texto": "Es opcional", "correcta": false},
-      {"texto": "Es un estilo de escritura", "correcta": false},
-      {"texto": "Delimita el bloque de la función", "correcta": true},
-      {"texto": "Se ignora en Turtle", "correcta": false}
+      {"texto": "st.divide()", "correcta": false},
+      {"texto": "st.break()", "correcta": false},
+      {"texto": "st.markdown(\"---\")", "correcta": true},
+      {"texto": "st.line()", "correcta": false}
     ]
   },
   {
     "id_leccion": 29,
     "tipo": "opcion_multiple",
     "puntos": 10,
-    "texto": "¿Qué permite una función con parámetros?",
-    "respuesta": "Modificar su comportamiento según los valores",
+    "texto": "¿Qué tipo de dato retorna st.slider()?",
+    "respuesta": "Entero o flotante",
     "opciones": [
-      {"texto": "Que la función se repita automáticamente", "correcta": false},
-      {"texto": "Modificar su comportamiento según los valores", "correcta": true},
-      {"texto": "Que se llame sola", "correcta": false},
-      {"texto": "Dibujar sin definirla", "correcta": false}
+      {"texto": "Lista", "correcta": false},
+      {"texto": "Booleano", "correcta": false},
+      {"texto": "Entero o flotante", "correcta": true},
+      {"texto": "Texto", "correcta": false}
     ]
   },
   {
-    "id_leccion": 27,
+    "id_leccion": 29,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué hace st.selectbox()?",
+    "respuesta": "Permite elegir una opción entre varias",
+    "opciones": [
+      {"texto": "Muestra botones de opción", "correcta": false},
+      {"texto": "Permite elegir una opción entre varias", "correcta": true},
+      {"texto": "Permite escribir texto", "correcta": false},
+      {"texto": "Crea listas desplegables (solo con múltiples respuestas)", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 31,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Cómo puedes usar emojis en Streamlit?",
+    "respuesta": "st.write(\"😃\")",
+    "opciones": [
+      {"texto": "st.emoji()", "correcta": false},
+      {"texto": "st.text(\"emoji\")", "correcta": false},
+      {"texto": "st.write(\"😃\")", "correcta": true},
+      {"texto": "No se puede", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 30,
+    "tipo": "opcion_multiple",
+    "puntos": 10,
+    "texto": "¿Qué pasa si no usas if st.button(): y colocas la lógica directamente?",
+    "respuesta": "El código se ejecuta siempre",
+    "opciones": [
+      {"texto": "La app no carga", "correcta": false},
+      {"texto": "El código se ejecuta siempre", "correcta": true},
+      {"texto": "El botón no aparece", "correcta": false},
+      {"texto": "Genera error", "correcta": false}
+    ]
+  },
+  {
+    "id_leccion": 30,
     "tipo": "codigo",
     "puntos": 15,
-    "texto": "Completa para definir una función que imprima “¡Hola!”:",
-    "codigo_inicial": "___ saludo():\n    print(\"¡Hola!\")",
+    "texto": "Completa para mostrar un saludo solo al hacer clic:",
+    "codigo_inicial": "if st.______(\"Saludar\"):\n    st.______(f\"Hola, {nombre}!\")",
     "respuesta": ""
   },
   {
     "id_leccion": 28,
     "tipo": "codigo",
     "puntos": 15,
-    "texto": "Corrige este código para que dibuje un triángulo:",
-    "codigo_inicial": "def dibujar_triangulo()  \n    for _ in range(3):\n        turtle.forward(100)\n        turtle.left(120)",
-    "respuesta": ""
-  },
-  {
-    "id_leccion": 29,
-    "tipo": "codigo",
-    "puntos": 15,
-    "texto": "Completa la función para que acepte un parámetro de color:",
-    "codigo_inicial": "def cuadrado_color(____):\n    turtle.pencolor(____)\n    for _ in range(4):\n        turtle.forward(100)\n        turtle.right(90)",
-    "respuesta": ""
-  },
-  {
-    "id_leccion": 29,
-    "tipo": "codigo",
-    "puntos": 15,
-    "texto": "Modifica esta función para aceptar el tamaño del cuadrado:",
-    "codigo_inicial": "def cuadrado(tamano):\n    for _ in range(4):\n        turtle.forward(____)\n        turtle.right(90)",
-    "respuesta": ""
-  },
-  {
-    "id_leccion": 30,
-    "tipo": "codigo",
-    "puntos": 15,
-    "texto": "Completa el código para que dibuje dos estrellas de distinto tamaño:",
-    "codigo_inicial": "def estrella(lado):\n    for _ in range(5):\n        turtle.forward(lado)\n        turtle.right(144)\n\nestrella(100)\nturtle.____()\nturtle.goto(____)\nturtle.____()\nestrella(50)",
-    "respuesta": ""
-  },
-  {
-    "id_leccion": 29,
-    "tipo": "codigo",
-    "puntos": 15,
-    "texto": "Completa esta función que combina color y tamaño:",
-    "codigo_inicial": "def figura_personalizada(color, tam):\n    turtle.________(color)\n    for _ in range(4):\n        turtle.forward(tam)\n        turtle.left(90)",
-    "respuesta": ""
-  },
-  {
-    "id_leccion": 29,
-    "tipo": "codigo",
-    "puntos": 15,
-    "texto": "Escribe una función llamada estrella() que reciba un parámetro lado y dibuje una estrella de 5 puntas.",
-    "codigo_inicial": "",
-    "respuesta": ""
-  },
-  {
-    "id_leccion": 30,
-    "tipo": "codigo",
-    "puntos": 15,
-    "texto": "Define una función bandera() que dibuje dos rectángulos horizontales, uno rojo y uno blanco.",
-    "codigo_inicial": "",
+    "texto": "Completa para pedir la edad y limitar el rango:",
+    "codigo_inicial": "edad = st.______(\"Edad:\", min_value=0, max_value=120)",
     "respuesta": ""
   },
   {
     "id_leccion": 31,
     "tipo": "codigo",
     "puntos": 15,
-    "texto": "Escribe una función llamada flor() que use circle() y left() para crear una flor de 6 pétalos.",
+    "texto": "Completa para mostrar una imagen y su descripción:",
+    "codigo_inicial": "st.______(\"ruta/a/logo.png\", width=150)\nst.______(\"Este es el logo\")",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 32,
+    "tipo": "codigo",
+    "puntos": 15,
+    "texto": "Crea una sección con título y subtítulo:",
+    "codigo_inicial": "st.______(\"Bienvenido a mi app\")\nst.______(\"Esta sección muestra datos\")",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 33,
+    "tipo": "codigo",
+    "puntos": 25,
+    "texto": "Crea una app que:\n• Pida un número entero del 1 al 100\n• Muestre si es par o impar al presionar un botón",
     "codigo_inicial": "",
     "respuesta": ""
   },
   {
-    "id_leccion": 29,
+    "id_leccion": 33,
     "tipo": "codigo",
-    "puntos": 15,
-    "texto": "Crea una función estrella_color(tamano, color) que dibuje una estrella del tamaño y color indicados.",
+    "puntos": 25,
+    "texto": "Crea una app que:\n• Pida el nombre del usuario\n• Solicite un mensaje o recordatorio\n• Use un slider para definir cuántas veces repetir el mensaje (entre 1 y 10)\n• Muestre el mensaje repetido varias veces usando st.write()",
+    "codigo_inicial": "",
+    "respuesta": ""
+  },
+  {
+    "id_leccion": 33,
+    "tipo": "codigo",
+    "puntos": 25,
+    "texto": "Crea una app que:\n• Pida dos números\n• Use botones individuales para sumar, restar, multiplicar o dividir\n• Muestre el resultado solo del botón presionado",
     "codigo_inicial": "",
     "respuesta": ""
   }

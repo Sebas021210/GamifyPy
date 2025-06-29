@@ -1,6 +1,6 @@
 [
   {
-    "id_leccion": 32,
+    "id_leccion": 34,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace import math en un programa?",
@@ -13,7 +13,7 @@
     ]
   },
   {
-    "id_leccion": 33,
+    "id_leccion": 35,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Para qué sirve random.choice()?",
@@ -26,7 +26,7 @@
     ]
   },
   {
-    "id_leccion": 32,
+    "id_leccion": 34,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué significa modularidad?",
@@ -39,7 +39,7 @@
     ]
   },
   {
-    "id_leccion": 34,
+    "id_leccion": 36,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es el resultado de math.sqrt(16)?",
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "id_leccion": 33,
+    "id_leccion": 35,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué módulo usarías para generar un número aleatorio entre 1 y 10?",
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "id_leccion": 34,
+    "id_leccion": 36,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace math.pow(2, 3)?",
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "id_leccion": 35,
+    "id_leccion": 37,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué se necesita para usar un módulo personalizado?",
@@ -91,7 +91,7 @@
     ]
   },
   {
-    "id_leccion": 33,
+    "id_leccion": 35,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál de estas funciones es parte del módulo random?",
@@ -104,7 +104,7 @@
     ]
   },
   {
-    "id_leccion": 33,
+    "id_leccion": 35,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace este código?\nimport random\nopciones = [\"rojo\", \"azul\", \"verde\"]\nprint(random.choice(opciones))",
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id_leccion": 34,
+    "id_leccion": 36,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Importa el módulo math y calcula la raíz cuadrada de 25:",
@@ -125,7 +125,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 34,
+    "id_leccion": 36,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa el código para importar solo pi del módulo math:",
@@ -133,7 +133,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 33,
+    "id_leccion": 35,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa el código para usar random.randint(1, 6) en un juego de dados:",
@@ -141,7 +141,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 35,
+    "id_leccion": 37,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa el import para usar un módulo propio llamado mi_modulo:",
@@ -149,18 +149,18 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 35,
+    "id_leccion": 37,
     "tipo": "codigo",
     "puntos": 15,
-    "texto": "Escribe un módulo llamado colores.py con dos funciones: rojo() y azul() que cambian el color de turtle",
+    "texto": "Crea un módulo llamado emociones.py con al menos dos funciones: felicidad() y enojo(). Cada función debe devolver un mensaje mágico relacionado con la emoción correspondiente.",
     "codigo_inicial": "",
     "respuesta": ""
   },
   {
-    "id_leccion": 36,
+    "id_leccion": 38,
     "tipo": "codigo",
     "puntos": 15,
-    "texto": "Crea una función llamada estilo_random() que use random para generar un tamaño aleatorio y math para rotar una figura según un ángulo calculado",
+    "texto": "Crea una función llamada crear_personaje() que use random para elegir un nombre y clase, y math para calcular un poder mágico; la función debe devolver una descripción completa del personaje e imprimir el resultado al ejecutarla.",
     "codigo_inicial": "",
     "respuesta": ""
   }
