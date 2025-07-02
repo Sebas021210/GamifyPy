@@ -1,5 +1,6 @@
 from backend.database.database import Database
 from backend.database.schemas import Categoria, Nivel
+from sqlalchemy import text
 
 db = Database()
 session = db.get_session()
@@ -7,9 +8,16 @@ session = db.get_session()
 def reset_data():
     """Elimina datos existentes de las tablas relacionadas."""
     print("🗑️ Eliminando datos previos...")
+
     session.query(Nivel).delete()
     session.query(Categoria).delete()
     session.commit()
+
+    # Reiniciar ID
+    session.execute(text("ALTER SEQUENCE categoria_id_seq RESTART WITH 1"))
+    session.execute(text("ALTER SEQUENCE niveles_id_seq RESTART WITH 1"))
+    session.commit()
+
     print("✅ Datos eliminados.")
 
 def seed():
@@ -17,10 +25,26 @@ def seed():
 
     # Insertar categorías
     categorias = [
-        Categoria(nombre="Principiante", descripcion="Fundamentos de programación y lógica básica en Python."),
-        Categoria(nombre="Intermedio", descripcion="Condicionales y estructuras de control para la toma de decisiones y repetición."),
-        Categoria(nombre="Avanzado", descripcion="Uso de funciones, módulos y programación visual con Turtle."),
-        Categoria(nombre="Experto", descripcion="Estructuras de datos clave y manejo adecuado de errores en Python.")
+        Categoria(
+            nombre="Principiante",
+            descripcion="Fundamentos esenciales de programación y lógica básica en Python, incluyendo variables, tipos de datos y operaciones."
+        ),
+        Categoria(
+            nombre="Intermedio",
+            descripcion="Uso de condicionales y estructuras de control para resolver problemas mediante decisiones y repeticiones."
+        ),
+        Categoria(
+            nombre="Avanzado",
+            descripcion="Desarrollo estructurado con funciones, introducción a Streamlit y modularidad en Python."
+        ),
+        Categoria(
+            nombre="Experto",
+            descripcion="Dominio de estructuras de datos como listas, cadenas y diccionarios, además de manejo robusto de errores y excepciones."
+        ),
+        Categoria(
+            nombre="Creativo / Visual",
+            descripcion="Exploración visual de la programación mediante Turtle y desarrollo de videojuegos básicos con Pygame."
+        )
     ]
     session.add_all(categorias)
     session.commit()
@@ -40,10 +64,10 @@ def seed():
               descripcion="Utiliza ciclos for y while para repetir instrucciones. Controla la ejecución con break y continue según condiciones específicas."),
 
         # Avanzado
-        Nivel(id_categoria=3, orden=5, nombre="Nivel 5: Aprendiz del Dibujo",
-              descripcion="Explora la librería Turtle para crear gráficos: líneas, colores, rellenos y diseños básicos con instrucciones secuenciales."),
-        Nivel(id_categoria=3, orden=6, nombre="Nivel 6: Arquitecto del Arte",
-              descripcion="Crea tus propias funciones y organiza dibujos con Turtle en módulos estructurados. Aprende reutilización y modularidad."),
+        Nivel(id_categoria=3, orden=5, nombre="Nivel 5: Forjador de Funciones",
+              descripcion="Crea tus propias funciones, define parámetros y retorna valores para reutilizar tu código."),
+        Nivel(id_categoria=3, orden=6, nombre="Nivel 6: Creador de Apps con Streamlit",
+              descripcion="Aprende los componentes básicos de Streamlit para construir interfaces simples en Python."),
         Nivel(id_categoria=3, orden=7, nombre="Nivel 7: Mago de Módulos",
               descripcion="Importa módulos propios o de la librería estándar como math y random. Aprende a estructurar programas más grandes."),
 
@@ -53,7 +77,17 @@ def seed():
         Nivel(id_categoria=4, orden=9, nombre="Nivel 9: Maestro de Diccionarios",
               descripcion="Aprende a trabajar con diccionarios: almacenar pares clave-valor, acceder a datos y recorrer colecciones con for."),
         Nivel(id_categoria=4, orden=10, nombre="Nivel 10: Invocador de Errores",
-              descripcion="Identifica y controla errores comunes usando try y except. Mejora la robustez de tus programas con buen manejo de excepciones.")
+              descripcion="Identifica y controla errores comunes usando try y except. Mejora la robustez de tus programas con buen manejo de excepciones."),
+
+        # Creativo / Visual
+        Nivel(id_categoria=5, orden=11, nombre="Nivel 11: Aprendiz del Dibujo con Turtle",
+              descripcion="Crea gráficos básicos con Turtle usando líneas, colores y bucles para patrones simples."),
+        Nivel(id_categoria=5, orden=12, nombre="Nivel 12: Arquitecto Visual con Turtle",
+              descripcion="Dibuja figuras complejas, usa funciones para modular tu código y aplica rellenos y combinaciones."),
+        Nivel(id_categoria=5, orden=13, nombre="Nivel 13: Iniciador de Juegos con Pygame",
+              descripcion="Aprende los fundamentos de Pygame: ventana de juego, imágenes y eventos de teclado."),
+        Nivel(id_categoria=5, orden=14, nombre="Nivel 14: Maestro de Juegos con Pygame",
+              descripcion="Desarrolla lógica básica de videojuegos con movimiento de sprites, colisiones y bucles de juego.")
     ]
     session.add_all(niveles)
     session.commit()
