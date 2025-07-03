@@ -1,6 +1,6 @@
 # 🎮 Nivel 13 – Iniciador de Juegos 
 
-## Lección 0 – Instalando Pygame
+## Lección 0: Instalando Pygame
 
 ### ¿Qué es Pygame?
 Es una biblioteca de Python que permite crear videojuegos de forma sencilla. Nos permite trabajar con gráficos, sonidos, imágenes y eventos de teclado o mouse.
@@ -16,7 +16,7 @@ import pygame
 print(pygame.__version__)
 ```
 
-## Lección 1 – Creando una ventana de juego
+## Lección 1: Creando una ventana de juego
 ```python
 import pygame
 
@@ -27,7 +27,7 @@ pygame.display.set_caption("Mi primer juego")
 
 📌 Esto crea una ventana básica de 640x480 píxeles.
 
-## Lección 2 – Dibujando fondo y color
+## Lección 2: Dibujando fondo y color
 ```python
 ventana.fill((135, 206, 250))  # Color celeste (RGB)
 pygame.display.update()
@@ -35,14 +35,14 @@ pygame.display.update()
 
 📌 Los colores en Pygame se definen como tuplas RGB: (Rojo, Verde, Azul)
 
-## Lección 3 – Cargar y mostrar una imagen
+## Lección 3: Cargar y mostrar una imagen
 ```python
 imagen = pygame.image.load("personaje.png")
 ventana.blit(imagen, (100, 100))
 pygame.display.update()
 ```
 
-## Lección 4 – Eventos de teclado
+## Lección 4: Eventos de teclado
 ```python
 for evento in pygame.event.get():
     if evento.type == pygame.KEYDOWN:
@@ -52,7 +52,7 @@ for evento in pygame.event.get():
 
 📌 Podemos detectar teclas como K_LEFT, K_RIGHT, K_UP, K_DOWN, K_SPACE, etc.
 
-## Lección 5 – Bucle principal del juego
+## Lección 5: Bucle principal del juego
 ```python
 corriendo = True
 while corriendo:

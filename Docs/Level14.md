@@ -1,6 +1,6 @@
-## 🎮 Nivel 14 – Maestro de Juegos
+# 🎮 Nivel 14 – Maestro de Juegos
 
-### Lección 1 – Movimiento con teclas
+### Lección 1: Movimiento con teclas
 ```python
 personaje_x = 100
 personaje_y = 300
@@ -15,7 +15,7 @@ for evento in pygame.event.get():
 
 📌 Se deben redibujar todos los objetos y el fondo en cada fotograma.
 
-## Lección 2 – Movimiento suave (FPS)
+## Lección 2: Movimiento suave (FPS)
 ```python
 clock = pygame.time.Clock()
 
@@ -29,7 +29,7 @@ while corriendo:
 
 📌 Esto permite que el personaje se mueva mientras la tecla esté presionada.
 
-## Lección 3 – Detección de colisiones
+## Lección 3: Detección de colisiones
 ```python
 jugador = pygame.Rect(personaje_x, personaje_y, 50, 50)
 enemigo = pygame.Rect(300, 300, 50, 50)
@@ -40,7 +40,7 @@ if jugador.colliderect(enemigo):
 
 📌 Rect permite representar áreas para detectar colisiones fácilmente.
 
-## Lección 4 – Lógica de juego básica
+## Lección 4: Lógica de juego básica
 ```python
 vidas = 3
 puntos = 0
@@ -54,7 +54,7 @@ if jugador.colliderect(enemigo):
 
 📌 Puedes mostrar la puntuación con pygame.font.Font.
 
-## Lección 5 – Reto: Juego simple completo
+## Lección 5: Juego simple completo
 Objetivo:
 Construir un juego básico donde el jugador debe moverse y esquivar meteoritos que caen. Si logra 10 puntos, gana. Si pierde todas sus vidas, pierde.
 
