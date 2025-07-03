@@ -1,6 +1,6 @@
 [
   {
-    "id_leccion": 67,
+    "id_leccion": 69,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace pygame.init()?",
@@ -13,7 +13,7 @@
     ]
   },
   {
-    "id_leccion": 67,
+    "id_leccion": 69,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué código crea una ventana de 800x600?",
@@ -26,7 +26,7 @@
     ]
   },
   {
-    "id_leccion": 68,
+    "id_leccion": 70,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cómo se define un color blanco en RGB?",
@@ -39,7 +39,7 @@
     ]
   },
   {
-    "id_leccion": 68,
+    "id_leccion": 70,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace pygame.display.update()?",
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "id_leccion": 69,
+    "id_leccion": 71,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es la función para cargar una imagen?",
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "id_leccion": 70,
+    "id_leccion": 72,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué evento se activa al presionar una tecla?",
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "id_leccion": 71,
+    "id_leccion": 73,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Para qué se usa pygame.quit()?",
@@ -91,7 +91,7 @@
     ]
   },
   {
-    "id_leccion": 70,
+    "id_leccion": 72,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cómo detectas si se presionó la flecha derecha?",
@@ -104,7 +104,7 @@
     ]
   },
   {
-    "id_leccion": 71,
+    "id_leccion": 73,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál de estos es un bucle principal válido?",
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id_leccion": 67,
+    "id_leccion": 69,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa para crear una ventana de 600x400 con título \"Juego Prueba\":",
@@ -125,7 +125,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 69,
+    "id_leccion": 71,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa para cargar y mostrar una imagen en posición (150, 150):",
@@ -133,7 +133,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 70,
+    "id_leccion": 72,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa para detectar si se presiona espacio:",
@@ -141,7 +141,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 71,
+    "id_leccion": 73,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa el bucle del juego:",
@@ -149,7 +149,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 68,
+    "id_leccion": 70,
     "tipo": "codigo",
     "puntos": 20,
     "texto": "Crea una ventana de 800x600 donde el fondo sea azul y aparezca una imagen en el centro. Al presionar una tecla, imprime cuál fue presionada.",
@@ -157,7 +157,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 70,
+    "id_leccion": 72,
     "tipo": "codigo",
     "puntos": 20,
     "texto": "Carga un personaje y permite moverlo con las flechas (K_LEFT, K_RIGHT). Usa ventana.fill() para actualizar el fondo y dibujar el personaje en nuevas posiciones.",

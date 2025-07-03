@@ -1,6 +1,6 @@
 [
   {
-    "id_leccion": 62,
+    "id_leccion": 63,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué beneficio tiene definir funciones para dibujar?",
@@ -13,7 +13,7 @@
     ]
   },
   {
-    "id_leccion": 63,
+    "id_leccion": 64,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace este código?\nfor _ in range(6):\n    t.forward(100)\n    t.right(60)",
@@ -26,7 +26,7 @@
     ]
   },
   {
-    "id_leccion": 64,
+    "id_leccion": 65,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué sucede si no se llama end_fill() después de begin_fill()?",
@@ -39,7 +39,7 @@
     ]
   },
   {
-    "id_leccion": 63,
+    "id_leccion": 64,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Para qué se usa t.circle(50, 180)?",
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "id_leccion": 62,
+    "id_leccion": 63,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace este código?\ndef petalo():\n    for _ in range(2):\n        t.circle(100, 60)\n        t.left(120)",
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "id_leccion": 64,
+    "id_leccion": 65,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál de estos comandos modifica el grosor del trazo?",
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "id_leccion": 63,
+    "id_leccion": 64,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "Si rotamos t.right(30) tras cada figura repetida, ¿cuántas veces para girar 360°?",
@@ -91,7 +91,7 @@
     ]
   },
   {
-    "id_leccion": 64,
+    "id_leccion": 65,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué permite usar fillcolor()?",
@@ -104,7 +104,7 @@
     ]
   },
   {
-    "id_leccion": 64,
+    "id_leccion": 65,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué pasa si usas t.hideturtle() después de dibujar?",
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id_leccion": 63,
+    "id_leccion": 64,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa la función que dibuja una estrella de 5 puntas:",
@@ -125,7 +125,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 63,
+    "id_leccion": 64,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa el código para hacer una figura rotada 8 veces:",
@@ -133,7 +133,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 64,
+    "id_leccion": 65,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa esta función para un cuadrado con color:",
@@ -141,7 +141,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 65,
+    "id_leccion": 66,
     "tipo": "codigo",
     "puntos": 20,
     "texto": "Diseña una flor de 10 pétalos que use una función con 3 parámetros: color del trazo, tamaño del pétalo y ángulo de rotación.",
@@ -149,7 +149,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 66,
+    "id_leccion": 67,
     "tipo": "codigo",
     "puntos": 20,
     "texto": "Crea un mandala con al menos 3 capas diferentes:\n• Una estrella central\n• Una flor intermedia\n• Un borde exterior con polígonos o figuras simétricas\n• Usa 3 funciones propias y hazlo modular.",

@@ -1,6 +1,6 @@
 [
   {
-    "id_leccion": 73,
+    "id_leccion": 75,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué función limita los FPS del juego?",
@@ -13,7 +13,7 @@
     ]
   },
   {
-    "id_leccion": 72,
+    "id_leccion": 74,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace pygame.key.get_pressed()?",
@@ -26,7 +26,7 @@
     ]
   },
   {
-    "id_leccion": 74,
+    "id_leccion": 76,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué representa un pygame.Rect?",
@@ -39,7 +39,7 @@
     ]
   },
   {
-    "id_leccion": 74,
+    "id_leccion": 76,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es el propósito de colliderect()?",
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "id_leccion": 75,
+    "id_leccion": 77,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cómo se reinicia la posición del personaje tras una colisión?",
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "id_leccion": 75,
+    "id_leccion": 77,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué sucede si no redibujas el fondo cada frame?",
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "id_leccion": 75,
+    "id_leccion": 77,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Para qué sirve pygame.font.Font()?",
@@ -91,7 +91,7 @@
     ]
   },
   {
-    "id_leccion": 74,
+    "id_leccion": 76,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué comando dibuja un rectángulo?",
@@ -104,7 +104,7 @@
     ]
   },
   {
-    "id_leccion": 75,
+    "id_leccion": 77,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cómo sabrías que se terminó el juego?",
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id_leccion": 72,
+    "id_leccion": 74,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa para mover personaje a la derecha si se presiona la tecla:",
@@ -125,7 +125,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 74,
+    "id_leccion": 76,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa para detectar colisión con el enemigo:",
@@ -133,7 +133,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 75,
+    "id_leccion": 77,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa para restar una vida y reiniciar posición:",
@@ -141,7 +141,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 75,
+    "id_leccion": 77,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa para mostrar texto de puntuación:",
@@ -149,7 +149,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 76,
+    "id_leccion": 78,
     "tipo": "codigo",
     "puntos": 20,
     "texto": "Crea un juego donde el jugador se mueva a la izquierda o derecha para esquivar enemigos que caen desde la parte superior. Si colisiona, pierde vidas. Si logra esquivar 10, gana.",
@@ -157,7 +157,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 76,
+    "id_leccion": 78,
     "tipo": "codigo",
     "puntos": 20,
     "texto": "Crea un juego donde un personaje recoja objetos. Cada vez que colisione con uno, suma un punto y el objeto reaparece en otro lugar aleatorio. Usa pygame.Rect para todo.",

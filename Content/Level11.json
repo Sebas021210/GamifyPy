@@ -1,6 +1,6 @@
 [
   {
-    "id_leccion": 57,
+    "id_leccion": 58,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace t.forward(100)?",
@@ -13,7 +13,7 @@
     ]
   },
   {
-    "id_leccion": 59,
+    "id_leccion": 60,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué instrucción cambia el color de relleno?",
@@ -26,7 +26,7 @@
     ]
   },
   {
-    "id_leccion": 60,
+    "id_leccion": 61,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué se necesita para comenzar y terminar un relleno?",
@@ -39,7 +39,7 @@
     ]
   },
   {
-    "id_leccion": 58,
+    "id_leccion": 59,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace este código?\nfor _ in range(4):\n    t.forward(100)\n    t.right(90)",
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "id_leccion": 58,
+    "id_leccion": 59,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué comando hace girar a la tortuga 180 grados?",
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "id_leccion": 60,
+    "id_leccion": 61,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué pasa si omites end_fill()?",
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "id_leccion": 58,
+    "id_leccion": 59,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace t.pencolor(\"blue\")?",
@@ -91,7 +91,7 @@
     ]
   },
   {
-    "id_leccion": 60,
+    "id_leccion": 61,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es el propósito de t.begin_fill()?",
@@ -104,7 +104,7 @@
     ]
   },
   {
-    "id_leccion": 58,
+    "id_leccion": 59,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es el valor mínimo que se puede usar con t.pensize()?",
@@ -117,7 +117,7 @@
     ]
   },
   {
-    "id_leccion": 57,
+    "id_leccion": 58,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál de estos comandos pertenece al módulo turtle?",
@@ -130,7 +130,7 @@
     ]
   },
   {
-    "id_leccion": 58,
+    "id_leccion": 59,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Qué hace el siguiente código?\nt.right(90)\nt.forward(100)",
@@ -143,7 +143,7 @@
     ]
   },
   {
-    "id_leccion": 61,
+    "id_leccion": 62,
     "tipo": "opcion_multiple",
     "puntos": 10,
     "texto": "¿Cuál es el propósito de t.hideturtle()?",
@@ -156,7 +156,7 @@
     ]
   },
   {
-    "id_leccion": 58,
+    "id_leccion": 59,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa para dibujar un triángulo equilátero:",
@@ -164,7 +164,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 60,
+    "id_leccion": 61,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa este código para rellenar un cuadrado rojo:",
@@ -172,7 +172,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 58,
+    "id_leccion": 59,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Haz que el siguiente código dibuje un hexágono:",
@@ -180,7 +180,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 60,
+    "id_leccion": 61,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Completa el código para dibujar un círculo completo relleno de amarillo:",
@@ -188,7 +188,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 61,
+    "id_leccion": 62,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Dibuja una estrella de 5 puntas usando un ciclo for.",
@@ -196,7 +196,7 @@
     "respuesta": ""
   },
   {
-    "id_leccion": 61,
+    "id_leccion": 62,
     "tipo": "codigo",
     "puntos": 15,
     "texto": "Dibuja una figura libre que combine begin_fill(), circle() y pensize().",
