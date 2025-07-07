@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Cookie, Body, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import EmailStr
 from datetime import timedelta
-from backend.database import get_db, Usuario
+from backend.database import get_db, Usuario, ProgresoUsuario
 from sqlalchemy.orm import Session
 from backend.controllers.auth import ( create_access_token, create_refresh_token, verify_password, hash_password, 
                                       send_verification_email, SECRET_KEY, ALGORITHM )
@@ -73,6 +73,20 @@ async def register(register_request: RegisterRequest, db=Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    progreso_existente = db.query(ProgresoUsuario).filter_by(
+        id_usuario=new_user.id,
+        id_leccion=1
+    ).first()
+
+    if not progreso_existente:
+        primer_progreso = ProgresoUsuario(
+            id_usuario=new_user.id,
+            id_leccion=1,
+            completado=False
+        )
+        db.add(primer_progreso)
+        db.commit()
 
     return {
         "message": "Usuario registrado correctamente",
@@ -153,6 +167,14 @@ async def auth_callback(code: str, request: Request, db: Session = Depends(get_d
             db.add(user)
             db.commit()
             db.refresh(user)
+
+            primer_progreso = ProgresoUsuario(
+                id_usuario=user.id,
+                id_leccion=1,
+                completado=False
+            )
+            db.add(primer_progreso)
+            db.commit()
 
         access_token = create_access_token(data={"sub": user.email}, expires_delta=timedelta(minutes=15))
         refresh_token = create_refresh_token(data={"sub": user.email}, expires_delta=timedelta(days=7))
