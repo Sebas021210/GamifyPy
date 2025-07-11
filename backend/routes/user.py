@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, Cookie, Body, Request
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from backend.database import get_db, Usuario, Insignia, InsigniaUsuario, Habilidad, LeccionHabilidad, ProgresoUsuario, Leccion, Nivel, Categoria
 from sqlalchemy.orm import Session
 from backend.controllers.auth import get_current_user
-import jwt, os
 
 router = APIRouter()
 
