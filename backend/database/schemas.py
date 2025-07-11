@@ -111,3 +111,4 @@ class InsigniaUsuario(Base):
     fecha_logro = Column(DateTime, server_default=func.now())
 
     usuario = relationship("Usuario", back_populates="insignias")
+    insignia = relationship("Insignia")
