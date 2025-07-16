@@ -1,9 +1,13 @@
 from backend.database import Pregunta, OpcionPregunta
 from sqlalchemy.orm import Session
 from openai import AsyncOpenAI
+from dotenv import load_dotenv
 import os
 
+load_dotenv()
+
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+print(f"API Key cargada: {os.getenv('OPENAI_API_KEY')}")
 
 def evaluate_multiple_choice(db: Session, pregunta: Pregunta, respuesta: str):
     """ Función para evaluar respuestas de opción múltiple. """
@@ -38,7 +42,11 @@ async def evaluate_code(pregunta: Pregunta, respuesta: str):
     feedback_raw = completion.choices[0].message.content.strip()
 
     resultado_line = next((line for line in feedback_raw.split("\n") if "Resultado:" in line), None)
-    is_correct = "correcto" in resultado_line.lower() if resultado_line else None
+    if resultado_line:
+        resultado = resultado_line.lower().replace("resultado:", "").strip()
+        is_correct = resultado == "correcto"
+    else:
+        is_correct = None
 
     feedback_lines = feedback_raw.split("Retroalimentación:", 1)
     feedback = feedback_lines[1].strip() if len(feedback_lines) > 1 else feedback_raw
