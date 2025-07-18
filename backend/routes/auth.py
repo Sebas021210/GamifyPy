@@ -6,6 +6,7 @@ from backend.database import get_db, Usuario, ProgresoUsuario
 from sqlalchemy.orm import Session
 from backend.controllers.auth import ( create_access_token, create_refresh_token, verify_password, hash_password, 
                                       send_verification_email, SECRET_KEY, ALGORITHM )
+from backend.controllers.user_insignias import assign_insignia
 from backend.models.auth import LoginRequest, RegisterRequest, EmailRequest
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -87,6 +88,9 @@ async def register(register_request: RegisterRequest, db=Depends(get_db)):
         )
         db.add(primer_progreso)
         db.commit()
+
+    id_insignia = 53
+    assign_insignia(new_user.id, id_insignia, db)
 
     return {
         "message": "Usuario registrado correctamente",
@@ -175,6 +179,9 @@ async def auth_callback(code: str, request: Request, db: Session = Depends(get_d
             )
             db.add(primer_progreso)
             db.commit()
+
+            id_insignia = 53
+            assign_insignia(user.id, id_insignia, db)
 
         access_token = create_access_token(data={"sub": user.email}, expires_delta=timedelta(minutes=15))
         refresh_token = create_refresh_token(data={"sub": user.email}, expires_delta=timedelta(days=7))

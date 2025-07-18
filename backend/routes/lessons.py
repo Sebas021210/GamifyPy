@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from backend.database import get_db, Leccion, Pregunta, OpcionPregunta, Habilidad, LeccionHabilidad, ProgresoUsuario
 from sqlalchemy.orm import Session
 from backend.controllers.auth import get_current_user
+from backend.controllers.user_insignias import assign_insignia
 from datetime import datetime
 
 router = APIRouter()
@@ -94,6 +95,11 @@ async def complete_lesson(leccion_id: int, db: Session = Depends(get_db), curren
     db.commit()
 
     leccion_actual = db.query(Leccion).filter(Leccion.id == leccion_id).first()
+
+    if leccion_actual and leccion_actual.orden == 1:
+        id_insignia = 54
+        assign_insignia(user_id, id_insignia, db)
+
     siguiente_leccion = (
         db.query(Leccion)
         .filter(Leccion.id_nivel == leccion_actual.id_nivel, Leccion.orden > leccion_actual.orden)
