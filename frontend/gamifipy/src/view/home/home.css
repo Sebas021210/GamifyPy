@@ -66,12 +66,10 @@
 
 .subtitle {
     font-size: 1.3rem;
-    /*color: #00d4ff; */
     color: #b0c4de;
     margin-bottom: 2rem;
     opacity: 0;
     animation: fadeInUp 2s ease-out 0.5s forwards;
-    /*text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);*/
 }
 
 @keyframes fadeInUp {
@@ -141,12 +139,12 @@
 }
 
 .terminal-header {
-    color: #fff;
+    color: #f8f8f8;
     margin-bottom: 0.5rem;
 }
 
 .terminal-line {
-    color: #fff;
+    color: #f8f8f8;
     margin: 0.3rem 0;
     opacity: 0;
 }
@@ -171,7 +169,7 @@
     display: inline-block;
     width: 8px;
     height: 16px;
-    background: #fff;
+    background: #f8f8f8;
     animation: blink 1s infinite;
 }
 
