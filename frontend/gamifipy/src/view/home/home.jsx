@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import './Home.css';
 
 function Home() {
+    const navigate = useNavigate();
+
     useEffect(() => {
         createParticles();
         setTimeout(animateTerminal, 2000);
@@ -36,7 +39,7 @@ function Home() {
     };
 
     const empezarAventura = () => {
-        alert('¡Redirigiendo al login/registro! 🎮');
+        navigate("/auth");
     };
 
     return (
@@ -61,7 +64,6 @@ function Home() {
             </button>
         </div>
     )
-
 }
 
 export default Home;

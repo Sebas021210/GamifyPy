@@ -7,22 +7,25 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
+import Checkbox from '@mui/material/Checkbox';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import GoogleIcon from '@mui/icons-material/Google';
 import './auth.css'
 
-function Auth() {
+function Register() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [acceptTerms, setAcceptTerms] = useState(false);
     const [values, setValues] = useState({
         username: '',
+        email: '',
         password: '',
+        confirmPassword: '',
     });
 
-    const handleRegister = () => {
-        navigate("/register");
+    const handleLogin = () => {
+        navigate("/auth");
     }
 
     const handleChange = (prop) => (event) => {
@@ -33,8 +36,16 @@ function Auth() {
         setShowPassword((show) => !show);
     };
 
+    const handleClickShowConfirmPassword = () => {
+        setShowConfirmPassword((show) => !show);
+    };
+
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
+    };
+
+    const handleTermsChange = (event) => {
+        setAcceptTerms(event.target.checked);
     };
 
     return (
@@ -64,27 +75,15 @@ function Auth() {
 
                     {/* Texto de bienvenida */}
                     <Typography
-                        variant="h6"
-                        sx={{
-                            textAlign: 'center',
-                            color: 'white',
-                            mt: 4,
-                            mb: 2,
-                            fontWeight: 300,
-                        }}
-                    >
-                        ¡Bienvenido de regreso!
-                    </Typography>
-
-                    <Typography
                         variant="body2"
                         sx={{
                             textAlign: 'center',
                             color: 'rgba(255, 255, 255, 0.7)',
-                            mb: 2,
+                            mt: 2,
+                            mb: 1,
                         }}
                     >
-                        Ingresa tus credenciales para acceder a tu cuenta
+                        Crea tu cuenta y comienza tu aventura
                     </Typography>
 
                     {/* Formulario */}
@@ -94,7 +93,7 @@ function Auth() {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            mt: 3,
+                            mt: 1,
                             '& .MuiTextField-root': {
                                 m: 2,
                                 width: '30ch',
@@ -109,6 +108,36 @@ function Auth() {
                             variant="standard"
                             value={values.username}
                             onChange={handleChange('username')}
+                            InputLabelProps={{
+                                sx: {
+                                    color: 'white',
+                                    '&.Mui-focused': {
+                                        color: 'white',
+                                    },
+                                },
+                            }}
+                            InputProps={{
+                                sx: {
+                                    color: 'white',
+                                    '&:before': {
+                                        borderBottomColor: 'rgba(255, 255, 255, 0.42)',
+                                    },
+                                    '&:hover:not(.Mui-disabled):before': {
+                                        borderBottomColor: 'rgba(255, 255, 255, 0.87)',
+                                    },
+                                    '&:after': {
+                                        borderBottomColor: 'white',
+                                    },
+                                },
+                            }}
+                        />
+                        <TextField
+                            id="email"
+                            label="Correo electrónico"
+                            variant="standard"
+                            type="email"
+                            value={values.email}
+                            onChange={handleChange('email')}
                             InputLabelProps={{
                                 sx: {
                                     color: 'white',
@@ -176,13 +205,103 @@ function Auth() {
                                 },
                             }}
                         />
+                        <TextField
+                            id="confirmPassword"
+                            label="Confirmar contraseña"
+                            variant="standard"
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            value={values.confirmPassword}
+                            onChange={handleChange('confirmPassword')}
+                            InputProps={{
+                                sx: {
+                                    color: 'white',
+                                    '&:before': {
+                                        borderBottomColor: 'rgba(255, 255, 255, 0.42)',
+                                    },
+                                    '&:hover:not(.Mui-disabled):before': {
+                                        borderBottomColor: 'rgba(255, 255, 255, 0.87)',
+                                    },
+                                    '&:after': {
+                                        borderBottomColor: 'white',
+                                    },
+                                },
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label={
+                                                showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+                                            }
+                                            onClick={handleClickShowConfirmPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            sx={{ color: 'white' }}
+                                        >
+                                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            InputLabelProps={{
+                                sx: {
+                                    color: 'white',
+                                    '&.Mui-focused': {
+                                        color: 'white',
+                                    },
+                                },
+                            }}
+                        />
+
+                        <Box sx={{ mt: 2, mb: 2, width: '35ch', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Checkbox
+                                checked={acceptTerms}
+                                onChange={handleTermsChange}
+                                sx={{
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    '&.Mui-checked': {
+                                        color: 'white',
+                                    },
+                                    mr: 1,
+                                    mt: -0.5,
+                                }}
+                            />
+                            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.85rem', lineHeight: 1.4 }}>
+                                Acepto los{' '}
+                                <span
+                                    style={{
+                                        color: 'white',
+                                        cursor: 'pointer',
+                                        textDecoration: 'underline',
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        console.log('Terms clicked');
+                                    }}
+                                >
+                                    términos y condiciones
+                                </span>
+                                {' '}y la{' '}
+                                <span
+                                    style={{
+                                        color: 'white',
+                                        cursor: 'pointer',
+                                        textDecoration: 'underline',
+                                    }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        console.log('Privacy clicked');
+                                    }}
+                                >
+                                    política de privacidad
+                                </span>
+                            </Typography>
+                        </Box>
 
                         {/* Botón de Iniciar Sesión */}
                         <Button
                             variant="contained"
+                            disabled={!acceptTerms}
                             sx={{
-                                mt: 3,
-                                mb: 1,
+                                mt: 1,
+                                mb: 4,
                                 width: '40ch',
                                 backgroundColor: 'rgba(255, 255, 255, 0.2)',
                                 backdropFilter: 'blur(10px)',
@@ -191,40 +310,14 @@ function Auth() {
                                 '&:hover': {
                                     backgroundColor: 'rgba(255, 255, 255, 0.3)',
                                 },
+                                '&.Mui-disabled': {
+                                    color: 'white',
+                                    opacity: 0.5,
+                                },
                             }}
                             onClick={() => console.log('Login clicked')}
                         >
-                            Iniciar Sesión
-                        </Button>
-
-                        {/* Divider */}
-                        <Box sx={{ width: '30ch', my: 2 }}>
-                            <Divider sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
-                                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                                    o
-                                </Typography>
-                            </Divider>
-                        </Box>
-
-                        {/* Botón de Google */}
-                        <Button
-                            variant="outlined"
-                            startIcon={<GoogleIcon />}
-                            sx={{
-                                mt: 1,
-                                mb: 4,
-                                width: '40ch',
-                                color: 'white',
-                                borderColor: 'rgba(255, 255, 255, 0.5)',
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '&:hover': {
-                                    borderColor: 'rgba(255, 255, 255, 0.8)',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                                },
-                            }}
-                            onClick={() => console.log('Google login clicked')}
-                        >
-                            Continuar con Google
+                            Registrarse
                         </Button>
 
                         {/* Enlaces inferiores */}
@@ -232,35 +325,19 @@ function Auth() {
                             <Typography
                                 variant="body2"
                                 sx={{
-                                    color: 'rgba(255, 255, 255, 0.8)',
-                                    cursor: 'pointer',
-                                    mb: 1,
-                                    '&:hover': {
-                                        color: 'white',
-                                        textDecoration: 'underline',
-                                    },
-                                }}
-                                onClick={() => console.log('Forgot password clicked')}
-                            >
-                                ¿Olvidaste tu contraseña?
-                            </Typography>
-
-                            <Typography
-                                variant="body2"
-                                sx={{
                                     color: 'rgba(255, 255, 255, 0.7)',
                                 }}
                             >
-                                ¿No tienes cuenta?{' '}
+                                ¿Ya tienes cuenta?{' '}
                                 <span
                                     style={{
                                         color: 'white',
                                         cursor: 'pointer',
                                         textDecoration: 'underline',
                                     }}
-                                    onClick={handleRegister}
+                                    onClick={handleLogin}
                                 >
-                                    Regístrate
+                                    Inicia sesión
                                 </span>
                             </Typography>
                         </Box>
@@ -271,4 +348,4 @@ function Auth() {
     )
 }
 
-export default Auth;
+export default Register;
