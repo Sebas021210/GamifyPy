@@ -74,6 +74,10 @@ def get_user_habilidades(user_id: int, db: Session = Depends(get_db)):
 @router.get("/{user_id}/progreso")
 async def get_user_progreso(user_id: int, db: Session = Depends(get_db)):
     """ Endpoint para obtener el progreso de un usuario en las lecciones. """
+    usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
     progreso = (
         db.query(ProgresoUsuario, Leccion, Nivel, Categoria)
         .join(Leccion, ProgresoUsuario.id_leccion == Leccion.id)
@@ -92,6 +96,7 @@ async def get_user_progreso(user_id: int, db: Session = Depends(get_db)):
             "Categoria": categoria.nombre,
             "Nivel": nivel.nombre,
             "Leccion": leccion.titulo,
+            "Puntos": usuario.puntos,
             "Completado": progreso_usuario.completado,
             "Fecha Completado": progreso_usuario.fecha_completado.isoformat() if progreso_usuario.fecha_completado else None
         }

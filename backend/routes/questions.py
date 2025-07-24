@@ -92,9 +92,17 @@ async def evaluate_question(
         retroalimentacion=retroalimentacion
     )
     db.add(intento)
+
+    if es_correcto:
+        puntos_actuales = current_user.puntos or 0
+        puntos_ganados = pregunta.puntos or 0
+        current_user.puntos = puntos_actuales + puntos_ganados
+
     db.commit()
 
     return {
         "es_correcto": es_correcto,
-        "retroalimentacion": retroalimentacion
+        "retroalimentacion": retroalimentacion,
+        "puntos_ganados": puntos_ganados if es_correcto else 0,
+        "puntos_totales": current_user.puntos
     }
