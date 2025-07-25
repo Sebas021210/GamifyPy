@@ -1,47 +1,10 @@
 import React from "react";
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Insignias from "../../components/InsigniaCarousel";
 import './profile.css'
-
-const data = [
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria1.png',
-        title: 'AVANCE A INTERMEDIO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria2.png',
-        title: 'AVANCE A AVANZADO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria3.png',
-        title: 'AVANCE A EXPERTO',
-    },
-];
-
-function Media() {
-    return (
-        <Grid container wrap="nowrap">
-            {data.map((item, index) => (
-                <Box key={index} sx={{ width: 210, marginRight: 0.5, mt: 4 }}>
-                    <img
-                        style={{ width: 180, height: 170 }}
-                        alt={item.title}
-                        src={item.src}
-                    />
-                    <Box sx={{ pr: 2, textAlign: 'center' }}>
-                        <Typography gutterBottom variant="body2" sx={{ fontFamily: 'Orbitron, sans-serif' }}>
-                            {item.title}
-                        </Typography>
-                    </Box>
-                </Box>
-            ))}
-        </Grid>
-    );
-}
 
 function Profile() {
     return (
@@ -67,7 +30,7 @@ function Profile() {
             <div className="profile-insignias">
                 <h2>Insignias</h2>
                 <Box sx={{ overflow: 'hidden' }}>
-                    <Media />
+                    <Insignias />
                 </Box>
             </div>
             <div className="profile-skills">
