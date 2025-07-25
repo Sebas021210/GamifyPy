@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Insignias from "../../components/InsigniaCarousel";
+import Skills from "../../components/SkillsList";
 import './profile.css'
 
 function Profile() {
@@ -35,6 +36,7 @@ function Profile() {
             </div>
             <div className="profile-skills">
                 <h2>Habilidades</h2>
+                <Skills />
             </div>
         </div>
     )
