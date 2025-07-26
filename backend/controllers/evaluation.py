@@ -7,7 +7,6 @@ import os
 load_dotenv()
 
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-print(f"API Key cargada: {os.getenv('OPENAI_API_KEY')}")
 
 def evaluate_multiple_choice(db: Session, pregunta: Pregunta, respuesta: str):
     """ Función para evaluar respuestas de opción múltiple. """
