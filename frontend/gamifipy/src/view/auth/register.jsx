@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Paper, TextField, IconButton, InputAdornment, Button, Typography, Checkbox } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import TokenVerificationModal from '../../components/TokenVerificationModal';
+import TermsPrivacyModal from '../../components/TermsPrivacyModal';
 import './auth.css'
 
 function Register() {
@@ -11,6 +12,9 @@ function Register() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [termsModalOpen, setTermsModalOpen] = useState(false);
+    const [termsModalTitle, setTermsModalTitle] = useState('');
+    const [termsModalContent, setTermsModalContent] = useState('');
     const [values, setValues] = useState({
         username: '',
         email: '',
@@ -55,6 +59,38 @@ function Register() {
         setIsModalOpen(false);
         navigate("/auth", { replace: true });
     };
+
+    const showTerms = () => {
+        setTermsModalTitle('Términos y Condiciones');
+        fetch('/legal/terminos.txt')
+            .then((res) => res.text())
+            .then((text) => {
+                setTermsModalContent(text);
+            })
+            .catch((error) => {
+                console.error('Error al cargar los términos:', error);
+                setTermsModalContent('Error al cargar los Términos y Condiciones.');
+            });
+        setTermsModalOpen(true);
+    };
+
+    const showPrivacy = () => {
+        setTermsModalTitle('Política de Privacidad')
+        fetch('/legal/politicas.txt')
+            .then((res) => res.text())
+            .then((text) => {
+                setTermsModalContent(text);
+            })
+            .catch((error) => {
+                console.error('Error al cargar las politicas:', error);
+                setTermsModalContent('Error al cargar las políticas de privacidad.');
+            });
+        setTermsModalOpen(true);
+    }
+
+    const handleCloseTerms = () => {
+        setTermsModalOpen(false);
+    }
 
     return (
         <div>
@@ -281,7 +317,7 @@ function Register() {
                                     }}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        console.log('Terms clicked');
+                                        showTerms();
                                     }}
                                 >
                                     términos y condiciones
@@ -295,12 +331,18 @@ function Register() {
                                     }}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        console.log('Privacy clicked');
+                                        showPrivacy();
                                     }}
                                 >
                                     política de privacidad
                                 </span>
                             </Typography>
+                            <TermsPrivacyModal
+                                open={termsModalOpen}
+                                handleClose={handleCloseTerms}
+                                title={termsModalTitle}
+                                content={termsModalContent}
+                            />
                         </Box>
 
                         {/* Botón de Iniciar Sesión */}
