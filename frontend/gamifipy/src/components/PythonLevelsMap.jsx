@@ -1,0 +1,401 @@
+import React, { useState } from 'react';
+import { Lock, Star, Play, Trophy, Zap, Code, Brain, Rocket } from 'lucide-react';
+import IconButton from '@mui/material/IconButton';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+const PythonLevelsMap = () => {
+    const [selectedLevel, setSelectedLevel] = useState(null);
+    const [completedLevels, setCompletedLevels] = useState([1, 2, 3]); // eslint-disable-line no-unused-vars
+    const [currentLevel, setCurrentLevel] = useState(4); // eslint-disable-line no-unused-vars
+    const [showExtraLevels, setShowExtraLevels] = useState(false);
+
+    const mainLevels = [
+        { id: 1, title: "Variables y Tipos", icon: Code, difficulty: "Básico" },
+        { id: 2, title: "Operadores", icon: Code, difficulty: "Básico" },
+        { id: 3, title: "Condicionales", icon: Brain, difficulty: "Básico" },
+        { id: 4, title: "Bucles", icon: Brain, difficulty: "Intermedio" },
+        { id: 5, title: "Funciones", icon: Zap, difficulty: "Intermedio" },
+        { id: 6, title: "Listas", icon: Zap, difficulty: "Intermedio" },
+        { id: 7, title: "Diccionarios", icon: Brain, difficulty: "Intermedio" },
+        { id: 8, title: "Clases y Objetos", icon: Rocket, difficulty: "Avanzado" },
+        { id: 9, title: "Manejo de Archivos", icon: Rocket, difficulty: "Avanzado" },
+        { id: 10, title: "Excepciones", icon: Rocket, difficulty: "Avanzado" }
+    ];
+
+    const extraLevels = [
+        { id: 11, title: "Decoradores", icon: Star, difficulty: "Experto" },
+        { id: 12, title: "Generadores", icon: Star, difficulty: "Experto" },
+        { id: 13, title: "Multithreading", icon: Trophy, difficulty: "Experto" },
+        { id: 14, title: "APIs y Requests", icon: Trophy, difficulty: "Experto" }
+    ];
+
+    const getLevelGradient = (levelId) => {
+        if (completedLevels.includes(levelId)) {
+            return 'linear-gradient(135deg, #22c55e, #16a34a)';
+        } else if (levelId === currentLevel) {
+            return 'linear-gradient(135deg, #06b6d4, #0891b2)';
+        } else if (isLevelUnlocked(levelId)) {
+            return 'linear-gradient(135deg, #06b6d4, #0891b2)';
+        } else {
+            return 'linear-gradient(135deg, #6b7280, #374151)';
+        }
+    };
+
+    const isLevelUnlocked = (levelId) => {
+        if (levelId === 1) return true;
+        if (levelId <= 10) return completedLevels.includes(levelId - 1) || levelId === currentLevel;
+        if (levelId === 11) return completedLevels.includes(10) || levelId === currentLevel;
+        return completedLevels.includes(levelId - 1) || levelId === currentLevel;
+    };
+
+    const isLevelCompleted = (levelId) => completedLevels.includes(levelId);
+
+    const LevelNode = ({ level, position, isExtra = false }) => { // eslint-disable-line no-unused-vars
+        const Icon = level.icon;
+        const unlocked = isLevelUnlocked(level.id);
+        const completed = isLevelCompleted(level.id);
+
+        const nodeStyles = {
+            position: 'absolute',
+            left: `${position.x}%`,
+            top: `${position.y}%`,
+            transform: 'translate(-50%, -50%)',
+            transition: 'all 0.3s ease',
+            cursor: unlocked ? 'pointer' : 'not-allowed'
+        };
+
+        const circleStyles = {
+            position: 'relative',
+            width: '80px',
+            height: '80px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
+            background: getLevelGradient(level.id),
+            border: completed ? '4px solid #fbbf24' : 'none',
+            zIndex: 10
+        };
+
+        return (
+            <div
+                style={nodeStyles}
+                onClick={() => unlocked && setSelectedLevel(level)}
+                onMouseEnter={(e) => {
+                    if (unlocked) {
+                        e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                    }
+                }}
+                onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1)';
+                }}
+            >
+                <div style={circleStyles}>
+                    {!unlocked && (
+                        <div style={{
+                            position: 'absolute',
+                            inset: '0',
+                            background: 'rgba(0, 0, 0, 0.5)',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <Lock size={24} color="#d1d5db" />
+                        </div>
+                    )}
+
+                    <Icon size={32} color={unlocked ? 'white' : '#9ca3af'} />
+
+                    {completed && (
+                        <div style={{
+                            position: 'absolute',
+                            top: '-8px',
+                            right: '-8px',
+                            background: '#fbbf24',
+                            borderRadius: '50%',
+                            padding: '4px'
+                        }}>
+                            <Star size={16} color="#92400e" fill="#92400e" />
+                        </div>
+                    )}
+
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '-45px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        textAlign: 'center'
+                    }}>
+                        <div style={{
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            color: unlocked ? 'white' : '#6b7280'
+                        }}>
+                            Nivel {level.id}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const mainPositions = [
+        { x: 15, y: 10 }, { x: 35, y: 20 }, { x: 55, y: 10 }, { x: 75, y: 20 },
+        { x: 85, y: 35 }, { x: 65, y: 45 }, { x: 45, y: 40 }, { x: 25, y: 45 },
+        { x: 40, y: 65 }, { x: 60, y: 70 }
+    ];
+
+    const extraPositions = [
+        { x: 20, y: 105 }, { x: 40, y: 105 }, { x: 60, y: 105 }, { x: 80, y: 105 }
+    ];
+
+    const containerStyles = {
+        minHeight: showExtraLevels ? '120vh' : '100vh',
+        width: '100%',
+        position: 'relative',
+        overflow: 'visible',
+    };
+
+    const overlayStyles = {
+        position: 'absolute',
+        inset: '0',
+    };
+
+    return (
+        <div style={containerStyles}>
+            <div style={overlayStyles} />
+            <div style={{ textAlign: 'center', padding: '32px 0', position: 'relative', zIndex: 10 }}>
+                <h1 style={{
+                    fontSize: '3.5rem',
+                    fontWeight: 'bold',
+                    color: 'white',
+                    marginBottom: '8px',
+                }}>
+                    Niveles
+                </h1>
+                <IconButton
+                    style={{
+                        position: 'absolute',
+                        top: 32,
+                        right: 32,
+                        color: 'white',
+                    }}
+                >
+                    <AccountCircleIcon fontSize="large" />
+                </IconButton>
+            </div>
+
+            <div style={{
+                position: 'relative',
+                height: '80vh',
+                margin: '0 32px 32px',
+                transition: 'height 0.3s ease'
+            }}>
+                {mainLevels.map((level, index) => (
+                    <LevelNode
+                        key={level.id}
+                        level={level}
+                        position={mainPositions[index]}
+                    />
+                ))}
+
+                {showExtraLevels && extraLevels.map((level, index) => (
+                    <LevelNode
+                        key={level.id}
+                        level={level}
+                        position={extraPositions[index]}
+                        isExtra
+                    />
+                ))}
+
+                {!showExtraLevels && (
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '20px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        textAlign: 'center'
+                    }}>
+                        <button
+                            onClick={() => {
+                                setShowExtraLevels(true);
+                                setTimeout(() => {
+                                    window.scrollTo({
+                                        top: window.innerHeight * 0.5,
+                                        behavior: 'smooth'
+                                    });
+                                }, 300);
+                            }}
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                background: 'rgba(147, 51, 234, 0.2)',
+                                backdropFilter: 'blur(8px)',
+                                border: '1px solid rgba(147, 51, 234, 0.3)',
+                                borderRadius: '24px',
+                                padding: '12px 24px',
+                                color: '#e9d5ff',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.background = 'rgba(147, 51, 234, 0.3)';
+                                e.target.style.transform = 'scale(1.05)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.background = 'rgba(147, 51, 234, 0.2)';
+                                e.target.style.transform = 'scale(1)';
+                            }}
+                        >
+                            <Trophy size={20} color="#c084fc" />
+                            <span>Mostrar Niveles Extras</span>
+                        </button>
+                    </div>
+                )}
+
+                {showExtraLevels && (
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '40px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        textAlign: 'center'
+                    }}>
+                        <button
+                            onClick={() => {
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth'
+                                });
+                                setTimeout(() => {
+                                    setShowExtraLevels(false);
+                                }, 300);
+                            }}
+                            style={{
+                                background: 'rgba(75, 85, 99, 0.3)',
+                                backdropFilter: 'blur(8px)',
+                                border: '1px solid rgba(75, 85, 99, 0.5)',
+                                borderRadius: '16px',
+                                padding: '8px 16px',
+                                color: '#9ca3af',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.background = 'rgba(75, 85, 99, 0.5)';
+                                e.target.style.color = 'white';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.background = 'rgba(75, 85, 99, 0.3)';
+                                e.target.style.color = '#9ca3af';
+                            }}
+                        >
+                            Ocultar Niveles Extras
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            {selectedLevel && (
+                <div style={{
+                    position: 'fixed',
+                    inset: '0',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 50,
+                    padding: '16px'
+                }}>
+                    <div style={{
+                        background: 'linear-gradient(135deg, #111827, #1f2937)',
+                        border: '1px solid #374151',
+                        borderRadius: '24px',
+                        padding: '32px',
+                        maxWidth: '448px',
+                        width: '100%',
+                        transform: 'scale(1)',
+                        transition: 'all 0.3s ease'
+                    }}>
+                        <div style={{ textAlign: 'center' }}>
+                            <div style={{
+                                width: '80px',
+                                height: '80px',
+                                margin: '0 auto 16px',
+                                borderRadius: '50%',
+                                background: getLevelGradient(selectedLevel.id),
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <selectedLevel.icon size={40} color="white" />
+                            </div>
+
+                            <h3 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>
+                                {selectedLevel.title}
+                            </h3>
+                            <p style={{ color: '#9ca3af', marginBottom: '16px' }}>
+                                Nivel {selectedLevel.id} • {selectedLevel.difficulty}
+                            </p>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                <button style={{
+                                    width: '100%',
+                                    background: 'linear-gradient(90deg, #22c55e, #16a34a)',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    padding: '12px 24px',
+                                    borderRadius: '12px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '8px'
+                                }}
+                                    onMouseEnter={(e) => {
+                                        e.target.style.background = 'linear-gradient(90deg, #16a34a, #15803d)';
+                                        e.target.style.transform = 'scale(1.05)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.background = 'linear-gradient(90deg, #22c55e, #16a34a)';
+                                        e.target.style.transform = 'scale(1)';
+                                    }}>
+                                    <Play size={20} fill="white" />
+                                    <span>Comenzar Nivel</span>
+                                </button>
+
+                                <button
+                                    onClick={() => setSelectedLevel(null)}
+                                    style={{
+                                        width: '100%',
+                                        background: '#374151',
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        padding: '12px 24px',
+                                        borderRadius: '12px',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.background = '#4b5563'}
+                                    onMouseLeave={(e) => e.target.style.background = '#374151'}
+                                >
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default PythonLevelsMap;

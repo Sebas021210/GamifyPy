@@ -1,9 +1,10 @@
 import React from "react";
+import PythonLevelsMap from "../../components/PythonLevelsMap";
 
 function Levels() {
     return (
         <div>
-            <h1>Hola soy Levels</h1>
+            <PythonLevelsMap />
         </div>
     )
 }
