@@ -238,26 +238,26 @@ const PythonLevelsMap = () => {
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: '8px',
-                                background: 'rgba(147, 51, 234, 0.2)',
+                                background: 'rgba(6, 182, 212, 0.15)',
                                 backdropFilter: 'blur(8px)',
-                                border: '1px solid rgba(147, 51, 234, 0.3)',
+                                border: '1px solid rgba(6, 182, 212, 0.3)',
                                 borderRadius: '24px',
                                 padding: '12px 24px',
-                                color: '#e9d5ff',
+                                color: '#67e8f9',
                                 fontWeight: '600',
                                 cursor: 'pointer',
                                 transition: 'all 0.3s ease'
                             }}
                             onMouseEnter={(e) => {
-                                e.target.style.background = 'rgba(147, 51, 234, 0.3)';
                                 e.target.style.transform = 'scale(1.05)';
+                                e.target.style.boxShadow = '0 0 10px rgba(34, 211, 238, 0.4)';
                             }}
                             onMouseLeave={(e) => {
-                                e.target.style.background = 'rgba(147, 51, 234, 0.2)';
                                 e.target.style.transform = 'scale(1)';
+                                e.target.style.boxShadow = 'none';
                             }}
                         >
-                            <Trophy size={20} color="#c084fc" />
+                            <Trophy size={20} color="#22d3ee" />
                             <span>Mostrar Niveles Extras</span>
                         </button>
                     </div>
@@ -282,23 +282,23 @@ const PythonLevelsMap = () => {
                                 }, 300);
                             }}
                             style={{
-                                background: 'rgba(75, 85, 99, 0.3)',
+                                background: 'rgba(100, 116, 139, 0.15)',
                                 backdropFilter: 'blur(8px)',
-                                border: '1px solid rgba(75, 85, 99, 0.5)',
+                                border: '1px solid rgba(100, 116, 139, 0.3)',
                                 borderRadius: '16px',
                                 padding: '8px 16px',
-                                color: '#9ca3af',
+                                color: '#cbd5e1',
                                 fontWeight: '600',
                                 cursor: 'pointer',
                                 transition: 'all 0.3s ease'
                             }}
                             onMouseEnter={(e) => {
-                                e.target.style.background = 'rgba(75, 85, 99, 0.5)';
-                                e.target.style.color = 'white';
+                                e.target.style.color = '#ffffff';
+                                e.target.style.boxShadow = '0 0 10px rgba(148, 163, 184, 0.4)';
                             }}
                             onMouseLeave={(e) => {
-                                e.target.style.background = 'rgba(75, 85, 99, 0.3)';
-                                e.target.style.color = '#9ca3af';
+                                e.target.style.color = '#cbd5e1';
+                                e.target.style.boxShadow = 'none';
                             }}
                         >
                             Ocultar Niveles Extras
@@ -350,31 +350,38 @@ const PythonLevelsMap = () => {
                             </p>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                <button style={{
-                                    width: '100%',
-                                    background: 'linear-gradient(90deg, #22c55e, #16a34a)',
-                                    color: 'white',
-                                    fontWeight: 'bold',
-                                    padding: '12px 24px',
-                                    borderRadius: '12px',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.3s ease',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '8px'
-                                }}
+                                <button
+                                    style={{
+                                        width: '100%',
+                                        fontFamily: '"Orbitron", sans-serif',
+                                        backgroundColor: '#009966',
+                                        border: 'none',
+                                        padding: '12px 24px',
+                                        fontWeight: 'bold',
+                                        color: '#000',
+                                        borderRadius: '12px',
+                                        cursor: 'pointer',
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        transition: 'all 0.3s ease',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '12px'
+                                    }}
                                     onMouseEnter={(e) => {
-                                        e.target.style.background = 'linear-gradient(90deg, #16a34a, #15803d)';
-                                        e.target.style.transform = 'scale(1.05)';
+                                        e.target.style.transform = 'scale(1.02)';
+                                        e.target.style.boxShadow = '0 0 10px rgba(0, 255, 136, 0.6)';
                                     }}
                                     onMouseLeave={(e) => {
-                                        e.target.style.background = 'linear-gradient(90deg, #22c55e, #16a34a)';
                                         e.target.style.transform = 'scale(1)';
-                                    }}>
-                                    <Play size={20} fill="white" />
-                                    <span>Comenzar Nivel</span>
+                                        e.target.style.boxShadow = 'none';
+                                    }}
+                                >
+                                    <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <Play size={20} fill="white" />
+                                        <span>Comenzar Nivel</span>
+                                    </div>
                                 </button>
 
                                 <button
