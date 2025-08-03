@@ -22,7 +22,11 @@ function Auth() {
     });
 
     const handleRegister = () => {
-        navigate("/register");
+        navigate("/register", { replace: true });
+    }
+
+    const handleLogin = () => {
+        navigate("/levels", { replace: true })
     }
 
     const handleChange = (prop) => (event) => {
@@ -192,7 +196,7 @@ function Auth() {
                                     backgroundColor: 'rgba(255, 255, 255, 0.3)',
                                 },
                             }}
-                            onClick={() => console.log('Login clicked')}
+                            onClick={handleLogin}
                         >
                             Iniciar Sesión
                         </Button>

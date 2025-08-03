@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Lock, Star, Play, Trophy, Zap, Code, Brain, Rocket } from 'lucide-react';
 import IconButton from '@mui/material/IconButton';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const PythonLevelsMap = () => {
+    const navigate = useNavigate();
     const [selectedLevel, setSelectedLevel] = useState(null);
     const [completedLevels, setCompletedLevels] = useState([1, 2, 3]); // eslint-disable-line no-unused-vars
     const [currentLevel, setCurrentLevel] = useState(4); // eslint-disable-line no-unused-vars
     const [showExtraLevels, setShowExtraLevels] = useState(false);
+
+    const handleProfile = () => {
+        navigate("/profile");
+    };
 
     const mainLevels = [
         { id: 1, title: "Variables y Tipos", icon: Code, difficulty: "Básico" },
@@ -183,7 +189,7 @@ const PythonLevelsMap = () => {
                         color: 'white',
                     }}
                 >
-                    <AccountCircleIcon fontSize="large" />
+                    <AccountCircleIcon fontSize="large" onClick={handleProfile} />
                 </IconButton>
             </div>
 

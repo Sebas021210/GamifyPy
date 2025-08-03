@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -8,14 +9,24 @@ import Skills from "../../components/SkillsList";
 import './profile.css'
 
 function Profile() {
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate("/levels");
+    };
+
+    const handleLogout = () => {
+        navigate("/", { replace: true });
+    };
+
     return (
         <div className="page-container">
             <div className="profile-Header">
                 <div className="profile-Header-buttons">
-                    <IconButton>
+                    <IconButton onClick={handleBack} >
                         <ArrowBackIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={handleLogout} >
                         <LogoutIcon />
                     </IconButton>
                 </div>

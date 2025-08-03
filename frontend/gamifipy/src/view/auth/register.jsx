@@ -25,7 +25,7 @@ function Register() {
     });
 
     const handleLogin = () => {
-        navigate("/auth");
+        navigate("/auth", { replace: true });
     }
 
     const handleChange = (prop) => (event) => {

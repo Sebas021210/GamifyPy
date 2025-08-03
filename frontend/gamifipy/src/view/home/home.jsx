@@ -39,7 +39,7 @@ function Home() {
     };
 
     const empezarAventura = () => {
-        navigate("/auth");
+        navigate("/auth", { replace: true });
     };
 
     return (
