@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Checkbox from '@mui/material/Checkbox';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Box, Paper, TextField, IconButton, InputAdornment, Button, Typography, Checkbox } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import TokenVerificationModal from '../../components/TokenVerificationModal';
 import './auth.css'
 
 function Register() {
@@ -17,6 +10,7 @@ function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [acceptTerms, setAcceptTerms] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [values, setValues] = useState({
         username: '',
         email: '',
@@ -46,6 +40,20 @@ function Register() {
 
     const handleTermsChange = (event) => {
         setAcceptTerms(event.target.checked);
+    };
+
+    const handleClickOpen = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleVerify = (token) => {
+        console.log('Token recibido:', token);
+        setIsModalOpen(false);
+        navigate("/auth", { replace: true });
     };
 
     return (
@@ -315,10 +323,15 @@ function Register() {
                                     opacity: 0.5,
                                 },
                             }}
-                            onClick={() => console.log('Login clicked')}
+                            onClick={handleClickOpen}
                         >
                             Registrarse
                         </Button>
+                        <TokenVerificationModal
+                            open={isModalOpen}
+                            handleClose={handleClose}
+                            handleVerify={handleVerify}
+                        />
 
                         {/* Enlaces inferiores */}
                         <Box sx={{ textAlign: 'center' }}>
