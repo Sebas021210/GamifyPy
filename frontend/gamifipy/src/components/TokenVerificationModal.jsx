@@ -24,7 +24,7 @@ export default function TokenVerificationModal({ open, handleClose, handleVerify
                     background: 'linear-gradient(135deg, #111827, #1f2937)',
                     border: '1px solid #374151',
                     borderRadius: '24px',
-                    padding: '32px',
+                    padding: '10px',
                     maxWidth: '448px',
                     width: '100%',
                     color: '#ffffff',
@@ -36,7 +36,7 @@ export default function TokenVerificationModal({ open, handleClose, handleVerify
             </DialogTitle>
 
             <DialogContent>
-                <DialogContentText id="token-dialog-description" sx={{ color: '#ffffff', marginBottom: '16px' }}>
+                <DialogContentText id="token-dialog-description" sx={{ color: '#ffffff', marginBottom: '30px' }}>
                     Se ha enviado un token de verificación a tu correo electrónico. Ingresa el código para continuar.
                 </DialogContentText>
 
