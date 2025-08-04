@@ -19,7 +19,7 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/levels' element={<Levels />} />
-            <Route path='/level/:nivelId' element={<LevelView />} />
+            <Route path='/level/:levelId' element={<LevelView />} />
           </Routes>
         </Router>
       </div>

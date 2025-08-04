@@ -1,0 +1,14 @@
+.levelView-Container {
+    padding: 3rem 6rem 0 4rem;
+}
+
+.levelView-Header-title {
+    font-size: 1.7rem;
+    text-align: center;
+}
+
+.levelView-Heder-Description {
+    margin: 2rem auto 0 auto;
+    text-align: center;
+    max-width: 1000px;
+}
