@@ -377,6 +377,7 @@ const PythonLevelsMap = () => {
                                         e.target.style.transform = 'scale(1)';
                                         e.target.style.boxShadow = 'none';
                                     }}
+                                    onClick={() => navigate(`/level/${selectedLevel.id}`) }
                                 >
                                     <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '12px' }}>
                                         <Play size={20} fill="white" />

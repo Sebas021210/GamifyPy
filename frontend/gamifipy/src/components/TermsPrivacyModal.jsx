@@ -28,7 +28,16 @@ export default function TermsPrivacyModal({ open, handleClose, title, content })
                 {title}
             </DialogTitle>
 
-            <DialogContent dividers>
+            <DialogContent
+                dividers
+                sx={{
+                    overflowY: 'scroll',
+                    scrollbarWidth: 'none',
+                    '&::-webkit-scrollbar': {
+                        display: 'none',
+                    },
+                }}
+            >
                 <Typography
                     variant="body2"
                     component="div"
