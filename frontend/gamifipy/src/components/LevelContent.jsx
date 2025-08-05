@@ -1,10 +1,32 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight, Play, BookOpen, Code, CheckCircle } from 'lucide-react';
+import LessonsDialog from './LessonsDialog';
+import ExerciseDialog from './ExcerciseDialog';
 import './LevelContent.css';
 
 const LevelContent = () => {
     const [leccionesExpanded, setLeccionesExpanded] = useState(false);
     const [ejerciciosExpanded, setEjerciciosExpanded] = useState(false);
+    const [openLessonsDialog, setOpenLessonsDialog] = useState(false);
+    const [leccionSeleccionada, setLeccionSeleccionada] = useState(null);
+    const [openExcerciseDialog, setOpenExcerciseDialog] = useState(false);
+    const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
+
+    const handleOpenLessonsDialog = () => {
+        setOpenLessonsDialog(true);
+    }
+
+    const handleCloseLessonsDialog = () => {
+        setOpenLessonsDialog(false);
+    }
+
+    const handleOpenExcerciseDialog = () => {
+        setOpenExcerciseDialog(true);
+    }
+
+    const handleCloseExcerciseDialog = () => {
+        setOpenExcerciseDialog(false);
+    }
 
     const nivelData = {
         id: 1,
@@ -101,7 +123,10 @@ const LevelContent = () => {
                                             <div
                                                 key={leccion.id}
                                                 className={`level-item ${leccion.completado ? 'level-completed-leccion' : 'level-pending-leccion'}`}
-                                                onClick={() => console.log(`Click en la lección: ${leccion.nombre}`)}
+                                                onClick={() => {
+                                                    setLeccionSeleccionada(leccion);
+                                                    handleOpenLessonsDialog();
+                                                }}
                                             >
                                                 <div className="level-item-content">
                                                     <div className="level-item-left">
@@ -125,6 +150,11 @@ const LevelContent = () => {
                         )}
                     </div>
                 </div>
+                <LessonsDialog
+                    open={openLessonsDialog}
+                    handleClose={handleCloseLessonsDialog}
+                    leccion={leccionSeleccionada}
+                />
 
                 {/* Sección de Ejercicios */}
                 <div className="level-section-container">
@@ -179,9 +209,12 @@ const LevelContent = () => {
                                     <div className="level-exercise-grid">
                                         {nivelData.ejercicios.map((ejercicio, index) => (
                                             <div
-                                                onClick={() => console.log(`Click en la lección: ${ejercicio.nombre}`)}
                                                 key={ejercicio.id}
                                                 className={`level-item ${ejercicio.completado ? 'level-completed-ejercicio' : 'level-pending-ejercicio'}`}
+                                                onClick={() => {
+                                                    setEjercicioSeleccionado(ejercicio);
+                                                    handleOpenExcerciseDialog();
+                                                }}
                                             >
                                                 <div className="level-item-content">
                                                     <div className="level-item-left">
@@ -205,6 +238,12 @@ const LevelContent = () => {
                         )}
                     </div>
                 </div>
+                <ExerciseDialog
+                    open={openExcerciseDialog}
+                    handleClose={handleCloseExcerciseDialog}
+                    ejercicio={ejercicioSeleccionado}
+                />
+
             </div>
         </div>
     );
