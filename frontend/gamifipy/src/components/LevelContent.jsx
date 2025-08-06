@@ -41,18 +41,66 @@ const LevelContent = () => {
             { id: 5, nombre: "Entrada y salida de datos", completado: false }
         ],
         ejercicios: [
-            { id: 1, nombre: "Hola Mundo", completado: true },
-            { id: 2, nombre: "Variables simples", completado: true },
-            { id: 3, nombre: "Operaciones matemáticas", completado: true },
-            { id: 4, nombre: "Calculadora básica", completado: false },
-            { id: 5, nombre: "Conversión de temperaturas", completado: false },
-            { id: 6, nombre: "Área de figuras", completado: false },
-            { id: 7, nombre: "Números pares e impares", completado: false },
-            { id: 8, nombre: "Mayor de tres números", completado: false },
-            { id: 9, nombre: "Tabla de multiplicar", completado: false },
-            { id: 10, nombre: "Contador de vocales", completado: false },
-            { id: 11, nombre: "Palíndromo", completado: false },
-            { id: 12, nombre: "Proyecto: Mini juego", completado: false }
+            {
+                id: 1,
+                nombre: "Hola Mundo",
+                completado: true,
+                tipo: "codigo",
+                puntos: 10,
+                texto: "Escribe un programa que imprima 'Hola, Mundo!' en la consola.",
+                codigo_inicial: "",
+                respuesta: "print('Hola, Mundo!')"
+            },
+            {
+                id: 2,
+                nombre: "Variables simples",
+                completado: true,
+                tipo: "opcion_multiple",
+                puntos: 15,
+                texto: "¿Cuál de las siguientes opciones es un nombre válido para una variable en Python?",
+                respuesta: "nombre_usuario",
+                opciones: [
+                    { texto: "1numero", correcta: false },
+                    { texto: "nombre_usuario", correcta: true },
+                    { texto: "print", correcta: false },
+                    { texto: "class", correcta: false }
+                ]
+            },
+            {
+                id: 3,
+                nombre: "Operaciones matemáticas",
+                completado: true,
+                tipo: "codigo",
+                puntos: 20,
+                texto: "Crea dos variables con números y realiza las operaciones básicas (suma, resta, multiplicación, división).",
+                codigo_inicial: "a = 10\nb = 5\n\n# Completa las operaciones:\nsuma = __\nresta = __\nmultiplicacion = __\ndivision = __",
+                respuesta: "a = 10\nb = 5\n\nsuma = a + b\nresta = a - b\nmultiplicacion = a * b\ndivision = a / b"
+            },
+            {
+                id: 4,
+                nombre: "Calculadora básica",
+                completado: false,
+                tipo: "codigo",
+                puntos: 25,
+                texto: "Crea una calculadora que solicite dos números al usuario y una operación, luego muestre el resultado.",
+                codigo_inicial: "",
+                respuesta: "num1 = float(input('Primer número: '))\nnum2 = float(input('Segundo número: '))\noperacion = input('Operación (+, -, , /): ')\n\nif operacion == '+':\n    resultado = num1 + num2\nelif operacion == '-':\n    resultado = num1 - num2\nelif operacion == '':\n    resultado = num1 * num2\nelif operacion == '/':\n    resultado = num1 / num2\n\nprint(f'Resultado: {resultado}')"
+            },
+            {
+                id: 5,
+                nombre: "Conversión de temperaturas",
+                completado: false,
+                tipo: "opcion_multiple",
+                puntos: 15,
+                texto: "¿Cuál es la fórmula correcta para convertir Celsius a Fahrenheit?",
+                respuesta: "F = (C * 9/5) + 32",
+                opciones: [
+                    { texto: "F = C * 9/5", correcta: false },
+                    { texto: "F = (C * 9/5) + 32", correcta: true },
+                    { texto: "F = C + 32", correcta: false },
+                    { texto: "F = (C + 32) * 9/5", correcta: false }
+                ]
+            },
         ]
     };
 
