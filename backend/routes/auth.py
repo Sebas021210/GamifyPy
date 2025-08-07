@@ -66,7 +66,7 @@ async def register(register_request: RegisterRequest, db=Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
 
     new_user = Usuario(
-        nombre=register_request.name,
+        nombre=register_request.username,
         email=email,
         password=hash_password(register_request.password)
     )

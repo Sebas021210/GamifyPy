@@ -46,18 +46,88 @@ function Register() {
         setAcceptTerms(event.target.checked);
     };
 
-    const handleClickOpen = () => {
-        setIsModalOpen(true);
+    const handleSendPin = async () => {
+        if (!values.email || !values.username || !values.password || !values.confirmPassword) {
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
+
+        if (values.password !== values.confirmPassword) {
+            alert('Las contraseñas no coinciden.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/auth/send-pin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: values.email,
+                }),
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || 'Error al enviar el PIN');
+            }
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error('Error al enviar el PIN:', error);
+            return;
+        }
     };
 
     const handleClose = () => {
         setIsModalOpen(false);
     };
 
-    const handleVerify = (token) => {
-        console.log('Token recibido:', token);
-        setIsModalOpen(false);
-        navigate("/auth", { replace: true });
+    const handleVerify = async (token) => {
+        if (!token || token.length !== 6) {
+            alert('Por favor, ingresa un token válido de 6 dígitos.');
+            return;
+        }
+
+        try {
+            const verifyResponse = await fetch('http://localhost:8000/auth/verify-pin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: values.email,
+                    pin: token,
+                }),
+            })
+            const verifyData = await verifyResponse.json();
+            if (!verifyResponse.ok) {
+                throw new Error(verifyData.detail || 'Error al verificar el pin');
+            }
+            console.log('Pin verificado');
+
+            const registerResponse = await fetch('http://localhost:8000/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: values.email,
+                    password: values.password,
+                    username: values.username,
+                }),
+            })
+            const registerData = await registerResponse.json();
+            if (!registerResponse.ok) {
+                throw new Error(registerData.detail || 'Error al registrar el usuario');
+            }
+            console.log('Usuario registrado:');
+            setIsModalOpen(false);
+            navigate("/auth", { replace: true });
+        } catch (error) {
+            console.error('❌ Error durante la verificación o el registro:', error.message);
+            alert(error.message);
+        }
     };
 
     const showTerms = () => {
@@ -148,7 +218,7 @@ function Register() {
                     >
                         <TextField
                             id="username"
-                            label="Usuario"
+                            label="Nombre de usuario"
                             variant="standard"
                             value={values.username}
                             onChange={handleChange('username')}
@@ -365,7 +435,7 @@ function Register() {
                                     opacity: 0.5,
                                 },
                             }}
-                            onClick={handleClickOpen}
+                            onClick={handleSendPin}
                         >
                             Registrarse
                         </Button>

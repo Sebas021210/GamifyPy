@@ -14,7 +14,7 @@ def assign_insignia(user_id, insignia_id, db):
         nueva_insignia = InsigniaUsuario(
             id_usuario=user_id,
             id_insignia=insignia_id,
-            fecha_obtenida=datetime.now()
+            fecha_logro=datetime.now()
         )
         db.add(nueva_insignia)
         db.commit()
