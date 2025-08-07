@@ -276,6 +276,10 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                         <IconButton
                             onClick={runCode}
                             disabled={isRunning || !codeAnswer.trim()}
+                            sx={{
+                                opacity: (isRunning || !codeAnswer.trim()) ? 0.3 : 1,
+                                transition: 'opacity 0.3s ease',
+                            }}
                         >
                             <PlayArrowIcon />
                         </IconButton>
@@ -338,7 +342,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                 fontWeight: 'bold'
                             }}
                         >
-                            📟 Consola
+                            Consola
                         </Typography>
                     </Box>
 
@@ -440,13 +444,13 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                 color="inherit"
                                 onClick={handleSubmit}
                                 disabled={
-                                    (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
-                                    (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
+                                    (ejercicio?.tipo === 'opcion_multiple' && !answerConfirmed) ||
+                                    (ejercicio?.tipo === 'codigo' && output === '')
                                 }
                                 startIcon={
                                     !(
-                                        (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
-                                        (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
+                                        (ejercicio?.tipo === 'opcion_multiple' && !answerConfirmed) ||
+                                        (ejercicio?.tipo === 'codigo' && output === '')
                                     ) && (
                                         <CheckCircleIcon sx={{ color: '#fff' }} />
                                     )
@@ -468,12 +472,12 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     '&:hover': {
-                                        boxShadow: (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
-                                            (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
+                                        boxShadow: (ejercicio?.tipo === 'opcion_multiple' && !answerConfirmed) ||
+                                            (ejercicio?.tipo === 'codigo' && output === '')
                                             ? 'none'
                                             : '0 8px 10px rgba(102, 187, 106, 0.4)',
-                                        transform: (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
-                                            (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
+                                        transform: (ejercicio?.tipo === 'opcion_multiple' && !answerConfirmed) ||
+                                            (ejercicio?.tipo === 'codigo' && output === '')
                                             ? 'none'
                                             : 'translateY(-2px)',
                                     },
