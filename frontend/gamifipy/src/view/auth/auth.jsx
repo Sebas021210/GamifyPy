@@ -17,7 +17,7 @@ function Auth() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [values, setValues] = useState({
-        username: '',
+        email: '',
         password: '',
     });
 
@@ -25,9 +25,35 @@ function Auth() {
         navigate("/register", { replace: true });
     }
 
-    const handleLogin = () => {
-        navigate("/levels", { replace: true })
+    const handleLogin = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: values.email,
+                    password: values.password,
+                }),
+            })
+            if (!response.ok) {
+                throw new Error('Error en la autenticación');
+            }
+            const data = await response.json();
+            localStorage.setItem('token', data.access_token);
+            console.log(data);
+            navigate("/levels", { replace: true })
+        } catch (error) {
+            console.error('Error al iniciar sesión:', error);
+            setValues({ email: '', password: '' }); 
+            console.error(error);
+        }
     }
+
+    const handleGoogleLogin = () => {
+        window.location.href = 'http://localhost:8000/auth/login/google';
+    };
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -108,11 +134,11 @@ function Auth() {
                         autoComplete="off"
                     >
                         <TextField
-                            id="username"
-                            label="Usuario"
+                            id="email"
+                            label="Correo Electrónico"
                             variant="standard"
-                            value={values.username}
-                            onChange={handleChange('username')}
+                            value={values.email}
+                            onChange={handleChange('email')}
                             InputLabelProps={{
                                 sx: {
                                     color: 'white',
@@ -226,7 +252,7 @@ function Auth() {
                                     backgroundColor: 'rgba(255, 255, 255, 0.2)',
                                 },
                             }}
-                            onClick={() => console.log('Google login clicked')}
+                            onClick={handleGoogleLogin}
                         >
                             Continuar con Google
                         </Button>

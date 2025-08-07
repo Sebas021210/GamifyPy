@@ -10,7 +10,7 @@ class Usuario(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
-    password = Column(String, nullable=False)
+    password = Column(String, nullable=True)
     puntos = Column(Integer, default=0)
     fecha_registro = Column(DateTime, server_default=func.now())
 
