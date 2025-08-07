@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -11,15 +11,26 @@ import Divider from '@mui/material/Divider';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import GoogleIcon from '@mui/icons-material/Google';
+import Alert from '@mui/material/Alert';
 import './auth.css'
 
 function Auth() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState(false);
     const [values, setValues] = useState({
         email: '',
         password: '',
     });
+
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                setError(false);
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [error]);
 
     const handleRegister = () => {
         navigate("/register", { replace: true });
@@ -46,8 +57,8 @@ function Auth() {
             navigate("/levels", { replace: true })
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            setValues({ email: '', password: '' }); 
-            console.error(error);
+            setError(true);
+            setValues({ email: '', password: '' });
         }
     }
 
@@ -69,6 +80,31 @@ function Auth() {
 
     return (
         <div>
+            {/* Alert flotante */}
+            {error && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 20,
+                        right: 20,
+                        zIndex: 9999,
+                    }}
+                >
+                    <Alert
+                        severity="error"
+                        variant="filled"
+                        onClose={() => setError(false)}
+                        sx={{
+                            color: 'black',
+                            backgroundColor: '#f44336',
+                        }}
+                    >
+                        Error al iniciar sesión. Verifica tus credenciales.
+                    </Alert>
+                </Box>
+            )}
+
+            {/* Contenedor principal */}
             <Box
                 sx={{
                     height: '100vh',

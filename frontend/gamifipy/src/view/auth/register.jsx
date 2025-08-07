@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Box, Paper, TextField, IconButton, InputAdornment, Button, Typography, Checkbox } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import Alert from '@mui/material/Alert';
 import TokenVerificationModal from '../../components/TokenVerificationModal';
 import TermsPrivacyModal from '../../components/TermsPrivacyModal';
 import './auth.css'
@@ -15,12 +16,22 @@ function Register() {
     const [termsModalOpen, setTermsModalOpen] = useState(false);
     const [termsModalTitle, setTermsModalTitle] = useState('');
     const [termsModalContent, setTermsModalContent] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [values, setValues] = useState({
         username: '',
         email: '',
         password: '',
         confirmPassword: '',
     });
+
+    useEffect(() => {
+        if (errorMessage) {
+            const timer = setTimeout(() => {
+                setErrorMessage('');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [errorMessage]);
 
     const handleLogin = () => {
         navigate("/auth", { replace: true });
@@ -48,12 +59,13 @@ function Register() {
 
     const handleSendPin = async () => {
         if (!values.email || !values.username || !values.password || !values.confirmPassword) {
-            alert('Por favor, completa todos los campos.');
+            setErrorMessage('Por favor, completa todos los campos.');
+            console.error('❌ Error: Todos los campos son obligatorios');
             return;
         }
 
         if (values.password !== values.confirmPassword) {
-            alert('Las contraseñas no coinciden.');
+            setErrorMessage('Las contraseñas no coinciden.');
             return;
         }
 
@@ -75,6 +87,7 @@ function Register() {
             setIsModalOpen(true);
         } catch (error) {
             console.error('Error al enviar el PIN:', error);
+            setErrorMessage(error.message || 'Error al enviar el PIN');
             return;
         }
     };
@@ -85,7 +98,7 @@ function Register() {
 
     const handleVerify = async (token) => {
         if (!token || token.length !== 6) {
-            alert('Por favor, ingresa un token válido de 6 dígitos.');
+            setErrorMessage('Por favor, ingresa un token válido de 6 dígitos.');
             return;
         }
 
@@ -126,7 +139,7 @@ function Register() {
             navigate("/auth", { replace: true });
         } catch (error) {
             console.error('❌ Error durante la verificación o el registro:', error.message);
-            alert(error.message);
+            setErrorMessage(error.message || 'Error durante la verificación o el registro');
         }
     };
 
@@ -164,6 +177,29 @@ function Register() {
 
     return (
         <div>
+            {errorMessage && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 20,
+                        right: 20,
+                        zIndex: 9999,
+                    }}
+                >
+                    <Alert
+                        severity="error"
+                        variant="filled"
+                        onClose={() => setErrorMessage('')}
+                        sx={{
+                            color: 'black',
+                            backgroundColor: '#f44336',
+                        }}
+                    >
+                        {errorMessage}
+                    </Alert>
+                </Box>
+            )}
+
             <Box
                 sx={{
                     height: '100vh',
