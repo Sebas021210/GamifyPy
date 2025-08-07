@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from '@mui/material/Box'
 import Dialog from '@mui/material/Dialog';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Slide from '@mui/material/Slide';
 import ReactMarkdown from 'react-markdown';
 
@@ -37,6 +40,54 @@ nombre = "Lucía"
 `;
 
 function LessonsDialog({ open, handleClose, leccion }) {
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [progress, setProgress] = useState(0);
+    const [timeRemaining, setTimeRemaining] = useState(15); // eslint-disable-line no-unused-vars
+
+    useEffect(() => {
+        if (!open) return;
+        setIsButtonDisabled(true);
+        setProgress(0);
+        setTimeRemaining(15);
+
+        const totalTime = 15000;
+        const interval = 50;
+        const increment = (100 / totalTime) * interval;
+
+        const progressTimer = setInterval(() => {
+            setProgress(prev => {
+                const newProgress = prev + increment;
+                if (newProgress >= 100) {
+                    setIsButtonDisabled(false);
+                    setTimeRemaining(0);
+                    clearInterval(progressTimer);
+                    return 100;
+                }
+                return newProgress;
+            });
+        }, interval);
+
+        const countdownTimer = setInterval(() => {
+            setTimeRemaining(prev => {
+                if (prev <= 1) {
+                    clearInterval(countdownTimer);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => {
+            clearInterval(progressTimer);
+            clearInterval(countdownTimer);
+        };
+    }, [open]);
+
+    const handleSubmit = () => {
+        console.log('Lección completada:', leccion?.nombre);
+        handleClose();
+    }
+
     return (
         <div>
             <Dialog
@@ -69,21 +120,89 @@ function LessonsDialog({ open, handleClose, leccion }) {
                         >
                             <CloseIcon />
                         </IconButton>
-                        <Typography
-                            sx={{
-                                ml: 2,
-                                flex: 1,
-                                color: '#81D4FA',
-                                fontSize: '1.75rem',
-                                fontFamily: "'Orbitron', sans-serif"
-                            }}
-                            variant="h6"
-                            component="div"
-                        >
-                            Lección {leccion?.id}: {leccion?.nombre}
-                        </Typography>
-
-
+                        <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+                            <Typography
+                                sx={{
+                                    color: '#81D4FA',
+                                    fontSize: '1.5rem',
+                                    fontFamily: "'Orbitron', sans-serif"
+                                }}
+                                variant="h6"
+                                component="div"
+                            >
+                                {leccion?.nombre || 'Lección'}
+                            </Typography>
+                        </Box>
+                        <Box sx={{ ml: 'auto', p: 2 }}>
+                            <Box sx={{ position: 'relative', display: 'inline-block' }}>
+                                <Button
+                                    variant="contained"
+                                    color="inherit"
+                                    onClick={handleSubmit}
+                                    disabled={isButtonDisabled}
+                                    startIcon={
+                                        !isButtonDisabled && (
+                                            <CheckCircleIcon sx={{ color: '#fff' }} />
+                                        )
+                                    }
+                                    sx={{
+                                        py: 1.5,
+                                        px: 3,
+                                        fontSize: '0.9rem',
+                                        fontWeight: 'bold',
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        background: isButtonDisabled
+                                            ? 'rgba(255, 255, 255, 0.1)'
+                                            : '#66BB6A',
+                                        color: isButtonDisabled
+                                            ? 'rgba(255, 255, 255, 0.3)'
+                                            : '#fff',
+                                        border: '2px solid rgba(102, 187, 106, 0.3)',
+                                        borderRadius: '25px',
+                                        minWidth: '200px',
+                                        transition: 'all 0.3s ease',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        '&:hover': {
+                                            boxShadow: isButtonDisabled
+                                                ? 'none'
+                                                : '0 8px 10px rgba(102, 187, 106, 0.4)',
+                                            transform: isButtonDisabled
+                                                ? 'none'
+                                                : 'translateY(-2px)',
+                                        },
+                                        '&:disabled': {
+                                            cursor: 'not-allowed'
+                                        },
+                                        '&::before': {
+                                            content: '""',
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            height: '100%',
+                                            width: `${progress}%`,
+                                            background: 'linear-gradient(45deg, #66BB6A 30%, #4CAF50 90%)',
+                                            transition: 'width 0.05s linear',
+                                            zIndex: -1,
+                                            opacity: isButtonDisabled ? 0.8 : 0,
+                                        }
+                                    }}
+                                >
+                                    {isButtonDisabled ? (
+                                        <AccessTimeIcon
+                                            sx={{
+                                                color: 'rgba(255, 255, 255, 0.5)',
+                                                fontSize: '1.5rem'
+                                            }}
+                                        />
+                                    ) : (
+                                        'Completar Lección'
+                                    )}
+                                </Button>
+                            </Box>
+                        </Box>
                     </Toolbar>
                 </AppBar>
 

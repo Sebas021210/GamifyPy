@@ -15,6 +15,7 @@ import Chip from "@mui/material/Chip";
 import CloseIcon from '@mui/icons-material/Close';
 import CodeIcon from '@mui/icons-material/Code';
 import QuizIcon from '@mui/icons-material/Quiz';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Editor from '@monaco-editor/react';
 import Slide from '@mui/material/Slide';
@@ -107,11 +108,13 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
     const handleSubmit = () => {
         if (ejercicio?.tipo === 'opcion_multiple') {
             console.log('Respuesta seleccionada:', selectedOption);
-            // Aquí puedes validar si la respuesta es correcta
             const isCorrect = ejercicio.opciones.find(opt => opt.texto === selectedOption)?.correcta;
             console.log('¿Es correcta?', isCorrect);
+            handleClose();
+            // Aquí puedes validar si la respuesta es correcta
         } else if (ejercicio?.tipo === 'codigo') {
             console.log('Código enviado:', codeAnswer);
+            handleClose();
             // Aquí puedes enviar el código para validación
         }
     };
@@ -234,20 +237,26 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                             onClick={runCode}
                             disabled={isRunning || !codeAnswer.trim()}
                             sx={{
-                                background: 'linear-gradient(45deg, #4CAF50 30%, #66BB6A 90%)',
-                                color: 'white',
-                                fontSize: '0.75rem',
+                                py: 1.5,
                                 px: 2,
+                                background: '#66BB6A',
+                                color: '#fff',
+                                fontWeight: 'bold',
+                                fontSize: '0.75rem',
+                                border: '2px solid rgba(102, 187, 106, 0.3)',
+                                borderRadius: '25px',
                                 '&:hover': {
-                                    background: 'linear-gradient(45deg, #66BB6A 30%, #4CAF50 90%)',
+                                    boxShadow: '0 4px 12px rgba(102, 187, 106, 0.4)',
                                 },
                                 '&:disabled': {
                                     background: 'rgba(255, 255, 255, 0.1)',
-                                    color: 'rgba(255, 255, 255, 0.3)'
+                                    color: 'rgba(255, 255, 255, 0.3)',
+                                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                                    cursor: 'not-allowed'
                                 }
                             }}
                         >
-                            {isRunning ? 'Ejecutando...' : 'Ejecutar'}
+                            {isRunning ? 'Comprobando...' : 'Comprobar'}
                         </Button>
                     </Box>
 
@@ -333,7 +342,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                     fontStyle: 'italic'
                                 }}
                             >
-                                Presiona "Ejecutar" para ver la salida...
+                                Presiona "Comprobar" para ver el resultado de tu código...
                             </Typography>
                         )}
                     </Box>
@@ -361,7 +370,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                 <AppBar
                     sx={{
                         position: 'relative',
-                        backgroundColor: 'rgba(10, 10, 10, 0.3)',
+                        backgroundColor: 'rgba(10, 10, 10, 0.6)',
                         boxShadow: 'none',
                     }}
                 >
@@ -374,7 +383,8 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                         >
                             <CloseIcon />
                         </IconButton>
-                        <Box sx={{ display: 'flex', alignItems: 'center', ml: 2, flex: 1 }}>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
                             {ejercicio?.tipo === 'opcion_multiple' ? (
                                 <QuizIcon sx={{ color: '#81D4FA', mr: 1 }} />
                             ) : (
@@ -402,44 +412,67 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                 }}
                             />
                         </Box>
+
+                        <Box sx={{ ml: 'auto', p: 2 }}>
+                            <Button
+                                variant="contained"
+                                color="inherit"
+                                onClick={handleSubmit}
+                                disabled={
+                                    (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
+                                    (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
+                                }
+                                startIcon={
+                                    !(
+                                        (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
+                                        (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
+                                    ) && (
+                                        <CheckCircleIcon sx={{ color: '#fff' }} />
+                                    )
+                                }
+                                sx={{
+                                    py: 1.5,
+                                    px: 3,
+                                    fontSize: '0.9rem',
+                                    fontWeight: 'bold',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    background: '#66BB6A',
+                                    color: '#fff',
+                                    border: '2px solid rgba(102, 187, 106, 0.3)',
+                                    borderRadius: '25px',
+                                    minWidth: '200px',
+                                    transition: 'all 0.3s ease',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    '&:hover': {
+                                        boxShadow: (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
+                                            (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
+                                            ? 'none'
+                                            : '0 8px 10px rgba(102, 187, 106, 0.4)',
+                                        transform: (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
+                                            (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
+                                            ? 'none'
+                                            : 'translateY(-2px)',
+                                    },
+                                    '&:disabled': {
+                                        background: 'rgba(255, 255, 255, 0.1)',
+                                        color: 'rgba(255, 255, 255, 0.3)',
+                                        border: '2px solid rgba(255, 255, 255, 0.2)',
+                                        cursor: 'not-allowed'
+                                    },
+                                }}
+                            >
+                                {ejercicio?.tipo === 'opcion_multiple' ? 'Confirmar Respuesta' : 'Terminar Ejercicio'}
+                            </Button>
+                        </Box>
                     </Toolbar>
                 </AppBar>
 
                 <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
                     {ejercicio?.tipo === 'opcion_multiple' && renderMultipleChoice()}
                     {ejercicio?.tipo === 'codigo' && renderCodeExercise()}
-                </Box>
-
-                <Box sx={{
-                    p: 2,
-                    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                    background: 'rgba(10, 10, 10, 0.5)'
-                }}>
-                    <Button
-                        variant="contained"
-                        onClick={handleSubmit}
-                        disabled={
-                            (ejercicio?.tipo === 'opcion_multiple' && !selectedOption) ||
-                            (ejercicio?.tipo === 'codigo' && !codeAnswer.trim())
-                        }
-                        sx={{
-                            width: '100%',
-                            py: 1.5,
-                            fontSize: '1.1rem',
-                            fontWeight: 'bold',
-                            background: 'linear-gradient(45deg, #81D4FA 30%, #4FC3F7 90%)',
-                            color: '#000',
-                            '&:hover': {
-                                background: 'linear-gradient(45deg, #4FC3F7 30%, #29B6F6 90%)',
-                            },
-                            '&:disabled': {
-                                background: 'rgba(255, 255, 255, 0.1)',
-                                color: 'rgba(255, 255, 255, 0.3)'
-                            }
-                        }}
-                    >
-                        {ejercicio?.tipo === 'opcion_multiple' ? 'Confirmar Respuesta' : 'Ejecutar Código'}
-                    </Button>
                 </Box>
             </Dialog>
         </div>
