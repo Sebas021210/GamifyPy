@@ -7,7 +7,7 @@ import Profile from './view/profile/profile.jsx';
 import Levels from './view/levels/levels.jsx';
 import LevelView from './view/LevelView/LevelView.jsx';
 import GoogleCallback from './components/GoogleCallback.jsx';
-import refreshAccessToken from './services/refreshToken.jsx';
+import { refreshAccessToken } from './services/refreshToken.jsx';
 import './App.css'
 
 function App() {
