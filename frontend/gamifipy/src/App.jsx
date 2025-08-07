@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from './view/home/home.jsx'
 import Auth from './view/auth/auth.jsx'
@@ -7,9 +7,18 @@ import Profile from './view/profile/profile.jsx';
 import Levels from './view/levels/levels.jsx';
 import LevelView from './view/LevelView/LevelView.jsx';
 import GoogleCallback from './components/GoogleCallback.jsx';
+import refreshAccessToken from './services/refreshToken.jsx';
 import './App.css'
 
 function App() {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshAccessToken();
+    }, 14 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <div>
