@@ -111,11 +111,9 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
             const isCorrect = ejercicio.opciones.find(opt => opt.texto === selectedOption)?.correcta;
             console.log('¿Es correcta?', isCorrect);
             handleClose();
-            // Aquí puedes validar si la respuesta es correcta
         } else if (ejercicio?.tipo === 'codigo') {
             console.log('Código enviado:', codeAnswer);
             handleClose();
-            // Aquí puedes enviar el código para validación
         }
     };
 
@@ -228,36 +226,14 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                 fontWeight: 'bold'
                             }}
                         >
-                            🐍 Python Editor
+                            main.py
                         </Typography>
-                        <Button
-                            variant="contained"
-                            size="small"
-                            startIcon={<PlayArrowIcon />}
+                        <IconButton
                             onClick={runCode}
                             disabled={isRunning || !codeAnswer.trim()}
-                            sx={{
-                                py: 1.5,
-                                px: 2,
-                                background: '#66BB6A',
-                                color: '#fff',
-                                fontWeight: 'bold',
-                                fontSize: '0.75rem',
-                                border: '2px solid rgba(102, 187, 106, 0.3)',
-                                borderRadius: '25px',
-                                '&:hover': {
-                                    boxShadow: '0 4px 12px rgba(102, 187, 106, 0.4)',
-                                },
-                                '&:disabled': {
-                                    background: 'rgba(255, 255, 255, 0.1)',
-                                    color: 'rgba(255, 255, 255, 0.3)',
-                                    border: '2px solid rgba(255, 255, 255, 0.2)',
-                                    cursor: 'not-allowed'
-                                }
-                            }}
                         >
-                            {isRunning ? 'Comprobando...' : 'Comprobar'}
-                        </Button>
+                            <PlayArrowIcon />
+                        </IconButton>
                     </Box>
 
                     <Box sx={{ flexGrow: 1, minHeight: 0 }}>
@@ -464,7 +440,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                     },
                                 }}
                             >
-                                {ejercicio?.tipo === 'opcion_multiple' ? 'Confirmar Respuesta' : 'Terminar Ejercicio'}
+                                {ejercicio?.tipo === 'opcion_multiple' ? 'Finalizar Ejercicio' : 'Terminar Ejercicio'}
                             </Button>
                         </Box>
                     </Toolbar>
