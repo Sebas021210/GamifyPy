@@ -26,6 +26,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function ExerciseDialog({ open, handleClose, ejercicio }) {
     const [selectedOption, setSelectedOption] = useState('');
+    const [answerConfirmed, setAnswerConfirmed] = useState(false);
+    const [correctAnswer, setCorrectAnswer] = useState(null);
     const [codeAnswer, setCodeAnswer] = useState(ejercicio?.codigo_inicial || '');
     const [output, setOutput] = useState('');
     const [isRunning, setIsRunning] = useState(false);
@@ -37,6 +39,8 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
             setOutput('');
         } else {
             setSelectedOption('');
+            setAnswerConfirmed(false);
+            setCorrectAnswer(null);
         }
     }, [ejercicio]);
 
@@ -47,7 +51,17 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
     }, [ejercicio?.codigo_inicial, ejercicio?.tipo]);
 
     const handleOptionChange = (event) => {
-        setSelectedOption(event.target.value);
+        if (!answerConfirmed) {
+            setSelectedOption(event.target.value);
+        }
+    };
+
+    const handleAnswerConfirm = () => {
+        const optionSelected = ejercicio.opciones.find(opt => opt.texto === selectedOption);
+        const isCorrect = optionSelected?.correcta || false;
+
+        setAnswerConfirmed(true);
+        setCorrectAnswer(isCorrect);
     };
 
     const handleEditorDidMount = (editor, monaco) => {
@@ -108,8 +122,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
     const handleSubmit = () => {
         if (ejercicio?.tipo === 'opcion_multiple') {
             console.log('Respuesta seleccionada:', selectedOption);
-            const isCorrect = ejercicio.opciones.find(opt => opt.texto === selectedOption)?.correcta;
-            console.log('¿Es correcta?', isCorrect);
+            console.log('Respuesta correcta:', correctAnswer);
             handleClose();
         } else if (ejercicio?.tipo === 'codigo') {
             console.log('Código enviado:', codeAnswer);
@@ -119,66 +132,98 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
 
     const renderMultipleChoice = () => (
         <Box sx={{ p: 2 }}>
-            <Typography
-                variant="h6"
-                sx={{
-                    color: '#81D4FA',
-                    mb: 3,
-                    fontFamily: "'Orbitron', sans-serif"
-                }}
-            >
+            <Typography variant="h6" sx={{ color: '#81D4FA', mb: 3, fontFamily: "'Orbitron', sans-serif" }}>
                 {ejercicio.texto}
             </Typography>
 
             <FormControl component="fieldset" sx={{ width: '100%' }}>
-                <RadioGroup
-                    value={selectedOption}
-                    onChange={handleOptionChange}
-                    sx={{ gap: 2 }}
-                >
-                    {ejercicio.opciones?.map((opcion, index) => (
-                        <Paper
-                            key={index}
-                            elevation={2}
-                            sx={{
-                                background: 'rgba(255, 255, 255, 0.05)',
-                                border: selectedOption === opcion.texto ? '2px solid #81D4FA' : '1px solid rgba(255, 255, 255, 0.1)',
-                                borderRadius: '12px',
-                                transition: 'all 0.3s ease',
-                                '&:hover': {
-                                    background: 'rgba(255, 255, 255, 0.08)',
-                                    border: '1px solid rgba(255, 255, 255, 0.2)'
-                                }
-                            }}
-                        >
-                            <FormControlLabel
-                                value={opcion.texto}
-                                control={
-                                    <Radio
-                                        sx={{
-                                            color: '#81D4FA',
-                                            '&.Mui-checked': {
-                                                color: '#81D4FA'
-                                            }
-                                        }}
-                                    />
-                                }
-                                label={
-                                    <Typography sx={{ color: 'white', fontSize: '1.1rem' }}>
-                                        {opcion.texto}
-                                    </Typography>
-                                }
+                <RadioGroup value={selectedOption} onChange={handleOptionChange} sx={{ gap: 2 }}>
+                    {ejercicio.opciones?.map((opcion, index) => {
+                        const esSeleccionada = selectedOption === opcion.texto;
+                        const esCorrecta = opcion.correcta;
+
+                        let borderColor = 'rgba(255, 255, 255, 0.1)';
+                        if (answerConfirmed) {
+                            if (esSeleccionada && esCorrecta) borderColor = '#4CAF50';
+                            else if (esSeleccionada && !esCorrecta) borderColor = '#f44336';
+                            else if (!esSeleccionada && esCorrecta) borderColor = '#4CAF50';
+                        } else {
+                            borderColor = esSeleccionada ? '#81D4FA' : 'rgba(255, 255, 255, 0.1)';
+                        }
+
+                        return (
+                            <Paper
+                                key={index}
+                                elevation={2}
                                 sx={{
-                                    width: '100%',
-                                    margin: 0,
-                                    padding: '16px 20px',
-                                    borderRadius: '12px'
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: `2px solid ${borderColor}`,
+                                    borderRadius: '12px',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        background: 'rgba(255, 255, 255, 0.08)',
+                                        border: `2px solid ${borderColor}`,
+                                    }
                                 }}
-                            />
-                        </Paper>
-                    ))}
+                            >
+                                <FormControlLabel
+                                    value={opcion.texto}
+                                    control={
+                                        <Radio
+                                            disabled={answerConfirmed}
+                                            sx={{
+                                                color: '#81D4FA',
+                                                '&.Mui-checked': {
+                                                    color: '#81D4FA'
+                                                }
+                                            }}
+                                        />
+                                    }
+                                    label={
+                                        <Typography sx={{ color: 'white', fontSize: '1.1rem' }}>
+                                            {opcion.texto}
+                                        </Typography>
+                                    }
+                                    sx={{
+                                        width: '100%',
+                                        margin: 0,
+                                        padding: '16px 20px',
+                                        borderRadius: '12px'
+                                    }}
+                                />
+                            </Paper>
+                        );
+                    })}
                 </RadioGroup>
             </FormControl>
+
+            {!answerConfirmed && (
+                <Box sx={{ mt: 3 }}>
+                    <Button
+                        variant="contained"
+                        onClick={handleAnswerConfirm}
+                        disabled={!selectedOption}
+                        sx={{
+                            backgroundColor: '#81D4FA',
+                            color: '#000',
+                            fontWeight: 'bold',
+                            px: 4,
+                            py: 1.5,
+                            fontSize: '0.9rem',
+                            borderRadius: '12px',
+                            '&:hover': {
+                                boxShadow: '0 6px 10px rgba(129, 212, 250, 0.3)',
+                            },
+                            '&:disabled': {
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                color: 'rgba(255, 255, 255, 0.3)',
+                            }
+                        }}
+                    >
+                        Confirmar respuesta
+                    </Button>
+                </Box>
+            )}
         </Box>
     );
 
