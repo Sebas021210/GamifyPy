@@ -84,23 +84,20 @@ async def get_user_progreso(user_id: int, db: Session = Depends(get_db)):
         .join(Nivel, Leccion.id_nivel == Nivel.id)
         .join(Categoria, Nivel.id_categoria == Categoria.id)
         .filter(ProgresoUsuario.id_usuario == user_id)
-        .order_by(Nivel.orden, Leccion.orden)
-        .all()
+        .order_by(Nivel.orden.desc(), Leccion.orden.desc())
+        .first()
     )
 
     if not progreso:
         return JSONResponse(content={"progreso": []})
     
-    progreso_data = [
-        {
-            "Categoria": categoria.nombre,
-            "Nivel": nivel.nombre,
-            "Leccion": leccion.titulo,
-            "Puntos": usuario.puntos,
-            "Completado": progreso_usuario.completado,
-            "Fecha Completado": progreso_usuario.fecha_completado.isoformat() if progreso_usuario.fecha_completado else None
-        }
-        for progreso_usuario, leccion, nivel, categoria in progreso
-    ]
+    progreso_data = {
+        "Categoria": progreso.Categoria.nombre,
+        "Nivel": progreso.Nivel.nombre,
+        "Leccion": progreso.Leccion.titulo,
+        "Puntos": usuario.puntos,
+        "Completado": progreso.ProgresoUsuario.completado,
+        "Fecha Completado": progreso.ProgresoUsuario.fecha_completado.isoformat() if progreso.ProgresoUsuario.fecha_completado else None
+    }
 
-    return JSONResponse(content={"progreso": progreso_data})
+    return JSONResponse(content=progreso_data)
