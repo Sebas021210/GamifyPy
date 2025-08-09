@@ -100,18 +100,30 @@ async def complete_lesson(leccion_id: int, db: Session = Depends(get_db), curren
         id_insignia = 54
         assign_insignia(user_id, id_insignia, db)
 
+    # Caso 1: Si la lección actual es la última lección del nivel, debemos pasar a la primera lección del siguiente nivel
     siguiente_leccion = (
         db.query(Leccion)
-        .filter(Leccion.id_nivel == leccion_actual.id_nivel, Leccion.orden > leccion_actual.orden)
+        .filter(Leccion.orden > leccion_actual.orden) 
+        .filter(Leccion.id_nivel == leccion_actual.id_nivel)
         .order_by(Leccion.orden.asc())
         .first()
     )
+
+    # Si no se encuentra la siguiente lección en el mismo nivel, buscar la primera del siguiente nivel
+    if not siguiente_leccion:
+        siguiente_leccion = (
+            db.query(Leccion)
+            .filter(Leccion.id_nivel > leccion_actual.id_nivel)
+            .order_by(Leccion.orden.asc())
+            .first()
+        )
 
     if siguiente_leccion:
         progreso_siguiente = db.query(ProgresoUsuario).filter_by(
             id_usuario=user_id, id_leccion=siguiente_leccion.id
         ).first()
 
+        # Si no existe el progreso para la siguiente lección, lo creamos con completado=False
         if not progreso_siguiente:
             nuevo_progreso = ProgresoUsuario(
                 id_usuario=user_id,
@@ -119,6 +131,10 @@ async def complete_lesson(leccion_id: int, db: Session = Depends(get_db), curren
                 completado=False
             )
             db.add(nuevo_progreso)
-            db.commit()
+        else:
+            # Si ya existe el progreso pero no está completado, lo marcamos como no completado
+            if not progreso_siguiente.completado:
+                progreso_siguiente.completado = False
+        db.commit()
 
     return JSONResponse(content={"message": "Lesson completed successfully"}, status_code=200)

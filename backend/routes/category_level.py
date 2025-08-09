@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from backend.database import get_db, Categoria, Nivel, Leccion
+from backend.database import get_db, Categoria, Nivel, Leccion, Usuario, ProgresoUsuario
 from sqlalchemy.orm import Session
 from backend.controllers.auth import get_current_user
 
@@ -41,6 +41,75 @@ async def get_levels_by_category(categoria_id: int, db: Session = Depends(get_db
     ]
 
     return JSONResponse(content={"niveles": nivel_data})
+
+@router.get("/niveles")
+def get_all_levels(current_user: Usuario = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not current_user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    niveles = db.query(Nivel).order_by(Nivel.orden).all()
+
+    ultimo_progreso = (
+        db.query(ProgresoUsuario, Leccion, Nivel)
+        .join(Leccion, ProgresoUsuario.id_leccion == Leccion.id)
+        .join(Nivel, Leccion.id_nivel == Nivel.id)
+        .filter(ProgresoUsuario.id_usuario == current_user.id)
+        .order_by(Nivel.orden.desc(), Leccion.orden.desc())
+        .first()
+    )
+
+    if not ultimo_progreso:
+        return JSONResponse(content=[
+            {
+                "id": nivel.id,
+                "nombre": nivel.nombre,
+                "descripcion": nivel.descripcion,
+                "orden": nivel.orden,
+                "id_categoria": nivel.id_categoria,
+                "completado": False,
+                "bloqueado": True if i > 0 else False
+            }
+            for i, nivel in enumerate(niveles)
+        ])
+
+    nivel_actual_id = ultimo_progreso.Nivel.id
+
+    niveles_data = []
+    encontrado_actual = False
+    for nivel in niveles:
+        if nivel.id == nivel_actual_id:
+            niveles_data.append({
+                "id": nivel.id,
+                "nombre": nivel.nombre,
+                "descripcion": nivel.descripcion,
+                "orden": nivel.orden,
+                "id_categoria": nivel.id_categoria,
+                "completado": False,
+                "bloqueado": False
+            })
+            encontrado_actual = True
+        elif not encontrado_actual:
+            niveles_data.append({
+                "id": nivel.id,
+                "nombre": nivel.nombre,
+                "descripcion": nivel.descripcion,
+                "orden": nivel.orden,
+                "id_categoria": nivel.id_categoria,
+                "completado": True,
+                "bloqueado": False
+            })
+        else:
+            niveles_data.append({
+                "id": nivel.id,
+                "nombre": nivel.nombre,
+                "descripcion": nivel.descripcion,
+                "orden": nivel.orden,
+                "id_categoria": nivel.id_categoria,
+                "completado": False,
+                "bloqueado": True
+            })
+
+    return JSONResponse(content=niveles_data)
 
 @router.get("/niveles/{nivel_id}")
 def get_level(nivel_id: int, db: Session = Depends(get_db)):
