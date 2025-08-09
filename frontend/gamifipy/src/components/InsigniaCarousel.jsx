@@ -63,7 +63,15 @@ function Insignias() {
     }, []);
 
     const itemTemplate = (item) => (
-        <Box className="text-center py-5 px-3">
+        <Box
+            className="text-center py-5 px-3"
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}
+        >
             <img
                 src={`http://localhost:8000${item.icono.replace('/backend', '')}`}
                 alt={item.nombre}
