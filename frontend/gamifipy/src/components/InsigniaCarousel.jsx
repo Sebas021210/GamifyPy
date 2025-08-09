@@ -1,48 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Carousel } from 'primereact/carousel';
 import 'primereact/resources/themes/lara-light-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
-
-const data = [
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria1.png',
-        title: 'AVANCE A INTERMEDIO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria2.png',
-        title: 'AVANCE A AVANZADO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria3.png',
-        title: 'AVANCE A EXPERTO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria1.png',
-        title: 'AVANCE A INTERMEDIO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria2.png',
-        title: 'AVANCE A AVANZADO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria3.png',
-        title: 'AVANCE A EXPERTO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria1.png',
-        title: 'AVANCE A INTERMEDIO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria2.png',
-        title: 'AVANCE A AVANZADO',
-    },
-    {
-        src: 'http://127.0.0.1:8000/static/insignias/Categoria/Categoria3.png',
-        title: 'AVANCE A EXPERTO',
-    },
-];
 
 const responsiveOptions = [
     {
@@ -68,22 +29,72 @@ const responsiveOptions = [
 ];
 
 function Insignias() {
+    const [insignias, setInsignias] = React.useState([]);
+
+    useEffect(() => {
+        const getInsignias = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error("No token found");
+                }
+
+                const response = await fetch('http://localhost:8000/user/insignias', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                if (!response.ok) {
+                    throw new Error("Failed to fetch skills data");
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Error fetching skills data:", error);
+                return [];
+            }
+        };
+
+        getInsignias().then(data => {
+            setInsignias(data.insignias || []);
+        });
+    }, []);
+
     const itemTemplate = (item) => (
         <Box className="text-center py-5 px-3">
             <img
-                src={item.src}
-                alt={item.title}
+                src={`http://localhost:8000${item.icono.replace('/backend', '')}`}
+                alt={item.nombre}
                 style={{ width: '160px', height: '160px', objectFit: 'contain' }}
             />
-            <Typography variant="body2" sx={{ fontFamily: 'Orbitron, sans-serif', mt: 2 }}>
-                {item.title}
+            <Typography variant="body2" sx={{ fontFamily: 'Orbitron, sans-serif', mt: 2, alignItems: 'center', textAlign: 'center' }}>
+                {item.nombre}
             </Typography>
         </Box>
     );
 
     return (
         <>
-            {data.length < 7 ? (
+            {insignias.length === 0 ? (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'start',
+                        flexDirection: 'column',
+                        alignItems: 'start',
+                        mt: 5
+                    }}
+                >
+                    <Typography variant="h6" sx={{ fontFamily: 'Orbitron, sans-serif', mb: 3 }}>
+                        ¡Empieza tu aventura para ganar nuevas insignias!
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontFamily: 'Orbitron, sans-serif', textAlign: 'start', maxWidth: '400px' }}>
+                        Completa lecciones y ejercicios para desbloquear insignias que reflejen tus logros y progreso.
+                    </Typography>
+                </Box>
+            ) : insignias.length < 7 ? (
                 <Box
                     sx={{
                         display: 'flex',
@@ -93,7 +104,7 @@ function Insignias() {
                         mt: 3
                     }}
                 >
-                    {data.map((item, index) => (
+                    {insignias.map((item, index) => (
                         <Box key={index} className="text-center">
                             {itemTemplate(item)}
                         </Box>
@@ -102,7 +113,7 @@ function Insignias() {
             ) : (
                 <Box sx={{ mt: 3 }}>
                     <Carousel
-                        value={data}
+                        value={insignias}
                         itemTemplate={itemTemplate}
                         numVisible={6}
                         numScroll={1}
