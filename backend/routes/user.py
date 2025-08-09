@@ -22,9 +22,11 @@ async def get_me(current_user: Usuario = Depends(get_current_user)):
 
     return JSONResponse(content=user_data)
 
-@router.get("/{user_id}/insignias")
-async def get_user_insignias(user_id: int, db: Session = Depends(get_db)):
+@router.get("/insignias")
+async def get_user_insignias(current_user: Usuario = Depends(get_current_user), db: Session = Depends(get_db)):
     """ Endpoint para obtener las insignias de un usuario. """
+    user_id = current_user.id
+
     insignias = (
         db.query(InsigniaUsuario)
         .filter(InsigniaUsuario.id_usuario == user_id)
@@ -46,37 +48,41 @@ async def get_user_insignias(user_id: int, db: Session = Depends(get_db)):
 
     return JSONResponse(content={"insignias": insignia_data})
 
-@router.get("/{user_id}/habilidades")
-def get_user_habilidades(user_id: int, db: Session = Depends(get_db)):
-    """ Endpoint para obtener las habilidades de un usuario. """
-    habilidades = (
-        db.query(Habilidad)
+@router.get("/habilidades")
+def get_user_habilidades(current_user: Usuario = Depends(get_current_user), db: Session = Depends(get_db)):
+    """ Endpoint para obtener TODAS las habilidades y marcar cuáles están desbloqueadas por el usuario. """
+    user_id = current_user.id
+    todas_habilidades = db.query(Habilidad).all()
+
+    habilidades_usuario = (
+        db.query(Habilidad.id)
         .join(LeccionHabilidad, Habilidad.id == LeccionHabilidad.id_habilidades)
         .join(ProgresoUsuario, LeccionHabilidad.id_leccion == ProgresoUsuario.id_leccion)
         .filter(ProgresoUsuario.id_usuario == user_id, ProgresoUsuario.completado == True)
         .distinct()
         .all()
     )
+    ids_desbloqueadas = {h[0] for h in habilidades_usuario}
 
-    if not habilidades:
-        return JSONResponse(content={"habilidades": []})
-    
     habilidad_data = [
         {
             "id": hab.id,
             "nombre": hab.nombre,
             "descripcion": hab.descripcion,
-        } for hab in habilidades
+            "isUnlocked": hab.id in ids_desbloqueadas
+        }
+        for hab in todas_habilidades
     ]
 
     return JSONResponse(content={"habilidades": habilidad_data})
 
-@router.get("/{user_id}/progreso")
-async def get_user_progreso(user_id: int, db: Session = Depends(get_db)):
+@router.get("/progreso")
+async def get_user_progreso(current_user: Usuario = Depends(get_current_user), db: Session = Depends(get_db)):
     """ Endpoint para obtener el progreso de un usuario en las lecciones. """
-    usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
-    if not usuario:
+    if not current_user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    user_id = current_user.id 
 
     progreso = (
         db.query(ProgresoUsuario, Leccion, Nivel, Categoria)
@@ -95,7 +101,7 @@ async def get_user_progreso(user_id: int, db: Session = Depends(get_db)):
         "Categoria": progreso.Categoria.nombre,
         "Nivel": progreso.Nivel.nombre,
         "Leccion": progreso.Leccion.titulo,
-        "Puntos": usuario.puntos,
+        "Puntos": current_user.puntos,
         "Completado": progreso.ProgresoUsuario.completado,
         "Fecha Completado": progreso.ProgresoUsuario.fecha_completado.isoformat() if progreso.ProgresoUsuario.fecha_completado else None
     }

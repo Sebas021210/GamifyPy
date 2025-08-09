@@ -1,79 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Zap } from 'lucide-react';
 
-const generateSkills = () => {
-    const skillTemplates = [
-        { name: "React Hooks", description: "Manejo avanzado de hooks de React para gestión de estado y efectos secundarios", category: "frontend" },
-        { name: "TypeScript", description: "Desarrollo con tipado estático para aplicaciones más robustas y mantenibles", category: "frontend" },
-        { name: "Node.js", description: "Desarrollo de servidores y APIs REST con JavaScript del lado del servidor", category: "backend" },
-        { name: "MongoDB", description: "Base de datos NoSQL para almacenamiento flexible de documentos", category: "database" },
-        { name: "Docker", description: "Containerización de aplicaciones para despliegues consistentes", category: "devops" },
-        { name: "AWS", description: "Servicios en la nube para escalabilidad y disponibilidad", category: "cloud" },
-        { name: "Python Django", description: "Framework web de Python para desarrollo rápido y limpio", category: "backend" },
-        { name: "PostgreSQL", description: "Base de datos relacional avanzada con características empresariales", category: "database" },
-        { name: "Vue.js", description: "Framework progresivo para interfaces de usuario reactivas", category: "frontend" },
-        { name: "Express.js", description: "Framework minimalista para aplicaciones web de Node.js", category: "backend" },
-        { name: "Redis", description: "Base de datos en memoria para cache y sesiones rápidas", category: "database" },
-        { name: "Kubernetes", description: "Orquestación de contenedores para aplicaciones escalables", category: "devops" },
-        { name: "GraphQL", description: "Lenguaje de consulta para APIs más eficientes y flexibles", category: "api" },
-        { name: "Jest Testing", description: "Framework de testing para JavaScript con cobertura completa", category: "testing" },
-        { name: "CSS Grid", description: "Sistema de layout bidimensional para diseños complejos", category: "frontend" },
-        { name: "Webpack", description: "Bundler de módulos para optimización de aplicaciones web", category: "tools" },
-        { name: "Git Workflows", description: "Flujos de trabajo con Git para colaboración efectiva", category: "tools" },
-        { name: "API RESTful", description: "Diseño e implementación de APIs siguiendo principios REST", category: "api" },
-        { name: "Sass/SCSS", description: "Preprocesador CSS para estilos más organizados y mantenibles", category: "frontend" },
-        { name: "React Native", description: "Desarrollo móvil multiplataforma con JavaScript", category: "mobile" },
-        { name: "Firebase", description: "Plataforma de Google para desarrollo de aplicaciones web y móviles", category: "cloud" },
-        { name: "Electron", description: "Framework para aplicaciones de escritorio con tecnologías web", category: "desktop" },
-        { name: "Next.js", description: "Framework de React para aplicaciones web con renderizado híbrido", category: "frontend" },
-        { name: "Tailwind CSS", description: "Framework CSS utility-first para diseño rápido y consistente", category: "frontend" },
-        { name: "MySQL", description: "Sistema de gestión de bases de datos relacionales", category: "database" },
-        { name: "CI/CD", description: "Integración y despliegue continuo para entregas automatizadas", category: "devops" },
-        { name: "Nginx", description: "Servidor web y proxy reverso de alto rendimiento", category: "devops" },
-        { name: "Socket.io", description: "Comunicación en tiempo real entre cliente y servidor", category: "realtime" },
-        { name: "Laravel", description: "Framework PHP elegante para desarrollo web artesanal", category: "backend" },
-        { name: "Flutter", description: "Framework de Google para aplicaciones móviles nativas", category: "mobile" },
-        { name: "Elasticsearch", description: "Motor de búsqueda y análisis distribuido", category: "search" },
-        { name: "Terraform", description: "Infraestructura como código para aprovisionamiento automatizado", category: "devops" },
-        { name: "JWT Auth", description: "Autenticación basada en tokens JSON Web Tokens", category: "security" },
-        { name: "Microservices", description: "Arquitectura de servicios distribuidos e independientes", category: "architecture" },
-        { name: "RabbitMQ", description: "Sistema de mensajería para comunicación asíncrona", category: "messaging" },
-        { name: "Apache Kafka", description: "Plataforma de streaming distribuido para big data", category: "messaging" },
-        { name: "Machine Learning", description: "Algoritmos de aprendizaje automático con Python", category: "ai" },
-        { name: "TensorFlow", description: "Framework de Google para machine learning y deep learning", category: "ai" },
-        { name: "Linux Admin", description: "Administración de sistemas Linux y scripting bash", category: "sysadmin" },
-        { name: "Blockchain", description: "Tecnología de cadena de bloques y contratos inteligentes", category: "blockchain" },
-        { name: "Web3.js", description: "Biblioteca JavaScript para interactuar con Ethereum", category: "blockchain" },
-        { name: "Solidity", description: "Lenguaje de programación para contratos inteligentes", category: "blockchain" },
-        { name: "Unity 3D", description: "Motor de videojuegos para desarrollo multiplataforma", category: "gamedev" },
-        { name: "Blender API", description: "Scripting y automatización en Blender con Python", category: "3d" },
-        { name: "WebGL", description: "Gráficos 3D en el navegador con JavaScript", category: "graphics" },
-        { name: "D3.js", description: "Visualización de datos interactiva con JavaScript", category: "dataviz" },
-        { name: "Pandas", description: "Análisis y manipulación de datos con Python", category: "data" },
-        { name: "NumPy", description: "Computación científica y arrays multidimensionales", category: "data" },
-        { name: "OpenCV", description: "Biblioteca de visión por computadora y procesamiento de imágenes", category: "ai" },
-        { name: "Selenium", description: "Automatización de pruebas web y scraping", category: "testing" },
-        { name: "Cypress", description: "Testing end-to-end moderno para aplicaciones web", category: "testing" },
-        { name: "Figma API", description: "Integración con Figma para automatización de diseño", category: "design" },
-        { name: "Adobe XD", description: "Diseño de interfaces y prototipado interactivo", category: "design" },
-        { name: "Photoshop", description: "Edición avanzada de imágenes y diseño gráfico", category: "design" },
-        { name: "After Effects", description: "Animación y efectos visuales para motion graphics", category: "design" },
-        { name: "Stripe API", description: "Integración de pagos online seguros y escalables", category: "payments" },
-        { name: "PayPal SDK", description: "Procesamiento de pagos con la plataforma PayPal", category: "payments" },
-        { name: "OAuth 2.0", description: "Protocolo de autorización para acceso seguro a recursos", category: "security" },
-        { name: "HTTPS/SSL", description: "Protocolos de seguridad para comunicaciones web cifradas", category: "security" },
-        { name: "Penetration Testing", description: "Pruebas de seguridad para identificar vulnerabilidades", category: "security" }
-    ];
+const generateSkills = async () => {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error("No token found");
+        }
 
-    return skillTemplates.map((skill, index) => ({
-        id: index + 1,
-        name: skill.name,
-        description: skill.description,
-        isUnlocked: Math.random() > 0.2
-    }));
+        const response = await fetch('http://localhost:8000/user/habilidades', {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        })
+        if (!response.ok) {
+            throw new Error("Failed to fetch skills data");
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching skills data:", error);
+        return [];
+    }
 };
-
-const skills = generateSkills();
 
 const generatePositions = (totalSkills) => {
     const positions = [];
@@ -95,8 +46,6 @@ const generatePositions = (totalSkills) => {
 
     return positions;
 };
-
-const positions = generatePositions(skills.length);
 
 const generateConnections = (totalSkills) => {
     const connections = [];
@@ -120,8 +69,6 @@ const generateConnections = (totalSkills) => {
     return connections;
 };
 
-const connections = generateConnections(skills.length);
-
 const styles = {
     container: {
         width: '100%',
@@ -136,7 +83,7 @@ const styles = {
     },
     treeContent: {
         minWidth: 'fit-content',
-        height: '500px',
+        height: '600px',
         position: 'relative'
     },
     svg: {
@@ -283,18 +230,42 @@ function SkillDetails({ skill }) {
     return (
         <div style={styles.detailsPanel}>
             <h3 style={styles.skillName}>
-                {skill.name}
+                {skill.nombre}
             </h3>
 
             <p style={styles.skillDescription}>
-                {skill.description}
+                {skill.descripcion}
             </p>
         </div>
     );
 }
 
 function Skills() {
+    const [skills, setSkills] = useState([]);
+    const [positions, setPositions] = useState([]);
+    const [connections, setConnections] = useState([]);
     const [selectedSkill, setSelectedSkill] = useState(null);
+
+    useEffect(() => {
+        const loadSkills = async () => {
+            try {
+                const response = await generateSkills();
+                const skillsData = response.habilidades;
+
+                if (Array.isArray(skillsData)) {
+                    setSkills(skillsData);
+                    setPositions(generatePositions(skillsData.length));
+                    setConnections(generateConnections(skillsData.length));
+                } else {
+                    console.error('La respuesta de la API no contiene un array en "habilidades":', response);
+                }
+            } catch (error) {
+                console.error('Error fetching skills:', error);
+            }
+        };
+
+        loadSkills();
+    }, []);
 
     const handleSkillClick = (skill) => {
         if (!skill.isUnlocked) return;
@@ -311,11 +282,9 @@ function Skills() {
                                 key={index}
                                 fromPos={positions[connection.from]}
                                 toPos={positions[connection.to]}
-                                isActive={
-                                    selectedSkill &&
+                                isActive={selectedSkill &&
                                     (selectedSkill.id === skills[connection.from].id ||
-                                        selectedSkill.id === skills[connection.to].id)
-                                }
+                                        selectedSkill.id === skills[connection.to].id)}
                             />
                         ))}
                     </svg>

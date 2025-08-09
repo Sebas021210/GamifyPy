@@ -46,9 +46,15 @@ function Profile() {
 
     const getProgreso = async () => {
         try {
-            const responseProgreso = await fetch(`http://localhost:8000/user/${userData.id}/progreso`, {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error("No token found");
+            }
+
+            const responseProgreso = await fetch(`http://localhost:8000/user/progreso`, {
                 method: 'GET',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
@@ -75,7 +81,7 @@ function Profile() {
         if (userData) {
             getProgreso();
         }
-    }, [userData]); //eslint-disable-line react-hooks/exhaustive-deps
+    }, [userData]);
 
     if (loading) {
         return <LoadingBackdrop loading={loading} />;
