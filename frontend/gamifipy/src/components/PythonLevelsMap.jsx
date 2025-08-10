@@ -1,65 +1,80 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Lock, Star, Play, Trophy, Zap, Code, Brain, Rocket } from 'lucide-react';
 import IconButton from '@mui/material/IconButton';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LoadingBackdrop from './LoadingBackdrop';
 
 const PythonLevelsMap = () => {
     const navigate = useNavigate();
     const [selectedLevel, setSelectedLevel] = useState(null);
-    const [completedLevels, setCompletedLevels] = useState([1, 2, 3]); // eslint-disable-line no-unused-vars
-    const [currentLevel, setCurrentLevel] = useState(4); // eslint-disable-line no-unused-vars
+    const [mainLevels, setMainLevels] = useState([]);
+    const [extraLevels, setExtraLevels] = useState([]);
     const [showExtraLevels, setShowExtraLevels] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const handleProfile = () => {
         navigate("/profile");
     };
+    
+    const getIconForLevel = (id) => {
+        const iconMap = { 1: Code, 2: Code, 3: Brain, 4: Brain, 5: Zap, 6: Rocket, 7: Code, 8: Brain, 9: Zap, 10: Rocket, 11: Star, 12: Star, 13: Star, 14: Star };
+        return iconMap[id] || Lock;
+    }
+    
+    useEffect(() => {
+        const getLevels = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error("No token found");
+                }
 
-    const mainLevels = [
-        { id: 1, title: "Variables y Tipos", icon: Code, difficulty: "Básico" },
-        { id: 2, title: "Operadores", icon: Code, difficulty: "Básico" },
-        { id: 3, title: "Condicionales", icon: Brain, difficulty: "Básico" },
-        { id: 4, title: "Bucles", icon: Brain, difficulty: "Intermedio" },
-        { id: 5, title: "Funciones", icon: Zap, difficulty: "Intermedio" },
-        { id: 6, title: "Listas", icon: Zap, difficulty: "Intermedio" },
-        { id: 7, title: "Diccionarios", icon: Brain, difficulty: "Intermedio" },
-        { id: 8, title: "Clases y Objetos", icon: Rocket, difficulty: "Avanzado" },
-        { id: 9, title: "Manejo de Archivos", icon: Rocket, difficulty: "Avanzado" },
-        { id: 10, title: "Excepciones", icon: Rocket, difficulty: "Avanzado" }
-    ];
+                const response = await fetch('http://localhost:8000/category-level/niveles', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch levels");
+                }
 
-    const extraLevels = [
-        { id: 11, title: "Decoradores", icon: Star, difficulty: "Experto" },
-        { id: 12, title: "Generadores", icon: Star, difficulty: "Experto" },
-        { id: 13, title: "Multithreading", icon: Trophy, difficulty: "Experto" },
-        { id: 14, title: "APIs y Requests", icon: Trophy, difficulty: "Experto" }
-    ];
+                const data = await response.json();
+                const nivelData = data.map(level => ({
+                    ...level,
+                    icon: getIconForLevel(level.id),
+                }))
 
-    const getLevelGradient = (levelId) => {
-        if (completedLevels.includes(levelId)) {
+                const main = nivelData.filter(level => level.id_categoria !== 5);
+                const extras = nivelData.filter(level => level.id_categoria === 5);
+                setMainLevels(main);
+                setExtraLevels(extras);
+
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching levels:", error);
+                setLoading(false);
+            }
+        }
+        getLevels();
+    }, []);
+
+    const getLevelGradient = (nivel) => {
+        if (nivel.completado) {
             return 'linear-gradient(135deg, #22c55e, #16a34a)';
-        } else if (levelId === currentLevel) {
-            return 'linear-gradient(135deg, #06b6d4, #0891b2)';
-        } else if (isLevelUnlocked(levelId)) {
+        } else if (!nivel.bloqueado) {
             return 'linear-gradient(135deg, #06b6d4, #0891b2)';
         } else {
             return 'linear-gradient(135deg, #6b7280, #374151)';
         }
     };
 
-    const isLevelUnlocked = (levelId) => {
-        if (levelId === 1) return true;
-        if (levelId <= 10) return completedLevels.includes(levelId - 1) || levelId === currentLevel;
-        if (levelId === 11) return completedLevels.includes(10) || levelId === currentLevel;
-        return completedLevels.includes(levelId - 1) || levelId === currentLevel;
-    };
-
-    const isLevelCompleted = (levelId) => completedLevels.includes(levelId);
-
-    const LevelNode = ({ level, position, isExtra = false }) => { // eslint-disable-line no-unused-vars
-        const Icon = level.icon;
-        const unlocked = isLevelUnlocked(level.id);
-        const completed = isLevelCompleted(level.id);
+    const LevelNode = ({ nivel, position }) => {
+        const unlocked = !nivel.bloqueado;
+        const completed = nivel.completado;
+        const Icon = nivel.icon;
 
         const nodeStyles = {
             position: 'absolute',
@@ -79,7 +94,7 @@ const PythonLevelsMap = () => {
             alignItems: 'center',
             justifyContent: 'center',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)',
-            background: getLevelGradient(level.id),
+            background: getLevelGradient(nivel),
             border: completed ? '4px solid #fbbf24' : 'none',
             zIndex: 10
         };
@@ -87,7 +102,7 @@ const PythonLevelsMap = () => {
         return (
             <div
                 style={nodeStyles}
-                onClick={() => unlocked && setSelectedLevel(level)}
+                onClick={() => unlocked && setSelectedLevel(nivel)}
                 onMouseEnter={(e) => {
                     if (unlocked) {
                         e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1.1)';
@@ -139,7 +154,7 @@ const PythonLevelsMap = () => {
                             fontWeight: 'bold',
                             color: unlocked ? 'white' : '#6b7280'
                         }}>
-                            Nivel {level.id}
+                            Nivel {nivel.id}
                         </div>
                     </div>
                 </div>
@@ -168,6 +183,10 @@ const PythonLevelsMap = () => {
         position: 'absolute',
         inset: '0',
     };
+
+    if (loading) {
+        return <LoadingBackdrop loading={loading} />;
+    }
 
     return (
         <div style={containerStyles}>
@@ -199,20 +218,19 @@ const PythonLevelsMap = () => {
                 margin: '0 32px 32px',
                 transition: 'height 0.3s ease'
             }}>
-                {mainLevels.map((level, index) => (
+                {mainLevels.map((nivel, index) => (
                     <LevelNode
-                        key={level.id}
-                        level={level}
+                        key={nivel.id}
+                        nivel={nivel}
                         position={mainPositions[index]}
                     />
                 ))}
 
-                {showExtraLevels && extraLevels.map((level, index) => (
+                {showExtraLevels && extraLevels.map((nivel, index) => (
                     <LevelNode
-                        key={level.id}
-                        level={level}
+                        key={nivel.id}
+                        nivel={nivel}
                         position={extraPositions[index]}
-                        isExtra
                     />
                 ))}
 
@@ -346,7 +364,7 @@ const PythonLevelsMap = () => {
                                 {selectedLevel.title}
                             </h3>
                             <p style={{ color: '#9ca3af', marginBottom: '16px' }}>
-                                Nivel {selectedLevel.id} • {selectedLevel.difficulty}
+                                {selectedLevel.nombre}
                             </p>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -377,7 +395,7 @@ const PythonLevelsMap = () => {
                                         e.target.style.transform = 'scale(1)';
                                         e.target.style.boxShadow = 'none';
                                     }}
-                                    onClick={() => navigate(`/level/${selectedLevel.id}`) }
+                                    onClick={() => navigate(`/level/${selectedLevel.id}`)}
                                 >
                                     <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '12px' }}>
                                         <Play size={20} fill="white" />
