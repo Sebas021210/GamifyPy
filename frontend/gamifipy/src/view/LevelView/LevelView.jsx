@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -8,6 +8,33 @@ import './LevelView.css'
 function LevelView() {
     const { levelId } = useParams();
     const navigate = useNavigate();
+    const [levelTitle, setLevelTitle] = useState("");
+    const [levelDescription, setLevelDescription] = useState("");
+    const [levelLessons, setLevelLessons] = useState([]); // eslint-disable-line
+    const [levelQuestions, setLevelQuestions] = useState([]); // eslint-disable-line
+
+    useEffect(() => {
+        const getLevelInfo = async () => {
+            try {
+                const respone = await fetch(`http://localhost:8000/category-level/niveles/${levelId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!respone.ok) {
+                    throw new Error('Error fetching level data');
+                }
+
+                const data = await respone.json();
+                setLevelTitle(data.nombre);
+                setLevelDescription(data.descripcion);
+            } catch (error) {
+                console.error('Error fetching level data:', error);
+            }
+        }
+        getLevelInfo();
+    }, [levelId]);
 
     return (
         <div className="levelView-Container">
@@ -18,10 +45,10 @@ function LevelView() {
                     </IconButton>
                 </div>
                 <div className="levelView-Header-title">
-                    <h1>Nivel {levelId}</h1>
+                    <h1>{levelTitle}</h1>
                 </div>
                 <div className="levelView-Heder-Description">
-                    <p>Aprende los conceptos básicos de programación en Python. Desde variables y tipos de datos hasta estructuras de control básicas.</p>
+                    <p>{levelDescription}</p>
                 </div>
             </div>
             <div className="levelView-Body">
