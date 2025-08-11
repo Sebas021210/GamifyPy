@@ -272,6 +272,17 @@
     color: white !important;
 }
 
+.level-disabled-leccion {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.level-disabled-number {
+    background-color: #e5e7eb;
+    color: #9ca3af;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

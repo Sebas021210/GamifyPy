@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, Play, BookOpen, Code, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, ChevronRight, Play, BookOpen, Code, CheckCircle, Lock } from 'lucide-react';
 import LessonsDialog from './LessonsDialog';
 import ExerciseDialog from './ExcerciseDialog';
 import './LevelContent.css';
 
-const LevelContent = () => {
+const LevelContent = ({ id_nivel }) => {
     const [leccionesExpanded, setLeccionesExpanded] = useState(false);
     const [ejerciciosExpanded, setEjerciciosExpanded] = useState(false);
     const [openLessonsDialog, setOpenLessonsDialog] = useState(false);
     const [leccionSeleccionada, setLeccionSeleccionada] = useState(null);
     const [openExcerciseDialog, setOpenExcerciseDialog] = useState(false);
     const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
+    const [lecciones, setLecciones] = useState([]);
+    const [ejercicios, setEjercicios] = useState([]); // eslint-disable-line
 
     const handleOpenLessonsDialog = () => {
         setOpenLessonsDialog(true);
@@ -28,23 +30,40 @@ const LevelContent = () => {
         setOpenExcerciseDialog(false);
     }
 
+    useEffect(() => {
+        const getLecciones = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error("No token found");
+                }
+
+                const response = await fetch(`http://localhost:8000/category-level/${id_nivel}/lecciones`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                if (!response.ok) {
+                    throw new Error('Error fetching lessons data');
+                }
+                const data = await response.json();
+                console.log('Lecciones data:', data);
+                setLecciones(data.lecciones);
+            } catch (error) {
+                console.error('Error fetching lessons data:', error);
+            }
+        }
+        getLecciones();
+    }, [id_nivel]);
+
     const nivelData = {
-        id: 1,
-        nombre: "Fundamentos de Python",
-        descripcion: "Aprende los conceptos básicos de programación en Python. Desde variables y tipos de datos hasta estructuras de control básicas.",
-        progreso: 45,
-        lecciones: [
-            { id: 1, nombre: "¿Qué es Python?", completado: true },
-            { id: 2, nombre: "Tu primer programa", completado: true },
-            { id: 3, nombre: "Variables y tipos de datos", completado: true },
-            { id: 4, nombre: "Operadores básicos", completado: false },
-            { id: 5, nombre: "Entrada y salida de datos", completado: false }
-        ],
         ejercicios: [
             {
                 id: 1,
                 nombre: "Hola Mundo",
-                completado: true,
+                completada: true,
                 tipo: "codigo",
                 puntos: 10,
                 texto: "Escribe un programa que imprima 'Hola, Mundo!' en la consola.",
@@ -54,7 +73,7 @@ const LevelContent = () => {
             {
                 id: 2,
                 nombre: "Variables simples",
-                completado: true,
+                completada: true,
                 tipo: "opcion_multiple",
                 puntos: 15,
                 texto: "¿Cuál de las siguientes opciones es un nombre válido para una variable en Python?",
@@ -69,7 +88,7 @@ const LevelContent = () => {
             {
                 id: 3,
                 nombre: "Operaciones matemáticas",
-                completado: true,
+                completada: true,
                 tipo: "codigo",
                 puntos: 20,
                 texto: "Crea dos variables con números y realiza las operaciones básicas (suma, resta, multiplicación, división).",
@@ -79,7 +98,7 @@ const LevelContent = () => {
             {
                 id: 4,
                 nombre: "Calculadora básica",
-                completado: false,
+                completada: false,
                 tipo: "codigo",
                 puntos: 25,
                 texto: "Crea una calculadora que solicite dos números al usuario y una operación, luego muestre el resultado.",
@@ -89,7 +108,7 @@ const LevelContent = () => {
             {
                 id: 5,
                 nombre: "Conversión de temperaturas",
-                completado: false,
+                completada: false,
                 tipo: "opcion_multiple",
                 puntos: 15,
                 texto: "¿Cuál es la fórmula correcta para convertir Celsius a Fahrenheit?",
@@ -105,11 +124,11 @@ const LevelContent = () => {
     };
 
     const calculateProgress = (items) => {
-        const completedItems = items.filter(item => item.completado).length;
+        const completedItems = items.filter(item => item.completada).length;
         return Math.round((completedItems / items.length) * 100);
     };
 
-    const leccionesProgress = calculateProgress(nivelData.lecciones);
+    const leccionesProgress = calculateProgress(lecciones);
     const ejerciciosProgress = calculateProgress(nivelData.ejercicios);
 
     return (
@@ -130,14 +149,14 @@ const LevelContent = () => {
                                 <div>
                                     <h2 className="level-section-title">Lecciones</h2>
                                     <p className="level-section-subtitle">
-                                        {nivelData.lecciones.length} lecciones disponibles
+                                        {lecciones.length} lecciones disponibles
                                     </p>
                                     <div className="level-section-progress">
                                         <span className="level-progress-text-small level-lecciones-progress-text">
                                             {leccionesProgress}% completado
                                         </span>
                                         <span className="level-progress-text-tiny">
-                                            {nivelData.lecciones.filter(l => l.completado).length} de {nivelData.lecciones.length} completadas
+                                            {lecciones.filter(l => l.completada).length} de {lecciones.length} completadas
                                         </span>
                                     </div>
                                 </div>
@@ -167,28 +186,50 @@ const LevelContent = () => {
                             <div className="level-expanded-content">
                                 <div className="level-expanded-content-inner">
                                     <div className="level-items-grid">
-                                        {nivelData.lecciones.map((leccion, index) => (
+                                        {lecciones.map((leccion, index) => (
                                             <div
                                                 key={leccion.id}
-                                                className={`level-item ${leccion.completado ? 'level-completed-leccion' : 'level-pending-leccion'}`}
+                                                className={`level-item 
+                                                    ${leccion.completada ? 'level-completed-leccion' : 'level-pending-leccion'} 
+                                                    ${leccion.bloqueada ? 'level-disabled-leccion' : ''}`}
                                                 onClick={() => {
-                                                    setLeccionSeleccionada(leccion);
-                                                    handleOpenLessonsDialog();
+                                                    if (!leccion.bloqueada) {
+                                                        setLeccionSeleccionada(leccion);
+                                                        console.log('Lección seleccionada:', leccion);
+                                                        handleOpenLessonsDialog();
+                                                    }
                                                 }}
                                             >
                                                 <div className="level-item-content">
                                                     <div className="level-item-left">
-                                                        <div className={`level-item-number ${leccion.completado ? 'level-completed-number' : 'level-pending-number-leccion'}`}>
-                                                            {leccion.completado ? <CheckCircle size={16} /> : index + 1}
+                                                        <div className={`level-item-number 
+                                                            ${leccion.completada ? 'level-completed-number' : 'level-pending-number-leccion'}
+                                                            ${leccion.bloqueada ? 'level-disabled-number' : ''}`}
+                                                        >
+                                                            {leccion.completada ? (
+                                                                <CheckCircle size={16} />
+                                                            ) : leccion.bloqueada ? (
+                                                                <Lock size={16} color="#9ca3af" />
+                                                            ) : (
+                                                                index + 1
+                                                            )}
                                                         </div>
                                                         <div className="level-item-text-container">
-                                                            <span className="level-item-name">{leccion.nombre}</span>
+                                                            <span className="level-item-name">{leccion.titulo}</span>
                                                             <div className="level-item-status">
-                                                                {leccion.completado ? 'Completada' : 'Pendiente'}
+                                                                {leccion.bloqueada
+                                                                    ? 'Bloqueada'
+                                                                    : leccion.completada
+                                                                        ? 'Completada'
+                                                                        : 'Pendiente'}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <Play size={20} color="#9ca3af" className="level-play-icon" />
+                                                    <Play
+                                                        size={20}
+                                                        color={leccion.bloqueada ? "#d1d5db" : "#9ca3af"}
+                                                        className="level-play-icon"
+                                                    />
                                                 </div>
                                             </div>
                                         ))}

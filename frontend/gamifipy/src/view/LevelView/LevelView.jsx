@@ -10,8 +10,6 @@ function LevelView() {
     const navigate = useNavigate();
     const [levelTitle, setLevelTitle] = useState("");
     const [levelDescription, setLevelDescription] = useState("");
-    const [levelLessons, setLevelLessons] = useState([]); // eslint-disable-line
-    const [levelQuestions, setLevelQuestions] = useState([]); // eslint-disable-line
 
     useEffect(() => {
         const getLevelInfo = async () => {
@@ -52,7 +50,9 @@ function LevelView() {
                 </div>
             </div>
             <div className="levelView-Body">
-                <LevelContent />
+                <LevelContent
+                    id_nivel={levelId}
+                />
             </div>
         </div>
     )
