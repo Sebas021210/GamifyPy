@@ -127,8 +127,11 @@ def get_level(nivel_id: int, db: Session = Depends(get_db)):
 
     return JSONResponse(content=nivel_data)
 
-@router.get("/niveles/{nivel_id}/lecciones")
-def get_lessons_by_level(nivel_id: int, db: Session = Depends(get_db)):
+@router.get("/{nivel_id}/lecciones")
+def get_lessons_by_level(nivel_id: int, current_user: Usuario = Depends(get_current_user), db: Session = Depends(get_db)):
+    if not current_user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
     lecciones = (
         db.query(Leccion)
         .filter(Leccion.id_nivel == nivel_id)
@@ -138,13 +141,35 @@ def get_lessons_by_level(nivel_id: int, db: Session = Depends(get_db)):
 
     if not lecciones:
         raise HTTPException(status_code=404, detail="No lessons found for this level")
-    
-    leccion_data = [
-        {
+
+    progreso_usuario = (
+        db.query(ProgresoUsuario.id_leccion)
+        .join(Leccion, ProgresoUsuario.id_leccion == Leccion.id)
+        .filter(
+            ProgresoUsuario.id_usuario == current_user.id,
+            Leccion.id_nivel == nivel_id,
+            ProgresoUsuario.completado == True
+        )
+        .all()
+    )
+
+    lecciones_completadas_ids = {p.id_leccion for p in progreso_usuario}
+    lecciones_data = []
+    bloqueadas = False
+    for i, leccion in enumerate(lecciones):
+        completada = leccion.id in lecciones_completadas_ids
+        bloqueada = False
+
+        if i > 0:
+            anterior_completada = lecciones[i - 1].id in lecciones_completadas_ids
+            bloqueada = not anterior_completada
+
+        lecciones_data.append({
             "id": leccion.id,
             "titulo": leccion.titulo,
             "orden": leccion.orden,
-        } for leccion in lecciones
-    ]
+            "completada": completada,
+            "bloqueada": bloqueada
+        })
 
-    return JSONResponse(content={"lecciones": leccion_data})
+    return JSONResponse(content={"lecciones": lecciones_data})
