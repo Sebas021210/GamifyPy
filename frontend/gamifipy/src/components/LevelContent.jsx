@@ -12,10 +12,27 @@ const LevelContent = ({ id_nivel }) => {
     const [openExcerciseDialog, setOpenExcerciseDialog] = useState(false);
     const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
     const [lecciones, setLecciones] = useState([]);
+    const [lessonsContent, setLessonsContent] = useState('');
     const [ejercicios, setEjercicios] = useState([]); // eslint-disable-line
 
-    const handleOpenLessonsDialog = () => {
-        setOpenLessonsDialog(true);
+    const handleOpenLessonsDialog = async (leccion) => {
+        try {
+            const response = await fetch(`http://localhost:8000/lessons/${leccion.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+            if (!response.ok) {
+                throw new Error('Error fetching lesson content');
+            }
+            const data = await response.json();
+            setLessonsContent(data);
+            setOpenLessonsDialog(true);
+        } catch (error) {
+            console.error('Error fetching lesson content:', error);
+        }
     }
 
     const handleCloseLessonsDialog = () => {
@@ -195,8 +212,7 @@ const LevelContent = ({ id_nivel }) => {
                                                 onClick={() => {
                                                     if (!leccion.bloqueada) {
                                                         setLeccionSeleccionada(leccion);
-                                                        console.log('Lección seleccionada:', leccion);
-                                                        handleOpenLessonsDialog();
+                                                        handleOpenLessonsDialog(leccion);
                                                     }
                                                 }}
                                             >
@@ -243,6 +259,7 @@ const LevelContent = ({ id_nivel }) => {
                     open={openLessonsDialog}
                     handleClose={handleCloseLessonsDialog}
                     leccion={leccionSeleccionada}
+                    lessonContent={lessonsContent}
                 />
 
                 {/* Sección de Ejercicios */}

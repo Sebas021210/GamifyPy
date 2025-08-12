@@ -11,35 +11,13 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Slide from '@mui/material/Slide';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const markdownContent = `
-### Objetivo:
-Aprender a declarar variables, nombrarlas correctamente y usarlas para guardar información.
-
----
-
-### ¿Qué es una variable?
-Una variable es como una caja con una etiqueta: puedes guardar datos dentro, como texto, números o valores lógicos. Luego puedes abrir esa caja (leer el valor) o cambiar su contenido.
-
-\`\`\`python
-edad = 18 # "edad" es la etiqueta, 18 es lo que guardamos
-\`\`\`
-
-### Cómo crear variables
-Solo escribe un nombre, un signo igual = y el valor que quieras guardar:
-
-\`\`\`python
-nombre = "Lucía"
-\`\`\`
-
----
-`;
-
-function LessonsDialog({ open, handleClose, leccion }) {
+function LessonsDialog({ open, handleClose, leccion, lessonContent }) {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [progress, setProgress] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(15); // eslint-disable-line no-unused-vars
@@ -84,7 +62,7 @@ function LessonsDialog({ open, handleClose, leccion }) {
     }, [open]);
 
     const handleSubmit = () => {
-        console.log('Lección completada:', leccion?.nombre);
+        console.log('Lección completada:', leccion?.titulo);
         handleClose();
     }
 
@@ -208,7 +186,8 @@ function LessonsDialog({ open, handleClose, leccion }) {
 
                 <Box sx={{ padding: 4, color: 'white' }}>
                     <ReactMarkdown
-                        children={markdownContent}
+                        children={lessonContent.contenido}
+                        remarkPlugins={[remarkGfm]}
                         components={{
                             h1: ({ ...props }) => <h1 style={{ color: '#4FC3F7', fontSize: '2rem', marginTop: '1.5rem' }} {...props} />,
                             h2: ({ ...props }) => <h2 style={{ color: '#81D4FA', fontSize: '1.75rem', marginTop: '1.25rem' }} {...props} />,
@@ -250,7 +229,7 @@ function LessonsDialog({ open, handleClose, leccion }) {
                                     color: '#eee'
                                 }} {...props} />
                             ),
-                            thead: ({ ...props }) => <thead style={{ backgroundColor: '#333' }} {...props} />,
+                            thead: ({ ...props }) => <thead style={{ backgroundColor: 'rgba(10, 10, 10, 0.3)' }} {...props} />,
                             tbody: ({ ...props }) => <tbody {...props} />,
                             tr: ({ ...props }) => <tr style={{ borderBottom: '1px solid #444' }} {...props} />,
                             th: ({ ...props }) => <th style={{ padding: '0.75rem', border: '1px solid #555', fontWeight: 'bold' }} {...props} />,
