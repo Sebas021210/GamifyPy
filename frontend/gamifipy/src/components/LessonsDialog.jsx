@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function LessonsDialog({ open, handleClose, leccion, lessonContent }) {
+function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLecciones }) {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [progress, setProgress] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(15); // eslint-disable-line no-unused-vars
@@ -61,9 +61,30 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent }) {
         };
     }, [open]);
 
-    const handleSubmit = () => {
-        console.log('Lección completada:', leccion?.titulo);
-        handleClose();
+    const handleSubmit = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error("No token found");
+            }
+
+            const response = await fetch(`http://localhost:8000/lessons/${leccion.id}/completar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            })
+            if (!response.ok) {
+                throw new Error('Error al completar la lección');
+            }
+            const data = await response.json();
+            console.log('Lección completada:', data);
+            updateLecciones(leccion.id);
+            handleClose();
+        } catch (error) {
+            console.error('Error al completar la lección:', error);
+        }
     }
 
     return (
@@ -113,72 +134,80 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent }) {
                         </Box>
                         <Box sx={{ ml: 'auto', p: 2 }}>
                             <Box sx={{ position: 'relative', display: 'inline-block' }}>
-                                <Button
-                                    variant="contained"
-                                    color="inherit"
-                                    onClick={handleSubmit}
-                                    disabled={isButtonDisabled}
-                                    startIcon={
-                                        !isButtonDisabled && (
-                                            <CheckCircleIcon sx={{ color: '#fff' }} />
-                                        )
-                                    }
-                                    sx={{
-                                        py: 1.5,
-                                        px: 3,
-                                        fontSize: '0.9rem',
-                                        fontWeight: 'bold',
-                                        position: 'relative',
-                                        overflow: 'hidden',
-                                        background: isButtonDisabled
-                                            ? 'rgba(255, 255, 255, 0.1)'
-                                            : '#66BB6A',
-                                        color: isButtonDisabled
-                                            ? 'rgba(255, 255, 255, 0.3)'
-                                            : '#fff',
-                                        border: '2px solid rgba(102, 187, 106, 0.3)',
-                                        borderRadius: '25px',
-                                        minWidth: '200px',
-                                        transition: 'all 0.3s ease',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        '&:hover': {
-                                            boxShadow: isButtonDisabled
-                                                ? 'none'
-                                                : '0 8px 10px rgba(102, 187, 106, 0.4)',
-                                            transform: isButtonDisabled
-                                                ? 'none'
-                                                : 'translateY(-2px)',
-                                        },
-                                        '&:disabled': {
-                                            cursor: 'not-allowed'
-                                        },
-                                        '&::before': {
-                                            content: '""',
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            height: '100%',
-                                            width: `${progress}%`,
-                                            background: 'linear-gradient(45deg, #66BB6A 30%, #4CAF50 90%)',
-                                            transition: 'width 0.05s linear',
-                                            zIndex: -1,
-                                            opacity: isButtonDisabled ? 0.8 : 0,
+                                {leccion?.completada ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                                        <CheckCircleIcon sx={{ fontSize: '1.6rem' }} />
+                                        <p>¡Lección Completada!</p>
+                                    </Box>
+                                ) : (
+                                    <Button
+                                        variant="contained"
+                                        color="inherit"
+                                        onClick={handleSubmit}
+                                        disabled={isButtonDisabled}
+                                        startIcon={
+                                            !isButtonDisabled && (
+                                                <CheckCircleIcon sx={{ color: '#fff' }} />
+                                            )
                                         }
-                                    }}
-                                >
-                                    {isButtonDisabled ? (
-                                        <AccessTimeIcon
-                                            sx={{
-                                                color: 'rgba(255, 255, 255, 0.5)',
-                                                fontSize: '1.5rem'
-                                            }}
-                                        />
-                                    ) : (
-                                        'Completar Lección'
-                                    )}
-                                </Button>
+                                        sx={{
+                                            py: 1.5,
+                                            px: 3,
+                                            fontSize: '0.9rem',
+                                            fontWeight: 'bold',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            background: isButtonDisabled
+                                                ? 'rgba(255, 255, 255, 0.1)'
+                                                : '#66BB6A',
+                                            color: isButtonDisabled
+                                                ? 'rgba(255, 255, 255, 0.3)'
+                                                : '#fff',
+                                            border: '2px solid rgba(102, 187, 106, 0.3)',
+                                            borderRadius: '25px',
+                                            minWidth: '200px',
+                                            transition: 'all 0.3s ease',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            '&:hover': {
+                                                boxShadow: isButtonDisabled
+                                                    ? 'none'
+                                                    : '0 8px 10px rgba(102, 187, 106, 0.4)',
+                                                transform: isButtonDisabled
+                                                    ? 'none'
+                                                    : 'translateY(-2px)',
+                                            },
+                                            '&:disabled': {
+                                                cursor: 'not-allowed'
+                                            },
+                                            '&::before': {
+                                                content: '""',
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                height: '100%',
+                                                width: `${progress}%`,
+                                                background: 'linear-gradient(45deg, #66BB6A 30%, #4CAF50 90%)',
+                                                transition: 'width 0.05s linear',
+                                                zIndex: -1,
+                                                opacity: isButtonDisabled ? 0.8 : 0,
+                                            }
+                                        }}
+                                    >
+                                        {isButtonDisabled ? (
+                                            <AccessTimeIcon
+                                                sx={{
+                                                    color: 'rgba(255, 255, 255, 0.5)',
+                                                    fontSize: '1.5rem'
+                                                }}
+                                            />
+                                        ) : (
+                                            'Completar Lección'
+                                        )}
+                                    </Button>
+                                )}
+
                             </Box>
                         </Box>
                     </Toolbar>

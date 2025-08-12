@@ -75,6 +75,20 @@ const LevelContent = ({ id_nivel }) => {
         getLecciones();
     }, [id_nivel]);
 
+    const updateLecciones = (leccionId) => {
+        setLecciones((prevLecciones) => {
+            return prevLecciones.map((leccion) => {
+                if (leccion.id === leccionId) {
+                    return { ...leccion, completada: true };
+                }
+                if (leccion.id === leccionId + 1) {
+                    return { ...leccion, bloqueada: false };
+                }
+                return leccion;
+            });
+        });
+    };
+
     const nivelData = {
         ejercicios: [
             {
@@ -212,6 +226,7 @@ const LevelContent = ({ id_nivel }) => {
                                                 onClick={() => {
                                                     if (!leccion.bloqueada) {
                                                         setLeccionSeleccionada(leccion);
+                                                        console.log('Selected lesson:', leccion);
                                                         handleOpenLessonsDialog(leccion);
                                                     }
                                                 }}
@@ -260,6 +275,7 @@ const LevelContent = ({ id_nivel }) => {
                     handleClose={handleCloseLessonsDialog}
                     leccion={leccionSeleccionada}
                     lessonContent={lessonsContent}
+                    updateLecciones={updateLecciones}
                 />
 
                 {/* Sección de Ejercicios */}
