@@ -161,6 +161,7 @@ const LevelContent = ({ id_nivel }) => {
 
     const leccionesProgress = calculateProgress(lecciones);
     const ejerciciosProgress = calculateProgress(nivelData.ejercicios);
+    const ejerciciosEnabled = leccionesProgress === 100;
 
     return (
         <div className="level-container">
@@ -279,12 +280,15 @@ const LevelContent = ({ id_nivel }) => {
                 />
 
                 {/* Sección de Ejercicios */}
-                <div className="level-section-container">
+                <div className={`level-section-container ${!ejerciciosEnabled ? 'disabled-section' : ''}`}>
                     <div
                         className={`level-section-card level-ejercicios-card ${ejerciciosExpanded ? 'expanded' : ''}`}
+                        onClick={() => {
+                            if (ejerciciosEnabled) setEjerciciosExpanded(!ejerciciosExpanded);
+                        }}
                     >
                         {/* Header de Ejercicios */}
-                        <div className="level-section-header" onClick={() => setEjerciciosExpanded(!ejerciciosExpanded)} >
+                        <div className="level-section-header">
                             <div className="level-section-header-left">
                                 <div className="level-section-icon level-ejercicios-icon">
                                     <Code size={32} color="white" />
@@ -294,14 +298,22 @@ const LevelContent = ({ id_nivel }) => {
                                     <p className="level-section-subtitle">
                                         {nivelData.ejercicios.length} ejercicios de práctica
                                     </p>
-                                    <div className="level-section-progress">
-                                        <span className="level-progress-text-small level-ejercicios-progress-text">
-                                            {ejerciciosProgress}% completado
-                                        </span>
-                                        <span className="level-progress-text-tiny">
-                                            {nivelData.ejercicios.filter(e => e.completado).length} de {nivelData.ejercicios.length} completados
-                                        </span>
-                                    </div>
+                                    {ejerciciosEnabled ? (
+                                        <div className="level-section-progress">
+                                            <span className="level-progress-text-small level-ejercicios-progress-text">
+                                                {ejerciciosProgress}% completado
+                                            </span>
+                                            <span className="level-progress-text-tiny">
+                                                {nivelData.ejercicios.filter(e => e.completada).length} de {nivelData.ejercicios.length} completados
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <div className="level-section-progress">
+                                            <span className="level-progress-text-small level-ejercicios-progress-text">
+                                                Bloqueado hasta completar lecciones
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -332,25 +344,27 @@ const LevelContent = ({ id_nivel }) => {
                                         {nivelData.ejercicios.map((ejercicio, index) => (
                                             <div
                                                 key={ejercicio.id}
-                                                className={`level-item ${ejercicio.completado ? 'level-completed-ejercicio' : 'level-pending-ejercicio'}`}
+                                                className={`level-item ${ejercicio.completada ? 'level-completed-ejercicio' : 'level-pending-ejercicio'}`}
                                                 onClick={() => {
-                                                    setEjercicioSeleccionado(ejercicio);
-                                                    handleOpenExcerciseDialog();
+                                                    if (ejerciciosEnabled) {
+                                                        setEjercicioSeleccionado(ejercicio);
+                                                        handleOpenExcerciseDialog();
+                                                    }
                                                 }}
                                             >
                                                 <div className="level-item-content">
                                                     <div className="level-item-left">
-                                                        <div className={`level-item-number ${ejercicio.completado ? 'level-completed-number' : 'level-pending-number-ejercicio'}`}>
-                                                            {ejercicio.completado ? <CheckCircle size={16} /> : index + 1}
+                                                        <div className={`level-item-number ${ejercicio.completada ? 'level-completed-number' : 'level-pending-number-ejercicio'}`}>
+                                                            {ejercicio.completada ? <CheckCircle size={16} /> : index + 1}
                                                         </div>
                                                         <div className="level-item-text-container">
                                                             <span className="level-item-name-small">{ejercicio.nombre}</span>
                                                             <div className="level-item-status">
-                                                                {ejercicio.completado ? 'Completado' : 'Pendiente'}
+                                                                {ejercicio.completada ? 'Completado' : 'Pendiente'}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <Play size={16} color="#9ca3af" className="level-play-icon" />
+                                                    <Play size={16} color={ejerciciosEnabled ? "#9ca3af" : "#d1d5db"} className="level-play-icon" />
                                                 </div>
                                             </div>
                                         ))}
