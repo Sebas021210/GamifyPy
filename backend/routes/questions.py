@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
 from fastapi.responses import JSONResponse
 from backend.database import get_db, Pregunta, OpcionPregunta, Leccion, IntentoPregunta, Usuario
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from backend.controllers.auth import get_current_user
 from backend.models.question import RespuestaRequest
@@ -9,18 +10,36 @@ from backend.controllers.evaluation import evaluate_multiple_choice, evaluate_co
 router = APIRouter()
 
 @router.get("/{nivel_id}/preguntas/opcion-multiple")
-async def get_multiple_choice_questions(nivel_id: int, db: Session = Depends(get_db)):
-    """ Endpoint para obtener preguntas de opción múltiple de un nivel específico. """
+async def get_multiple_choice_questions(nivel_id: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    """ Preguntas de opción múltiple con estado de intento del usuario """
     preguntas = (
         db.query(Pregunta)
         .join(Leccion, Pregunta.id_leccion == Leccion.id)
-        .filter(Leccion.id_nivel == nivel_id, Pregunta.tipo == "opcion_multiple")
+        .filter(
+            Leccion.id_nivel == nivel_id,
+            Pregunta.tipo == "opcion_multiple"
+        )
         .all()
     )
 
     resultado = []
     for pregunta in preguntas:
-        opciones = db.query(OpcionPregunta).filter(OpcionPregunta.id_preguntas == pregunta.id).all()
+        ultimo_intento = (
+            db.query(IntentoPregunta)
+            .filter(
+                IntentoPregunta.id_usuario == current_user.id,
+                IntentoPregunta.id_preguntas == pregunta.id
+            )
+            .order_by(desc(IntentoPregunta.fecha))
+            .first()
+        )
+
+        opciones = (
+            db.query(OpcionPregunta)
+            .filter(OpcionPregunta.id_preguntas == pregunta.id)
+            .all()
+        )
+
         resultado.append({
             "id": pregunta.id,
             "pregunta": pregunta.pregunta,
@@ -33,31 +52,48 @@ async def get_multiple_choice_questions(nivel_id: int, db: Session = Depends(get
                     "texto": opcion.texto_opcion,
                     "valor": opcion.valor_opcion,
                 } for opcion in opciones
-            ]
+            ],
+            "intento_realizado": ultimo_intento is not None,
+            "correcto": ultimo_intento.es_correcto if ultimo_intento else None
         })
 
     return JSONResponse(content={"preguntas": resultado})
 
 @router.get("/{nivel_id}/preguntas/codigo")
-async def get_code_questions(nivel_id: int, db: Session = Depends(get_db)):
-    """ Endpoint para obtener preguntas de código de un nivel específico. """
+async def get_code_questions(nivel_id: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    """ Preguntas de código con estado de intento del usuario """
     preguntas = (
         db.query(Pregunta)
         .join(Leccion, Pregunta.id_leccion == Leccion.id)
-        .filter(Leccion.id_nivel == nivel_id, Pregunta.tipo == "codigo")
+        .filter(
+            Leccion.id_nivel == nivel_id,
+            Pregunta.tipo == "codigo"
+        )
         .all()
     )
 
-    resultado = [
-        {
+    resultado = []
+    for pregunta in preguntas:
+        ultimo_intento = (
+            db.query(IntentoPregunta)
+            .filter(
+                IntentoPregunta.id_usuario == current_user.id,
+                IntentoPregunta.id_preguntas == pregunta.id
+            )
+            .order_by(desc(IntentoPregunta.fecha))
+            .first()
+        )
+
+        resultado.append({
             "id": pregunta.id,
             "pregunta": pregunta.pregunta,
             "codigo_inicial": pregunta.codigo_inicial,
             "respuesta": pregunta.respuesta,
             "tipo": pregunta.tipo,
             "puntos": pregunta.puntos,
-        } for pregunta in preguntas
-    ]
+            "intento_realizado": ultimo_intento is not None,
+            "correcto": ultimo_intento.es_correcto if ultimo_intento else None
+        })
 
     return JSONResponse(content={"preguntas": resultado})
 
