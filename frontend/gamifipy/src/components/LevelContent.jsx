@@ -37,6 +37,8 @@ const LevelContent = ({ id_nivel }) => {
 
     const handleCloseLessonsDialog = () => {
         setOpenLessonsDialog(false);
+        setLeccionSeleccionada(null);
+        setLessonsContent('');
     }
 
     const handleOpenExcerciseDialog = () => {
@@ -77,7 +79,7 @@ const LevelContent = ({ id_nivel }) => {
 
     const updateLecciones = (leccionId) => {
         setLecciones((prevLecciones) => {
-            return prevLecciones.map((leccion) => {
+            const updatedLecciones = prevLecciones.map((leccion) => {
                 if (leccion.id === leccionId) {
                     return { ...leccion, completada: true };
                 }
@@ -86,7 +88,48 @@ const LevelContent = ({ id_nivel }) => {
                 }
                 return leccion;
             });
+
+            if (leccionSeleccionada && leccionSeleccionada.id === leccionId) {
+                setLeccionSeleccionada(prev => ({ ...prev, completada: true }));
+            }
+
+            return updatedLecciones;
         });
+    };
+
+    const handleNextLesson = async () => {
+        const currentIndex = lecciones.findIndex(l => l.id === leccionSeleccionada.id);
+        const nextIndex = currentIndex + 1;
+
+        if (nextIndex < lecciones.length) {
+            const nextLesson = lecciones[nextIndex];
+            if (!nextLesson.bloqueada) {
+                try {
+                    const response = await fetch(`http://localhost:8000/lessons/${nextLesson.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    });
+                    if (!response.ok) {
+                        throw new Error('Error fetching lesson content');
+                    }
+                    const data = await response.json();
+                    setLessonsContent(data);
+                    setLeccionSeleccionada(nextLesson);
+                } catch (error) {
+                    console.error('Error fetching next lesson content:', error);
+                }
+            }
+        }
+    };
+
+    const hasNextLesson = () => {
+        if (!leccionSeleccionada) return false;
+        const currentIndex = lecciones.findIndex(l => l.id === leccionSeleccionada.id);
+        const nextIndex = currentIndex + 1;
+        return nextIndex < lecciones.length && !lecciones[nextIndex]?.bloqueada;
     };
 
     const nivelData = {
@@ -277,6 +320,8 @@ const LevelContent = ({ id_nivel }) => {
                     leccion={leccionSeleccionada}
                     lessonContent={lessonsContent}
                     updateLecciones={updateLecciones}
+                    onNextLesson={handleNextLesson}
+                    hasNextLesson={hasNextLesson()}
                 />
 
                 {/* Sección de Ejercicios */}

@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Slide from '@mui/material/Slide';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -17,49 +18,58 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLecciones }) {
+function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLecciones, onNextLesson, hasNextLesson }) {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [progress, setProgress] = useState(0);
+    const [lessonCompleted, setLessonCompleted] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(15); // eslint-disable-line no-unused-vars
 
     useEffect(() => {
-        if (!open) return;
-        setIsButtonDisabled(true);
-        setProgress(0);
-        setTimeRemaining(15);
+        if (!open || !leccion) return;
+        setLessonCompleted(leccion.completada || false);
+        
+        if (!leccion.completada) {
+            setIsButtonDisabled(true);
+            setProgress(0);
+            setTimeRemaining(15);
 
-        const totalTime = 15000;
-        const interval = 50;
-        const increment = (100 / totalTime) * interval;
+            const totalTime = 15000;
+            const interval = 50;
+            const increment = (100 / totalTime) * interval;
 
-        const progressTimer = setInterval(() => {
-            setProgress(prev => {
-                const newProgress = prev + increment;
-                if (newProgress >= 100) {
-                    setIsButtonDisabled(false);
-                    setTimeRemaining(0);
-                    clearInterval(progressTimer);
-                    return 100;
-                }
-                return newProgress;
-            });
-        }, interval);
+            const progressTimer = setInterval(() => {
+                setProgress(prev => {
+                    const newProgress = prev + increment;
+                    if (newProgress >= 100) {
+                        setIsButtonDisabled(false);
+                        setTimeRemaining(0);
+                        clearInterval(progressTimer);
+                        return 100;
+                    }
+                    return newProgress;
+                });
+            }, interval);
 
-        const countdownTimer = setInterval(() => {
-            setTimeRemaining(prev => {
-                if (prev <= 1) {
-                    clearInterval(countdownTimer);
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
+            const countdownTimer = setInterval(() => {
+                setTimeRemaining(prev => {
+                    if (prev <= 1) {
+                        clearInterval(countdownTimer);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
 
-        return () => {
-            clearInterval(progressTimer);
-            clearInterval(countdownTimer);
-        };
-    }, [open]);
+            return () => {
+                clearInterval(progressTimer);
+                clearInterval(countdownTimer);
+            };
+        } else {
+            setIsButtonDisabled(true);
+            setProgress(100);
+            setTimeRemaining(0);
+        }
+    }, [open, leccion]);
 
     const handleSubmit = async () => {
         try {
@@ -81,11 +91,20 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
             const data = await response.json();
             console.log('Lección completada:', data);
             updateLecciones(leccion.id);
-            handleClose();
         } catch (error) {
             console.error('Error al completar la lección:', error);
         }
     }
+
+    const handleNextLessonClick = () => {
+        if (onNextLesson) {
+            onNextLesson();
+            setLessonCompleted(false);
+            setProgress(0);
+            setTimeRemaining(15);
+            setIsButtonDisabled(true);
+        }
+    };
 
     return (
         <div>
@@ -207,7 +226,6 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                                         )}
                                     </Button>
                                 )}
-
                             </Box>
                         </Box>
                     </Toolbar>
@@ -288,6 +306,41 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                         }}
                     />
                 </Box>
+
+                {/* Botón flotante para siguiente lección */}
+                {(lessonCompleted || (leccion && leccion.completada)) && hasNextLesson && (
+                    <Button
+                        variant="contained"
+                        onClick={handleNextLessonClick}
+                        startIcon={<ArrowForwardIcon />}
+                        sx={{
+                            position: 'fixed',
+                            bottom: 30,
+                            right: 30,
+                            py: 1.5,
+                            px: 3,
+                            fontSize: '0.9rem',
+                            fontWeight: 'bold',
+                            background: '#21CBF3',
+                            color: '#fff',
+                            border: '2px solid rgba(33, 150, 243, 0.3)',
+                            borderRadius: '25px',
+                            minWidth: '200px',
+                            transition: 'all 0.3s ease',
+                            zIndex: 1300,
+                            boxShadow: '0 6px 20px rgba(33, 150, 243, 0.3)',
+                            '&:hover': {
+                                boxShadow: '0 8px 10px rgba(33, 150, 243, 0.5)',
+                                transform: 'translateY(-3px) scale(1.02)',
+                            },
+                            '&:active': {
+                                transform: 'translateY(-1px) scale(1.01)',
+                            }
+                        }}
+                    >
+                        Siguiente Lección
+                    </Button>
+                )}
             </Dialog>
         </div>
     );
