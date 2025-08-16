@@ -13,8 +13,9 @@ const LevelContent = ({ id_nivel }) => {
     const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
     const [lecciones, setLecciones] = useState([]);
     const [lessonsContent, setLessonsContent] = useState('');
-    const [ejercicios, setEjercicios] = useState([]); // eslint-disable-line
+    const [ejercicios, setEjercicios] = useState([]);
 
+    {/* Funciones para el manejo de Dialog */ }
     const handleOpenLessonsDialog = async (leccion) => {
         try {
             const response = await fetch(`http://localhost:8000/lessons/${leccion.id}`, {
@@ -49,6 +50,7 @@ const LevelContent = ({ id_nivel }) => {
         setOpenExcerciseDialog(false);
     }
 
+    {/* Funciones para logica de Lecciones */ }
     useEffect(() => {
         const getLecciones = async () => {
             try {
@@ -132,78 +134,53 @@ const LevelContent = ({ id_nivel }) => {
         return nextIndex < lecciones.length && !lecciones[nextIndex]?.bloqueada;
     };
 
-    const nivelData = {
-        ejercicios: [
-            {
-                id: 1,
-                nombre: "Hola Mundo",
-                completada: true,
-                tipo: "codigo",
-                puntos: 10,
-                texto: "Escribe un programa que imprima 'Hola, Mundo!' en la consola.",
-                codigo_inicial: "",
-                respuesta: "print('Hola, Mundo!')"
-            },
-            {
-                id: 2,
-                nombre: "Variables simples",
-                completada: true,
-                tipo: "opcion_multiple",
-                puntos: 15,
-                texto: "¿Cuál de las siguientes opciones es un nombre válido para una variable en Python?",
-                respuesta: "nombre_usuario",
-                opciones: [
-                    { texto: "1numero", correcta: false },
-                    { texto: "nombre_usuario", correcta: true },
-                    { texto: "print", correcta: false },
-                    { texto: "class", correcta: false }
-                ]
-            },
-            {
-                id: 3,
-                nombre: "Operaciones matemáticas",
-                completada: true,
-                tipo: "codigo",
-                puntos: 20,
-                texto: "Crea dos variables con números y realiza las operaciones básicas (suma, resta, multiplicación, división).",
-                codigo_inicial: "a = 10\nb = 5\n\n# Completa las operaciones:\nsuma = __\nresta = __\nmultiplicacion = __\ndivision = __",
-                respuesta: "a = 10\nb = 5\n\nsuma = a + b\nresta = a - b\nmultiplicacion = a * b\ndivision = a / b"
-            },
-            {
-                id: 4,
-                nombre: "Calculadora básica",
-                completada: false,
-                tipo: "codigo",
-                puntos: 25,
-                texto: "Crea una calculadora que solicite dos números al usuario y una operación, luego muestre el resultado.",
-                codigo_inicial: "",
-                respuesta: "num1 = float(input('Primer número: '))\nnum2 = float(input('Segundo número: '))\noperacion = input('Operación (+, -, , /): ')\n\nif operacion == '+':\n    resultado = num1 + num2\nelif operacion == '-':\n    resultado = num1 - num2\nelif operacion == '':\n    resultado = num1 * num2\nelif operacion == '/':\n    resultado = num1 / num2\n\nprint(f'Resultado: {resultado}')"
-            },
-            {
-                id: 5,
-                nombre: "Conversión de temperaturas",
-                completada: false,
-                tipo: "opcion_multiple",
-                puntos: 15,
-                texto: "¿Cuál es la fórmula correcta para convertir Celsius a Fahrenheit?",
-                respuesta: "F = (C * 9/5) + 32",
-                opciones: [
-                    { texto: "F = C * 9/5", correcta: false },
-                    { texto: "F = (C * 9/5) + 32", correcta: true },
-                    { texto: "F = C + 32", correcta: false },
-                    { texto: "F = (C + 32) * 9/5", correcta: false }
-                ]
-            },
-        ]
+    {/* Funciones para logica de Ejercicios */ }
+    useEffect(() => {
+        const getEjercicios = async () => {
+            const [resOpciones, resCodigo] = await Promise.all([
+                fetch(`http://localhost:8000/questions/${id_nivel}/preguntas/opcion-multiple`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }),
+                fetch(`http://localhost:8000/questions/${id_nivel}/preguntas/codigo`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }),
+            ]);
+
+            const [dataOpciones, dataCodigo] = await Promise.all([
+                resOpciones.json(),
+                resCodigo.json()
+            ]);
+            setEjercicios([...dataOpciones.preguntas, ...dataCodigo.preguntas]);
+            console.log('Ejercicios data:', [...dataOpciones.preguntas, ...dataCodigo.preguntas]);
+        }
+        getEjercicios();
+    }, [id_nivel]);
+
+    const tipoLabels = {
+        "codigo": "Ejercicio de Código",
+        "opcion_multiple": "Ejercicio de Opción Múltiple",
     };
 
-    const calculateProgress = (items) => {
+    const calculateLessonsProgress = (items) => {
         const completedItems = items.filter(item => item.completada).length;
         return Math.round((completedItems / items.length) * 100);
     };
 
-    const leccionesProgress = calculateProgress(lecciones);
-    const ejerciciosProgress = calculateProgress(nivelData.ejercicios);
+    const calculateExerciseProgress = (items) => {
+        const completedItems = items.filter(item => item.intento_realizado).length;
+        return Math.round((completedItems / items.length) * 100);
+    };
+
+    const leccionesProgress = calculateLessonsProgress(lecciones);
+    const ejerciciosProgress = calculateExerciseProgress(ejercicios);
     const ejerciciosEnabled = leccionesProgress === 100;
 
     return (
@@ -341,7 +318,7 @@ const LevelContent = ({ id_nivel }) => {
                                 <div>
                                     <h2 className="level-section-title">Ejercicios</h2>
                                     <p className="level-section-subtitle">
-                                        {nivelData.ejercicios.length} ejercicios de práctica
+                                        {ejercicios.length} ejercicios de práctica
                                     </p>
                                     {ejerciciosEnabled ? (
                                         <div className="level-section-progress">
@@ -349,7 +326,7 @@ const LevelContent = ({ id_nivel }) => {
                                                 {ejerciciosProgress}% completado
                                             </span>
                                             <span className="level-progress-text-tiny">
-                                                {nivelData.ejercicios.filter(e => e.completada).length} de {nivelData.ejercicios.length} completados
+                                                {ejercicios.filter(e => e.intento_realizado).length} de {ejercicios.length} completados
                                             </span>
                                         </div>
                                     ) : (
@@ -386,10 +363,10 @@ const LevelContent = ({ id_nivel }) => {
                             <div className="level-expanded-content">
                                 <div className="level-expanded-content-inner">
                                     <div className="level-exercise-grid">
-                                        {nivelData.ejercicios.map((ejercicio, index) => (
+                                        {ejercicios.map((ejercicio, index) => (
                                             <div
                                                 key={ejercicio.id}
-                                                className={`level-item ${ejercicio.completada ? 'level-completed-ejercicio' : 'level-pending-ejercicio'}`}
+                                                className={`level-item ${ejercicio.intento_realizado ? 'level-completed-ejercicio' : 'level-pending-ejercicio'}`}
                                                 onClick={() => {
                                                     if (ejerciciosEnabled) {
                                                         setEjercicioSeleccionado(ejercicio);
@@ -399,13 +376,13 @@ const LevelContent = ({ id_nivel }) => {
                                             >
                                                 <div className="level-item-content">
                                                     <div className="level-item-left">
-                                                        <div className={`level-item-number ${ejercicio.completada ? 'level-completed-number' : 'level-pending-number-ejercicio'}`}>
-                                                            {ejercicio.completada ? <CheckCircle size={16} /> : index + 1}
+                                                        <div className={`level-item-number ${ejercicio.intento_realizado ? 'level-completed-number' : 'level-pending-number-ejercicio'}`}>
+                                                            {ejercicio.intento_realizado ? <CheckCircle size={16} /> : index + 1}
                                                         </div>
                                                         <div className="level-item-text-container">
-                                                            <span className="level-item-name-small">{ejercicio.nombre}</span>
+                                                            <span className="level-item-name-small">{tipoLabels[ejercicio.tipo]}</span>
                                                             <div className="level-item-status">
-                                                                {ejercicio.completada ? 'Completado' : 'Pendiente'}
+                                                                {ejercicio.intento_realizado ? 'Completado' : 'Pendiente'}
                                                             </div>
                                                         </div>
                                                     </div>

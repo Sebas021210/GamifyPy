@@ -34,7 +34,13 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
     const editorRef = useRef(null);
 
     useEffect(() => {
-        if (ejercicio?.tipo === 'codigo') {
+        if (!open) {
+            setCodeAnswer('');
+            setOutput('');
+            setSelectedOption('');
+            setAnswerConfirmed(false);
+            setCorrectAnswer(null);
+        } else if (ejercicio?.tipo === 'codigo') {
             setCodeAnswer(ejercicio.codigo_inicial || '');
             setOutput('');
         } else {
@@ -42,7 +48,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
             setAnswerConfirmed(false);
             setCorrectAnswer(null);
         }
-    }, [ejercicio]);
+    }, [ejercicio, open]);
 
     useEffect(() => {
         if (editorRef.current && ejercicio?.tipo === 'codigo') {
@@ -58,7 +64,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
 
     const handleAnswerConfirm = () => {
         const optionSelected = ejercicio.opciones.find(opt => opt.texto === selectedOption);
-        const isCorrect = optionSelected?.correcta || false;
+        const isCorrect = Boolean(optionSelected?.valor);
 
         setAnswerConfirmed(true);
         setCorrectAnswer(isCorrect);
@@ -133,14 +139,14 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
     const renderMultipleChoice = () => (
         <Box sx={{ p: 2 }}>
             <Typography variant="h6" sx={{ color: '#81D4FA', mb: 3, fontFamily: "'Orbitron', sans-serif" }}>
-                {ejercicio.texto}
+                {ejercicio.pregunta}
             </Typography>
 
             <FormControl component="fieldset" sx={{ width: '100%' }}>
                 <RadioGroup value={selectedOption} onChange={handleOptionChange} sx={{ gap: 2 }}>
                     {ejercicio.opciones?.map((opcion, index) => {
                         const esSeleccionada = selectedOption === opcion.texto;
-                        const esCorrecta = opcion.correcta;
+                        const esCorrecta = Boolean(opcion.valor);
 
                         let borderColor = 'rgba(255, 255, 255, 0.1)';
                         if (answerConfirmed) {
@@ -237,7 +243,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                     fontFamily: "'Orbitron', sans-serif"
                 }}
             >
-                {ejercicio.texto}
+                {ejercicio.pregunta}
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 2, flexGrow: 1, minHeight: 0 }}>
