@@ -191,6 +191,23 @@ const LevelContent = ({ id_nivel }) => {
         getEjercicios();
     }, [id_nivel]);
 
+    const updateEjercicios = (ejercicioId) => {
+        setEjercicios((prevEjercicios) => {
+            const updatedEjercicios = prevEjercicios.map((ej) => {
+                if (ej.id === ejercicioId) {
+                    return { ...ej, intento_realizado: true };
+                }
+                return ej;
+            });
+
+            if (ejercicioSeleccionado && ejercicioSeleccionado.id === ejercicioId) {
+                setEjercicioSeleccionado((prev) => ({ ...prev, intento_realizado: true }));
+            }
+
+            return updatedEjercicios;
+        });
+    };
+
     const tipoLabels = {
         "codigo": "Ejercicio de Código",
         "opcion_multiple": "Ejercicio de Opción Múltiple",
@@ -433,6 +450,7 @@ const LevelContent = ({ id_nivel }) => {
                     open={openExcerciseDialog}
                     handleClose={handleCloseExcerciseDialog}
                     ejercicio={ejercicioSeleccionado}
+                    updateEjercicios={updateEjercicios}
                 />
 
             </div>

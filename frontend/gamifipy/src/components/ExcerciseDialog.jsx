@@ -26,7 +26,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ExerciseDialog({ open, handleClose, ejercicio }) {
+function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
     const [selectedOption, setSelectedOption] = useState('');
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [groupAnswers, setGroupAnswers] = useState([]);
@@ -365,28 +365,30 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
     const runCode = async () => {
         setIsRunning(true);
         setOutput('Ejecutando código...');
+        console.log('Ejecutando código:', codeAnswer);
+        console.log('Ejercicio:', ejercicio);
 
-        setTimeout(() => {
-            try {
-                if (codeAnswer.includes('print')) {
-                    const printMatches = codeAnswer.match(/print\(['"`](.*?)['"`]\)/g);
-                    if (printMatches) {
-                        const outputs = printMatches.map(match => {
-                            const content = match.match(/print\(['"`](.*?)['"`]\)/)[1];
-                            return content;
-                        });
-                        setOutput(outputs.join('\n'));
-                    } else {
-                        setOutput('Código ejecutado correctamente');
-                    }
-                } else {
-                    setOutput('Código ejecutado correctamente');
-                }
-            } catch (error) {
-                setOutput('Error: ' + error.message);
+        try {
+            const response = await fetch(`http://localhost:8000/questions/${ejercicio.id}/evaluar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({ respuesta: codeAnswer }),
+            });
+            if (!response.ok) {
+                throw new Error('Error al ejecutar el código');
             }
+
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+            setOutput(data.retroalimentacion || 'No se recibió salida del servidor.');
+        } catch (error) {
+            setOutput('Error al ejecutar el código: ' + error.message);
+        } finally {
             setIsRunning(false);
-        }, 1500);
+        }
     };
 
     const renderCodeExercise = () => (
@@ -541,8 +543,10 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
     {/* Logica para enviar */ }
     const handleSubmit = () => {
         if (ejercicio?.tipo === 'grupo_opcion_multiple') {
+            updateEjercicios(ejercicio.id)
             handleClose();
         } else if (ejercicio?.tipo === 'codigo') {
+            updateEjercicios(ejercicio.id);
             handleClose();
         }
     };
