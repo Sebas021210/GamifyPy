@@ -12,11 +12,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Paper from "@mui/material/Paper";
 import Chip from "@mui/material/Chip";
+import LinearProgress from '@mui/material/LinearProgress';
 import CloseIcon from '@mui/icons-material/Close';
 import CodeIcon from '@mui/icons-material/Code';
 import QuizIcon from '@mui/icons-material/Quiz';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Editor from '@monaco-editor/react';
 import Slide from '@mui/material/Slide';
 
@@ -26,8 +28,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function ExerciseDialog({ open, handleClose, ejercicio }) {
     const [selectedOption, setSelectedOption] = useState('');
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [groupAnswers, setGroupAnswers] = useState([]);
+    const [showResults, setShowResults] = useState(false);
     const [answerConfirmed, setAnswerConfirmed] = useState(false);
-    const [correctAnswer, setCorrectAnswer] = useState(null);
     const [codeAnswer, setCodeAnswer] = useState(ejercicio?.codigo_inicial || '');
     const [output, setOutput] = useState('');
     const [isRunning, setIsRunning] = useState(false);
@@ -39,14 +43,18 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
             setOutput('');
             setSelectedOption('');
             setAnswerConfirmed(false);
-            setCorrectAnswer(null);
+            setCurrentQuestionIndex(0);
+            setGroupAnswers([]);
+            setShowResults(false);
         } else if (ejercicio?.tipo === 'codigo') {
             setCodeAnswer(ejercicio.codigo_inicial || '');
             setOutput('');
-        } else {
+        } else if (ejercicio?.tipo === 'grupo_opcion_multiple') {
+            setCurrentQuestionIndex(0);
+            setGroupAnswers([]);
+            setShowResults(false);
             setSelectedOption('');
             setAnswerConfirmed(false);
-            setCorrectAnswer(null);
         }
     }, [ejercicio, open]);
 
@@ -56,20 +64,250 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
         }
     }, [ejercicio?.codigo_inicial, ejercicio?.tipo]);
 
+    {/* Logica para preguntas de opción múltiple */ }
     const handleOptionChange = (event) => {
         if (!answerConfirmed) {
             setSelectedOption(event.target.value);
         }
     };
 
-    const handleAnswerConfirm = () => {
-        const optionSelected = ejercicio.opciones.find(opt => opt.texto === selectedOption);
-        const isCorrect = Boolean(optionSelected?.valor);
+    const renderGroupResults = () => {
+        const correctAnswers = groupAnswers.filter(answer => answer.isCorrect).length;
+        const totalQuestions = groupAnswers.length;
+        const percentage = Math.round((correctAnswers / totalQuestions) * 100);
 
-        setAnswerConfirmed(true);
-        setCorrectAnswer(isCorrect);
+        return (
+            <Box sx={{ p: 3, textAlign: 'center' }}>
+                <Typography variant="h4" sx={{ color: '#81D4FA', mb: 3, fontFamily: "'Orbitron', sans-serif" }}>
+                    ¡Ejercicio Completado!
+                </Typography>
+
+                <Box sx={{ mb: 4 }}>
+                    <Typography variant="h2" sx={{ color: percentage >= 70 ? '#4CAF50' : '#ff9800', mb: 1, fontFamily: "'Orbitron', sans-serif" }}>
+                        {percentage}%
+                    </Typography>
+                    <Typography variant="h6" sx={{ color: 'white', mb: 3, fontFamily: "'Orbitron', sans-serif" }}>
+                        {correctAnswers} de {totalQuestions} respuestas correctas
+                    </Typography>
+                </Box>
+
+                <Box sx={{ textAlign: 'left', mb: 3 }}>
+                    <Typography variant="h6" sx={{ color: '#81D4FA', mb: 2, fontFamily: "'Orbitron', sans-serif" }}>
+                        Resumen de respuestas:
+                    </Typography>
+                    {groupAnswers.map((answer, index) => (
+                        <Paper
+                            key={index}
+                            elevation={2}
+                            sx={{
+                                p: 2,
+                                mb: 2,
+                                backgroundColor: answer.isCorrect ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
+                                border: `1px solid ${answer.isCorrect ? '#4CAF50' : '#f44336'}`
+                            }}
+                        >
+                            <Typography sx={{ color: 'white', fontWeight: 'bold', mb: 1, fontFamily: "'Orbitron', sans-serif" }}>
+                                Pregunta {index + 1}:
+                            </Typography>
+                            <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)', mb: 1, fontSize: '0.9rem' }}>
+                                {answer.question}
+                            </Typography>
+                            <Typography sx={{ color: 'white', fontFamily: "'Orbitron', sans-serif" }}>
+                                Tu respuesta: {answer.selectedOption}
+                            </Typography>
+                            <Typography sx={{
+                                color: answer.isCorrect ? '#4CAF50' : '#f44336',
+                                fontWeight: 'bold'
+                            }}>
+                                {answer.isCorrect ? '✓ Correcto' : '✗ Incorrecto'}
+                            </Typography>
+                        </Paper>
+                    ))}
+                </Box>
+            </Box>
+        );
     };
 
+    const renderMultipleChoice = () => {
+        const currentQuestion = ejercicio.tipo === 'grupo_opcion_multiple'
+            ? ejercicio.preguntas[currentQuestionIndex]
+            : ejercicio;
+
+        return (
+            <Box sx={{ p: 2 }}>
+                {ejercicio.tipo === 'grupo_opcion_multiple' && (
+                    <Box sx={{ mb: 3, textAlign: 'center' }}>
+                        <Typography variant="body2" sx={{ color: '#81D4FA', mb: 1 }}>
+                            Pregunta {currentQuestionIndex + 1} de {ejercicio.preguntas.length}
+                        </Typography>
+                        <LinearProgress
+                            variant="determinate"
+                            value={(currentQuestionIndex / ejercicio.preguntas.length) * 100}
+                            sx={{
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                '& .MuiLinearProgress-bar': {
+                                    backgroundColor: '#81D4FA'
+                                }
+                            }}
+                        />
+                    </Box>
+                )}
+
+                <Typography variant="h6" sx={{ color: '#81D4FA', mb: 3, fontFamily: "'Orbitron', sans-serif" }}>
+                    {currentQuestion.pregunta}
+                </Typography>
+
+                <FormControl component="fieldset" sx={{ width: '100%' }}>
+                    <RadioGroup value={selectedOption} onChange={handleOptionChange} sx={{ gap: 2 }}>
+                        {currentQuestion.opciones?.map((opcion, index) => {
+                            const esSeleccionada = selectedOption === opcion.texto;
+                            const esCorrecta = Boolean(opcion.valor);
+
+                            let borderColor = 'rgba(255, 255, 255, 0.1)';
+                            if (answerConfirmed) {
+                                if (esSeleccionada && esCorrecta) borderColor = '#4CAF50';
+                                else if (esSeleccionada && !esCorrecta) borderColor = '#f44336';
+                                else if (!esSeleccionada && esCorrecta) borderColor = '#4CAF50';
+                            } else {
+                                borderColor = esSeleccionada ? '#81D4FA' : 'rgba(255, 255, 255, 0.1)';
+                            }
+
+                            return (
+                                <Paper
+                                    key={index}
+                                    elevation={2}
+                                    sx={{
+                                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                                        border: `2px solid ${borderColor}`,
+                                        borderRadius: '8px',
+                                        transition: 'all 0.3s ease',
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                        }
+                                    }}
+                                >
+                                    <FormControlLabel
+                                        value={opcion.texto}
+                                        control={
+                                            <Radio
+                                                disabled={answerConfirmed}
+                                                sx={{
+                                                    color: 'rgba(255, 255, 255, 0.7)',
+                                                    '&.Mui-checked': {
+                                                        color: '#81D4FA',
+                                                    },
+                                                }}
+                                            />
+                                        }
+                                        label={
+                                            <Typography sx={{ color: 'white', fontSize: '1.1rem' }}>
+                                                {opcion.texto}
+                                            </Typography>
+                                        }
+                                        sx={{
+                                            margin: 0,
+                                            padding: '16px',
+                                            width: '100%',
+                                        }}
+                                    />
+                                </Paper>
+                            );
+                        })}
+                    </RadioGroup>
+                </FormControl>
+
+                <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+                    {!answerConfirmed && (
+                        <Button
+                            variant="contained"
+                            onClick={handleAnswerConfirm}
+                            disabled={!selectedOption}
+                            sx={{
+                                fontSize: '0.9rem',
+                                fontWeight: 'bold',
+                                background: '#21CBF3',
+                                color: '#fff',
+                                border: '2px solid rgba(33, 150, 243, 0.3)',
+                                borderRadius: '25px',
+                                transition: 'all 0.3s ease',
+                                px: 4,
+                                py: 1.5,
+                                '&:hover': {
+                                    boxShadow: '0 8px 10px rgba(33, 150, 243, 0.5)',
+                                    transform: 'translateY(-3px) scale(1.02)',
+                                },
+                                '&:disabled': {
+                                    background: 'rgba(255, 255, 255, 0.1)',
+                                    color: 'rgba(255, 255, 255, 0.3)',
+                                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                                    cursor: 'not-allowed'
+                                },
+                            }}
+                        >
+                            Confirmar respuesta
+                        </Button>
+                    )}
+
+                    {answerConfirmed && ejercicio.tipo === 'grupo_opcion_multiple' && (
+                        <Button
+                            variant="contained"
+                            onClick={handleNextQuestion}
+                            startIcon={<ArrowForwardIcon />}
+                            sx={{
+                                fontSize: '0.9rem',
+                                fontWeight: 'bold',
+                                background: '#21CBF3',
+                                color: '#fff',
+                                border: '2px solid rgba(33, 150, 243, 0.3)',
+                                borderRadius: '25px',
+                                transition: 'all 0.3s ease',
+                                px: 4,
+                                py: 1.5,
+                                '&:hover': {
+                                    boxShadow: '0 8px 10px rgba(33, 150, 243, 0.5)',
+                                    transform: 'translateY(-3px) scale(1.02)',
+                                }
+                            }}
+                        >
+                            {currentQuestionIndex < ejercicio.preguntas.length - 1 ? 'Siguiente pregunta' : 'Ver resultados'}
+                        </Button>
+                    )}
+                </Box>
+            </Box>
+        );
+    };
+
+    const handleAnswerConfirm = () => {
+        if (ejercicio.tipo === 'grupo_opcion_multiple') {
+            const currentQuestion = ejercicio.preguntas[currentQuestionIndex];
+            const optionSelected = currentQuestion.opciones.find(opt => opt.texto === selectedOption);
+            const isCorrect = Boolean(optionSelected?.valor);
+
+            const newAnswer = {
+                questionId: currentQuestion.id,
+                selectedOption,
+                isCorrect,
+                question: currentQuestion.pregunta
+            };
+
+            setGroupAnswers(prev => [...prev, newAnswer]);
+            setAnswerConfirmed(true);
+        }
+    };
+
+    const handleNextQuestion = () => {
+        if (ejercicio.tipo === 'grupo_opcion_multiple') {
+            if (currentQuestionIndex < ejercicio.preguntas.length - 1) {
+                setCurrentQuestionIndex(prev => prev + 1);
+                setSelectedOption('');
+                setAnswerConfirmed(false);
+            } else {
+                setShowResults(true);
+            }
+        }
+    };
+
+    {/* Logica para ejercicios de código */ }
     const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor;
         monaco.editor.defineTheme('cyberTheme', {
@@ -124,114 +362,6 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
             setIsRunning(false);
         }, 1500);
     };
-
-    const handleSubmit = () => {
-        if (ejercicio?.tipo === 'opcion_multiple') {
-            console.log('Respuesta seleccionada:', selectedOption);
-            console.log('Respuesta correcta:', correctAnswer);
-            handleClose();
-        } else if (ejercicio?.tipo === 'codigo') {
-            console.log('Código enviado:', codeAnswer);
-            handleClose();
-        }
-    };
-
-    const renderMultipleChoice = () => (
-        <Box sx={{ p: 2 }}>
-            <Typography variant="h6" sx={{ color: '#81D4FA', mb: 3, fontFamily: "'Orbitron', sans-serif" }}>
-                {ejercicio.pregunta}
-            </Typography>
-
-            <FormControl component="fieldset" sx={{ width: '100%' }}>
-                <RadioGroup value={selectedOption} onChange={handleOptionChange} sx={{ gap: 2 }}>
-                    {ejercicio.opciones?.map((opcion, index) => {
-                        const esSeleccionada = selectedOption === opcion.texto;
-                        const esCorrecta = Boolean(opcion.valor);
-
-                        let borderColor = 'rgba(255, 255, 255, 0.1)';
-                        if (answerConfirmed) {
-                            if (esSeleccionada && esCorrecta) borderColor = '#4CAF50';
-                            else if (esSeleccionada && !esCorrecta) borderColor = '#f44336';
-                            else if (!esSeleccionada && esCorrecta) borderColor = '#4CAF50';
-                        } else {
-                            borderColor = esSeleccionada ? '#81D4FA' : 'rgba(255, 255, 255, 0.1)';
-                        }
-
-                        return (
-                            <Paper
-                                key={index}
-                                elevation={2}
-                                sx={{
-                                    background: 'rgba(255, 255, 255, 0.05)',
-                                    border: `2px solid ${borderColor}`,
-                                    borderRadius: '12px',
-                                    transition: 'all 0.3s ease',
-                                    '&:hover': {
-                                        background: 'rgba(255, 255, 255, 0.08)',
-                                        border: `2px solid ${borderColor}`,
-                                    }
-                                }}
-                            >
-                                <FormControlLabel
-                                    value={opcion.texto}
-                                    control={
-                                        <Radio
-                                            disabled={answerConfirmed}
-                                            sx={{
-                                                color: '#81D4FA',
-                                                '&.Mui-checked': {
-                                                    color: '#81D4FA'
-                                                }
-                                            }}
-                                        />
-                                    }
-                                    label={
-                                        <Typography sx={{ color: 'white', fontSize: '1.1rem' }}>
-                                            {opcion.texto}
-                                        </Typography>
-                                    }
-                                    sx={{
-                                        width: '100%',
-                                        margin: 0,
-                                        padding: '16px 20px',
-                                        borderRadius: '12px'
-                                    }}
-                                />
-                            </Paper>
-                        );
-                    })}
-                </RadioGroup>
-            </FormControl>
-
-            {!answerConfirmed && (
-                <Box sx={{ mt: 3 }}>
-                    <Button
-                        variant="contained"
-                        onClick={handleAnswerConfirm}
-                        disabled={!selectedOption}
-                        sx={{
-                            backgroundColor: '#81D4FA',
-                            color: '#000',
-                            fontWeight: 'bold',
-                            px: 4,
-                            py: 1.5,
-                            fontSize: '0.9rem',
-                            borderRadius: '12px',
-                            '&:hover': {
-                                boxShadow: '0 6px 10px rgba(129, 212, 250, 0.3)',
-                            },
-                            '&:disabled': {
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                color: 'rgba(255, 255, 255, 0.3)',
-                            }
-                        }}
-                    >
-                        Confirmar respuesta
-                    </Button>
-                </Box>
-            )}
-        </Box>
-    );
 
     const renderCodeExercise = () => (
         <Box sx={{ p: 2, height: 'calc(100vh - 200px)', display: 'flex', flexDirection: 'column' }}>
@@ -382,6 +512,19 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
         </Box>
     );
 
+    {/* Logica para enviar */ }
+    const handleSubmit = () => {
+        if (ejercicio?.tipo === 'grupo_opcion_multiple') {
+            console.log('Respuestas del grupo:', groupAnswers);
+            const correctAnswers = groupAnswers.filter(answer => answer.isCorrect).length;
+            console.log(`Respuestas correctas: ${correctAnswers}/${groupAnswers.length}`);
+            handleClose();
+        } else if (ejercicio?.tipo === 'codigo') {
+            console.log('Código enviado:', codeAnswer);
+            handleClose();
+        }
+    };
+
     return (
         <div>
             <Dialog
@@ -416,7 +559,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                         </IconButton>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-                            {ejercicio?.tipo === 'opcion_multiple' ? (
+                            {ejercicio?.tipo === 'grupo_opcion_multiple' ? (
                                 <QuizIcon sx={{ color: '#81D4FA', mr: 1 }} />
                             ) : (
                                 <CodeIcon sx={{ color: '#81D4FA', mr: 1 }} />
@@ -430,7 +573,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                 variant="h6"
                                 component="div"
                             >
-                                {ejercicio?.tipo === 'opcion_multiple' ? 'Pregunta' : 'Ejercicio de Código'}
+                                {ejercicio?.tipo === 'grupo_opcion_multiple' ? 'Pregunta' : 'Ejercicio de Código'}
                             </Typography>
                             <Chip
                                 label={`${ejercicio?.puntos || 0} pts`}
@@ -450,12 +593,12 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                 color="inherit"
                                 onClick={handleSubmit}
                                 disabled={
-                                    (ejercicio?.tipo === 'opcion_multiple' && !answerConfirmed) ||
+                                    (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
                                     (ejercicio?.tipo === 'codigo' && output === '')
                                 }
                                 startIcon={
                                     !(
-                                        (ejercicio?.tipo === 'opcion_multiple' && !answerConfirmed) ||
+                                        (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
                                         (ejercicio?.tipo === 'codigo' && output === '')
                                     ) && (
                                         <CheckCircleIcon sx={{ color: '#fff' }} />
@@ -478,11 +621,11 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     '&:hover': {
-                                        boxShadow: (ejercicio?.tipo === 'opcion_multiple' && !answerConfirmed) ||
+                                        boxShadow: (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
                                             (ejercicio?.tipo === 'codigo' && output === '')
                                             ? 'none'
                                             : '0 8px 10px rgba(102, 187, 106, 0.4)',
-                                        transform: (ejercicio?.tipo === 'opcion_multiple' && !answerConfirmed) ||
+                                        transform: (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
                                             (ejercicio?.tipo === 'codigo' && output === '')
                                             ? 'none'
                                             : 'translateY(-2px)',
@@ -495,14 +638,15 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                                     },
                                 }}
                             >
-                                {ejercicio?.tipo === 'opcion_multiple' ? 'Finalizar Ejercicio' : 'Terminar Ejercicio'}
+                                {ejercicio?.tipo === 'grupo_opcion_multiple' ? 'Finalizar Ejercicio' : 'Terminar Ejercicio'}
                             </Button>
                         </Box>
                     </Toolbar>
                 </AppBar>
 
                 <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
-                    {ejercicio?.tipo === 'opcion_multiple' && renderMultipleChoice()}
+                    {ejercicio?.tipo === 'grupo_opcion_multiple' && showResults && renderGroupResults()}
+                    {ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults && renderMultipleChoice()}
                     {ejercicio?.tipo === 'codigo' && renderCodeExercise()}
                 </Box>
             </Dialog>

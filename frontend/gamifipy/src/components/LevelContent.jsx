@@ -135,6 +135,29 @@ const LevelContent = ({ id_nivel }) => {
     };
 
     {/* Funciones para logica de Ejercicios */ }
+    const agruparEjercicios = (ejercicios) => {
+        const ejerciciosCodigo = ejercicios.filter(ej => ej.tipo === 'codigo');
+        const ejerciciosOpcionMultiple = ejercicios.filter(ej => ej.tipo === 'opcion_multiple');
+
+        const gruposOpcionMultiple = [];
+        for (let i = 0; i < ejerciciosOpcionMultiple.length; i += 5) {
+            const grupo = ejerciciosOpcionMultiple.slice(i, i + 5);
+            const grupoId = `grupo_opcion_multiple_${Math.floor(i / 5) + 1}`;
+            const todasCompletadas = grupo.every(ej => ej.intento_realizado);
+
+            gruposOpcionMultiple.push({
+                id: grupoId,
+                tipo: 'grupo_opcion_multiple',
+                preguntas: grupo,
+                nombre: `Preguntas ${i + 1}-${Math.min(i + 5, ejerciciosOpcionMultiple.length)}`,
+                intento_realizado: todasCompletadas,
+                puntos: grupo.reduce((sum, ej) => sum + (ej.puntos || 0), 0)
+            });
+        }
+
+        return [...gruposOpcionMultiple, ...ejerciciosCodigo];
+    };
+
     useEffect(() => {
         const getEjercicios = async () => {
             const [resOpciones, resCodigo] = await Promise.all([
@@ -158,8 +181,12 @@ const LevelContent = ({ id_nivel }) => {
                 resOpciones.json(),
                 resCodigo.json()
             ]);
-            setEjercicios([...dataOpciones.preguntas, ...dataCodigo.preguntas]);
-            console.log('Ejercicios data:', [...dataOpciones.preguntas, ...dataCodigo.preguntas]);
+            const todosEjercicios = [...dataOpciones.preguntas, ...dataCodigo.preguntas];
+            const ejerciciosAgrup = agruparEjercicios(todosEjercicios);
+            setEjercicios(ejerciciosAgrup);
+
+            console.log('Ejercicios data:', todosEjercicios);
+            console.log('Ejercicios agrupados:', ejerciciosAgrup);
         }
         getEjercicios();
     }, [id_nivel]);
@@ -174,13 +201,11 @@ const LevelContent = ({ id_nivel }) => {
         return Math.round((completedItems / items.length) * 100);
     };
 
-    const calculateExerciseProgress = (items) => {
-        const completedItems = items.filter(item => item.intento_realizado).length;
-        return Math.round((completedItems / items.length) * 100);
-    };
-
     const leccionesProgress = calculateLessonsProgress(lecciones);
-    const ejerciciosProgress = calculateExerciseProgress(ejercicios);
+    const ejerciciosCompletados = ejercicios.filter(ej => ej.intento_realizado).length;
+    const ejerciciosProgress = ejercicios.length > 0
+        ? Math.round((ejerciciosCompletados / ejercicios.length) * 100)
+        : 0;
     const ejerciciosEnabled = leccionesProgress === 100;
 
     return (
@@ -326,7 +351,7 @@ const LevelContent = ({ id_nivel }) => {
                                                 {ejerciciosProgress}% completado
                                             </span>
                                             <span className="level-progress-text-tiny">
-                                                {ejercicios.filter(e => e.intento_realizado).length} de {ejercicios.length} completados
+                                                {ejerciciosCompletados} de {ejercicios.length} completados
                                             </span>
                                         </div>
                                     ) : (
@@ -380,9 +405,17 @@ const LevelContent = ({ id_nivel }) => {
                                                             {ejercicio.intento_realizado ? <CheckCircle size={16} /> : index + 1}
                                                         </div>
                                                         <div className="level-item-text-container">
-                                                            <span className="level-item-name-small">{tipoLabels[ejercicio.tipo]}</span>
+                                                            <span className="level-item-name-small">
+                                                                {ejercicio.tipo === 'grupo_opcion_multiple'
+                                                                    ? ejercicio.nombre
+                                                                    : tipoLabels[ejercicio.tipo]
+                                                                }
+                                                            </span>
                                                             <div className="level-item-status">
                                                                 {ejercicio.intento_realizado ? 'Completado' : 'Pendiente'}
+                                                                {ejercicio.tipo === 'grupo_opcion_multiple' &&
+                                                                    ` (${ejercicio.preguntas.filter(p => p.intento_realizado).length}/${ejercicio.preguntas.length})`
+                                                                }
                                                             </div>
                                                         </div>
                                                     </div>
