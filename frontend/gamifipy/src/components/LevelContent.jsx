@@ -155,7 +155,7 @@ const LevelContent = ({ id_nivel }) => {
             });
         }
 
-        return [...gruposOpcionMultiple, ...ejerciciosCodigo];
+        return [...ejerciciosCodigo, ...gruposOpcionMultiple];
     };
 
     useEffect(() => {

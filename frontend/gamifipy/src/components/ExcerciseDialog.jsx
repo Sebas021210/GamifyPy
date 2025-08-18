@@ -121,6 +121,9 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
                             }}>
                                 {answer.isCorrect ? '✓ Correcto' : '✗ Incorrecto'}
                             </Typography>
+                            <Typography sx={{ color: 'white', fontFamily: "'Orbitron', sans-serif" }}>
+                                Retroalimentación: {answer.feedback || 'No hay retroalimentación disponible.'}
+                            </Typography>
                         </Paper>
                     ))}
                 </Box>
@@ -277,7 +280,7 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
         );
     };
 
-    const handleAnswerConfirm = () => {
+    const handleAnswerConfirm = async () => {
         if (ejercicio.tipo === 'grupo_opcion_multiple') {
             const currentQuestion = ejercicio.preguntas[currentQuestionIndex];
             const optionSelected = currentQuestion.opciones.find(opt => opt.texto === selectedOption);
@@ -292,6 +295,29 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
 
             setGroupAnswers(prev => [...prev, newAnswer]);
             setAnswerConfirmed(true);
+
+            try {
+                const response = await fetch(`http://localhost:8000/questions/${currentQuestion.id}/evaluar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                    body: JSON.stringify({ respuesta: selectedOption }),
+                });
+                if (!response.ok) {
+                    throw new Error('Error al enviar la respuesta');
+                }
+
+                const data = await response.json();
+                console.log('Respuesta enviada correctamente:', data);
+                setGroupAnswers(prev => prev.map(a =>
+                    a.questionId === currentQuestion.id ? { ...a, feedback: data.retroalimentacion } : a
+                ));
+                console.log('New answer con feedback:', { ...newAnswer, feedback: data.retroalimentacion });
+            } catch (error) {
+                console.error("Error guardando intento:", error);
+            }
         }
     };
 
@@ -515,12 +541,8 @@ function ExerciseDialog({ open, handleClose, ejercicio }) {
     {/* Logica para enviar */ }
     const handleSubmit = () => {
         if (ejercicio?.tipo === 'grupo_opcion_multiple') {
-            console.log('Respuestas del grupo:', groupAnswers);
-            const correctAnswers = groupAnswers.filter(answer => answer.isCorrect).length;
-            console.log(`Respuestas correctas: ${correctAnswers}/${groupAnswers.length}`);
             handleClose();
         } else if (ejercicio?.tipo === 'codigo') {
-            console.log('Código enviado:', codeAnswer);
             handleClose();
         }
     };
