@@ -54,7 +54,9 @@ async def get_multiple_choice_questions(nivel_id: int, db: Session = Depends(get
                 } for opcion in opciones
             ],
             "intento_realizado": ultimo_intento is not None,
-            "correcto": ultimo_intento.es_correcto if ultimo_intento else None
+            "correcto": ultimo_intento.es_correcto if ultimo_intento else None,
+            "respuesta_enviada": ultimo_intento.respuesta_enviada if ultimo_intento else None,
+            "retroalimentacion": ultimo_intento.retroalimentacion if ultimo_intento else None
         })
 
     return JSONResponse(content={"preguntas": resultado})

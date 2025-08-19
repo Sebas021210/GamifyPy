@@ -51,12 +51,47 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
             setOutput('');
         } else if (ejercicio?.tipo === 'grupo_opcion_multiple') {
             setCurrentQuestionIndex(0);
-            setGroupAnswers([]);
-            setShowResults(false);
             setSelectedOption('');
             setAnswerConfirmed(false);
+
+            if (ejercicio.intento_realizado) {
+                const previousAnswers = ejercicio.preguntas.map(pregunta => ({
+                    questionId: pregunta.id,
+                    selectedOption: pregunta.respuesta_enviada,
+                    isCorrect: pregunta.correcto,
+                    question: pregunta.pregunta,
+                    feedback: pregunta.retroalimentacion
+                }));
+                setGroupAnswers(previousAnswers);
+                setShowResults(true);
+            } else {
+                const preguntasRespondidas = ejercicio.preguntas.filter(p => p.intento_realizado);
+                if (preguntasRespondidas.length > 0) {
+                    const partialAnswers = preguntasRespondidas.map(pregunta => ({
+                        questionId: pregunta.id,
+                        selectedOption: pregunta.respuesta_enviada,
+                        isCorrect: pregunta.correcto,
+                        question: pregunta.pregunta,
+                        feedback: pregunta.retroalimentacion
+                    }));
+                    setGroupAnswers(partialAnswers);
+                    setCurrentQuestionIndex(preguntasRespondidas.length);
+                } else {
+                    setGroupAnswers([]);
+                    setCurrentQuestionIndex(0);
+                }
+                setShowResults(false);
+            }
         }
     }, [ejercicio, open]);
+
+    const handleCloseWithSave = () => {
+        if (ejercicio?.tipo === 'grupo_opcion_multiple' && groupAnswers.length > 0 && !showResults) {
+            updateEjercicios(ejercicio.id, groupAnswers);
+        }
+
+        handleClose();
+    };
 
     useEffect(() => {
         if (editorRef.current && ejercicio?.tipo === 'codigo') {
@@ -543,7 +578,7 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
     {/* Logica para enviar */ }
     const handleSubmit = () => {
         if (ejercicio?.tipo === 'grupo_opcion_multiple') {
-            updateEjercicios(ejercicio.id)
+            updateEjercicios(ejercicio.id, groupAnswers);
             handleClose();
         } else if (ejercicio?.tipo === 'codigo') {
             updateEjercicios(ejercicio.id);
@@ -577,7 +612,7 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                     <Toolbar>
                         <IconButton
                             edge="start"
-                            onClick={handleClose}
+                            onClick={handleCloseWithSave}
                             aria-label="close"
                             sx={{ color: 'white' }}
                         >

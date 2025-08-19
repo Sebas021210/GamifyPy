@@ -144,6 +144,7 @@ const LevelContent = ({ id_nivel }) => {
             const grupo = ejerciciosOpcionMultiple.slice(i, i + 5);
             const grupoId = `grupo_opcion_multiple_${Math.floor(i / 5) + 1}`;
             const todasCompletadas = grupo.every(ej => ej.intento_realizado);
+            const algunaEmpezada = grupo.some(ej => ej.intento_realizado);
 
             gruposOpcionMultiple.push({
                 id: grupoId,
@@ -151,6 +152,7 @@ const LevelContent = ({ id_nivel }) => {
                 preguntas: grupo,
                 nombre: `Preguntas ${i + 1}-${Math.min(i + 5, ejerciciosOpcionMultiple.length)}`,
                 intento_realizado: todasCompletadas,
+                progreso_parcial: algunaEmpezada && !todasCompletadas,
                 puntos: grupo.reduce((sum, ej) => sum + (ej.puntos || 0), 0)
             });
         }
@@ -191,17 +193,68 @@ const LevelContent = ({ id_nivel }) => {
         getEjercicios();
     }, [id_nivel]);
 
-    const updateEjercicios = (ejercicioId) => {
+    const updateEjercicios = (ejercicioId, completedAnswers = null) => {
         setEjercicios((prevEjercicios) => {
             const updatedEjercicios = prevEjercicios.map((ej) => {
                 if (ej.id === ejercicioId) {
-                    return { ...ej, intento_realizado: true };
+                    const updatedEjercicio = { ...ej };
+
+                    if (ej.tipo === 'grupo_opcion_multiple' && completedAnswers) {
+                        updatedEjercicio.preguntas = ej.preguntas.map(pregunta => {
+                            const answer = completedAnswers.find(ans => ans.questionId === pregunta.id);
+                            if (answer) {
+                                return {
+                                    ...pregunta,
+                                    intento_realizado: true,
+                                    respuesta_enviada: answer.selectedOption,
+                                    correcto: answer.isCorrect,
+                                    retroalimentacion: answer.feedback
+                                };
+                            }
+                            return pregunta;
+                        });
+
+                        const todasCompletadas = updatedEjercicio.preguntas.every(p => p.intento_realizado);
+                        const algunaEmpezada = updatedEjercicio.preguntas.some(p => p.intento_realizado);
+                        updatedEjercicio.intento_realizado = todasCompletadas;
+                        updatedEjercicio.progreso_parcial = algunaEmpezada && !todasCompletadas;
+                    } else if (ej.tipo === 'codigo') {
+                        updatedEjercicio.intento_realizado = true;
+                    }
+
+                    return updatedEjercicio;
                 }
                 return ej;
             });
 
             if (ejercicioSeleccionado && ejercicioSeleccionado.id === ejercicioId) {
-                setEjercicioSeleccionado((prev) => ({ ...prev, intento_realizado: true }));
+                const updatedSelected = { ...ejercicioSeleccionado };
+
+                if (ejercicioSeleccionado.tipo === 'grupo_opcion_multiple' && completedAnswers) {
+                    updatedSelected.preguntas = ejercicioSeleccionado.preguntas.map(pregunta => {
+                        const answer = completedAnswers.find(ans => ans.questionId === pregunta.id);
+                        if (answer) {
+                            return {
+                                ...pregunta,
+                                intento_realizado: true,
+                                respuesta_enviada: answer.selectedOption,
+                                correcto: answer.isCorrect,
+                                retroalimentacion: answer.feedback
+                            };
+                        }
+                        return pregunta;
+                    });
+
+                    const todasCompletadas = updatedSelected.preguntas.every(p => p.intento_realizado);
+                    const algunaEmpezada = updatedSelected.preguntas.some(p => p.intento_realizado);
+
+                    updatedSelected.intento_realizado = todasCompletadas;
+                    updatedSelected.progreso_parcial = algunaEmpezada && !todasCompletadas;
+                } else if (ejercicioSeleccionado.tipo === 'codigo') {
+                    updatedSelected.intento_realizado = true;
+                }
+
+                setEjercicioSeleccionado(updatedSelected);
             }
 
             return updatedEjercicios;
