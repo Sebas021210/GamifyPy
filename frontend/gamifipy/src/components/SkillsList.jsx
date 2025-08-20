@@ -47,28 +47,6 @@ const generatePositions = (totalSkills) => {
     return positions;
 };
 
-const generateConnections = (totalSkills) => {
-    const connections = [];
-    const cols = 10;
-
-    for (let i = 0; i < totalSkills; i++) {
-        const row = Math.floor(i / cols);
-        const col = i % cols;
-
-        if (col < cols - 1 && Math.random() > 0.6) {
-            connections.push({ from: i, to: i + 1 });
-        }
-        if (row < Math.floor((totalSkills - 1) / cols) && Math.random() > 0.7) {
-            const nextRowIndex = i + cols;
-            if (nextRowIndex < totalSkills) {
-                connections.push({ from: i, to: nextRowIndex });
-            }
-        }
-    }
-
-    return connections;
-};
-
 const styles = {
     container: {
         width: '100%',
@@ -85,14 +63,6 @@ const styles = {
         minWidth: 'fit-content',
         height: '600px',
         position: 'relative'
-    },
-    svg: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none'
     },
     skillNode: {
         position: 'absolute',
@@ -210,20 +180,6 @@ function SkillNode({ skill, position, isSelected, onClick, isUnlocked }) {
     );
 }
 
-function ConnectionLine({ fromPos, toPos, isActive }) {
-    return (
-        <line
-            x1={fromPos.x}
-            y1={fromPos.y}
-            x2={toPos.x}
-            y2={toPos.y}
-            stroke={isActive ? "rgba(59, 130, 246, 0.4)" : "rgba(255, 255, 255, 0.1)"}
-            strokeWidth="1"
-            style={{ transition: 'all 0.3s ease' }}
-        />
-    );
-}
-
 function SkillDetails({ skill }) {
     if (!skill) return null;
 
@@ -243,7 +199,6 @@ function SkillDetails({ skill }) {
 function Skills() {
     const [skills, setSkills] = useState([]);
     const [positions, setPositions] = useState([]);
-    const [connections, setConnections] = useState([]);
     const [selectedSkill, setSelectedSkill] = useState(null);
 
     useEffect(() => {
@@ -255,7 +210,6 @@ function Skills() {
                 if (Array.isArray(skillsData)) {
                     setSkills(skillsData);
                     setPositions(generatePositions(skillsData.length));
-                    setConnections(generateConnections(skillsData.length));
                 } else {
                     console.error('La respuesta de la API no contiene un array en "habilidades":', response);
                 }
@@ -276,19 +230,6 @@ function Skills() {
         <div style={styles.container}>
             <div style={styles.treeContainer}>
                 <div style={styles.treeContent}>
-                    <svg style={styles.svg}>
-                        {connections.map((connection, index) => (
-                            <ConnectionLine
-                                key={index}
-                                fromPos={positions[connection.from]}
-                                toPos={positions[connection.to]}
-                                isActive={selectedSkill &&
-                                    (selectedSkill.id === skills[connection.from].id ||
-                                        selectedSkill.id === skills[connection.to].id)}
-                            />
-                        ))}
-                    </svg>
-
                     {skills.map((skill, index) => (
                         <SkillNode
                             key={skill.id}
