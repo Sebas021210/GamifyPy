@@ -7,6 +7,7 @@ import Profile from './view/profile/profile.jsx';
 import Levels from './view/levels/levels.jsx';
 import LevelView from './view/LevelView/LevelView.jsx';
 import GoogleCallback from './components/GoogleCallback.jsx';
+import ProtectedRoute from './services/ProtectedRoute.jsx';
 import { refreshAccessToken } from './services/refreshToken.jsx';
 import './App.css'
 
@@ -28,9 +29,21 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/auth' element={<Auth />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/profile' element={<Profile />} />
-            <Route path='/levels' element={<Levels />} />
-            <Route path='/level/:levelId' element={<LevelView />} />
+            <Route path='/profile' element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
+            <Route path='/levels' element={
+              <ProtectedRoute>
+                <Levels />
+              </ProtectedRoute>
+            } />
+            <Route path='/level/:levelId' element={
+              <ProtectedRoute>
+                <LevelView />
+              </ProtectedRoute>
+            } />
             <Route path='/auth/callback' element={<GoogleCallback />} />
           </Routes>
         </Router>
