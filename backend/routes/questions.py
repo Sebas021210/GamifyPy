@@ -113,7 +113,7 @@ async def evaluate_question(
         raise HTTPException(status_code=404, detail="Pregunta no encontrada")
     
     if pregunta.tipo == "opcion_multiple":
-        es_correcto, retroalimentacion = evaluate_multiple_choice(db, pregunta, respuesta)
+        es_correcto, retroalimentacion = await evaluate_multiple_choice(db, pregunta, respuesta)
     elif pregunta.tipo == "codigo":
         try:
             es_correcto, retroalimentacion = await evaluate_code(pregunta, respuesta)

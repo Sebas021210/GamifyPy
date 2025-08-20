@@ -8,7 +8,7 @@ export async function refreshAccessToken() {
         if (!res.ok) throw new Error("No se pudo refrescar el token");
 
         const data = await res.json();
-        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("token", data.access_token);
         return data.access_token;
     } catch (err) {
         console.error("Error al refrescar token:", err);
