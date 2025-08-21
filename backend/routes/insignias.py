@@ -24,14 +24,31 @@ async def get_insignias(db: Session = Depends(get_db)):
 
 @router.post("/assign")
 async def assign_insignia(current_user: Usuario = Depends(get_current_user), db: Session = Depends(get_db)):
-    """ Endpoint para asignar una insignia a un usuario. """
+    """ Endpoint para asignar insignias a un usuario. """
     try:
         user_id = current_user.id
-        evaluate_level_completion(user_id, db)
-        evaluate_category_completion(user_id, db)
-        evaluate_question_progress(user_id, db)
+        nuevas_insignias = []
+        nuevas_insignias += evaluate_level_completion(user_id, db)
+        nuevas_insignias += evaluate_category_completion(user_id, db)
+        nuevas_insignias += evaluate_question_progress(user_id, db)
 
-        return JSONResponse(content={"message": "Insignias evaluadas y asignadas correctamente."})
+        insignias_info = []
+        if nuevas_insignias:
+            insignias_info = db.query(Insignia).filter(
+                Insignia.id.in_(nuevas_insignias)
+            ).all()
+
+        return JSONResponse(content={
+            "message": "Insignias evaluadas.",
+            "nuevas_insignias": [
+                {
+                    "id": ins.id,
+                    "nombre": ins.nombre,
+                    "descripcion": ins.descripcion,
+                    "icono": ins.icono
+                }
+                for ins in insignias_info
+            ]
+        })
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Play, BookOpen, Code, CheckCircle, Lock } from 'lucide-react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import LessonsDialog from './LessonsDialog';
 import ExerciseDialog from './ExcerciseDialog';
 import './LevelContent.css';
@@ -14,6 +15,8 @@ const LevelContent = ({ id_nivel }) => {
     const [lecciones, setLecciones] = useState([]);
     const [lessonsContent, setLessonsContent] = useState('');
     const [ejercicios, setEjercicios] = useState([]);
+    const [openInsigniaDialog, setOpenInsigniaDialog] = useState(false);
+    const [nuevasInsignias, setNuevasInsignias] = useState([]);
 
     {/* Funciones para el manejo de Dialog */ }
     const handleOpenLessonsDialog = async (leccion) => {
@@ -49,6 +52,34 @@ const LevelContent = ({ id_nivel }) => {
     const handleCloseExcerciseDialog = () => {
         setOpenExcerciseDialog(false);
     }
+
+    const handleCloseInsigniaDialog = () => {
+        setOpenInsigniaDialog(false);
+        setNuevasInsignias([]);
+    }
+
+    {/* Funciones para el manejo de Insignias */ }
+    const checkInsignias = async () => {
+        try {
+            const res = await fetch(`http://localhost:8000/insignias/assign`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data.nuevas_insignias && data.nuevas_insignias.length > 0) {
+                    setNuevasInsignias(data.nuevas_insignias);
+                    setOpenInsigniaDialog(true);
+                }
+            }
+        } catch (error) {
+            console.error("Error al verificar insignias:", error);
+        }
+    };
 
     {/* Funciones para logica de Lecciones */ }
     useEffect(() => {
@@ -95,6 +126,7 @@ const LevelContent = ({ id_nivel }) => {
                 setLeccionSeleccionada(prev => ({ ...prev, completada: true }));
             }
 
+            checkInsignias();
             return updatedLecciones;
         });
     };
@@ -259,6 +291,7 @@ const LevelContent = ({ id_nivel }) => {
 
             return updatedEjercicios;
         });
+        checkInsignias();
     };
 
     const tipoLabels = {
@@ -505,8 +538,132 @@ const LevelContent = ({ id_nivel }) => {
                     ejercicio={ejercicioSeleccionado}
                     updateEjercicios={updateEjercicios}
                 />
-
             </div>
+            <Dialog
+                open={openInsigniaDialog}
+                onClose={handleCloseInsigniaDialog}
+                aria-labelledby="insignia-dialog-title"
+                BackdropProps={{
+                    style: {
+                        backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    },
+                }}
+                PaperProps={{
+                    sx: {
+                        background: "linear-gradient(135deg, #111827, #1f2937)",
+                        border: "1px solid #374151",
+                        borderRadius: "24px",
+                        padding: "20px",
+                        maxWidth: "720px",
+                        width: "100%",
+                        color: "#ffffff",
+                        boxShadow: "0px 0px 20px rgba(0,0,0,0.8)",
+                    },
+                }}
+            >
+                <DialogTitle
+                    id="insignia-dialog-title"
+                    sx={{
+                        color: "#fff",
+                        fontWeight: "bold",
+                        fontSize: "1.5rem",
+                        textAlign: "center",
+                    }}
+                >
+                    ¡Nueva Insignia Desbloqueada!
+                </DialogTitle>
+
+                <DialogContent
+                    dividers
+                    sx={{
+                        overflowY: "auto",
+                        scrollbarWidth: "none",
+                        "&::-webkit-scrollbar": {
+                            display: "none",
+                        },
+                        padding: "20px",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr",
+                            gap: "24px",
+                            justifyItems: "center",
+                        }}
+                    >
+                        {nuevasInsignias.map((insignia) => (
+                            <div
+                                key={insignia.id}
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    padding: "16px",
+                                    borderRadius: "16px",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                                    transition: "transform 0.3s ease",
+                                    background: "linear-gradient(145deg, rgba(55,65,81,0.8), rgba(31,41,55,0.9))",
+                                    border: "1px solid #4b5563",
+                                    maxWidth: "350px",
+                                    width: "100%",
+                                }}
+                            >
+                                <img
+                                    src={`http://localhost:8000${insignia.icono.replace('/backend', '')}`}
+                                    alt={insignia.nombre}
+                                    style={{
+                                        width: "148px",
+                                        height: "148px",
+                                        marginBottom: "12px",
+                                        filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.4))",
+                                    }}
+                                />
+                                <h3
+                                    style={{
+                                        fontWeight: "600",
+                                        fontSize: "1rem",
+                                        textAlign: "center",
+                                        color: "#81D4FA",
+                                        margin: 0,
+                                    }}
+                                >
+                                    {insignia.nombre}
+                                </h3>
+                                <p
+                                    style={{
+                                        fontSize: "0.875rem",
+                                        color: "#d1d5db",
+                                        textAlign: "center",
+                                        marginTop: "4px",
+                                    }}
+                                >
+                                    {insignia.descripcion}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </DialogContent>
+
+                <DialogActions sx={{ justifyContent: "center", padding: "16px" }}>
+                    <Button
+                        variant="contained"
+                        onClick={handleCloseInsigniaDialog}
+                        sx={{
+                            background: "#81D4FA",
+                            color: "#111827",
+                            fontWeight: "bold",
+                            fontSize: "1rem",
+                            borderRadius: "12px",
+                            textTransform: "none",
+                            paddingX: "24px",
+                        }}
+                    >
+                        Cerrar
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
