@@ -6,6 +6,7 @@ import Register from './view/auth/register.jsx';
 import Profile from './view/profile/profile.jsx';
 import Levels from './view/levels/levels.jsx';
 import LevelView from './view/LevelView/LevelView.jsx';
+import ForgotPassword from './view/auth/ForgotPassword.jsx';
 import GoogleCallback from './components/GoogleCallback.jsx';
 import ProtectedRoute from './services/ProtectedRoute.jsx';
 import { refreshAccessToken } from './services/refreshToken.jsx';
@@ -45,6 +46,7 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path='/auth/callback' element={<GoogleCallback />} />
+            <Route path='/reset-password' element={<ForgotPassword />} />
           </Routes>
         </Router>
       </div>

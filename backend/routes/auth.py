@@ -5,12 +5,14 @@ from datetime import timedelta
 from backend.database import get_db, Usuario, ProgresoUsuario
 from sqlalchemy.orm import Session
 from backend.controllers.auth import ( create_access_token, create_refresh_token, verify_password, hash_password, 
-                                      send_verification_email, SECRET_KEY, ALGORITHM )
+                                      send_verification_email, create_reset_token, send_password_reset_email, 
+                                      SECRET_KEY, ALGORITHM )
 from backend.controllers.user_insignias import assign_insignia
-from backend.models.auth import LoginRequest, RegisterRequest, EmailRequest
+from backend.models.auth import LoginRequest, RegisterRequest, EmailRequest, ResetPasswordRequest
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from urllib.parse import urlencode
+from jose import JWTError
 from random import randint
 import jwt, os, httpx, traceback
 
@@ -19,6 +21,7 @@ router = APIRouter()
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 verification_codes = {}
+reset_token = {}
 
 @router.post("/login")
 async def login(login_request: LoginRequest, db=Depends(get_db)):
@@ -213,6 +216,34 @@ async def auth_callback(code: str, request: Request, db: Session = Depends(get_d
     except Exception:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Error en login con Google")
+
+@router.post("/forgot-password")
+async def forgot_password(request: EmailRequest, db: Session = Depends(get_db)):
+    user = db.query(Usuario).filter(Usuario.email == request.email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Correo no encontrado.")
+    
+    token = create_reset_token(user.email)
+    reset_token[user.email] = token
+
+    await send_password_reset_email(user.email, token)
+    return {"message": "Enlace de recuperación enviado al correo."}
+
+@router.post("/reset-password")
+async def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(data.token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+    except JWTError:
+        raise HTTPException(status_code=400, detail="Token inválido o expirado")
+    
+    user = db.query(Usuario).filter(Usuario.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    user.password = hash_password(data.new_password)
+    db.commit()
+    return {"message": "Contraseña actualizada correctamente."}
 
 @router.post("/refresh")
 async def refresh_token(refresh_token: str = Cookie(None), db = Depends(get_db)):

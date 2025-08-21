@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -7,74 +7,31 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import GoogleIcon from '@mui/icons-material/Google';
 import Alert from '@mui/material/Alert';
-import ResetPassword from '../../components/ResetPassword';
 import './auth.css'
 
-function Auth() {
+function ForgotPassword() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get("token");
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState(false);
-    const [openResetPassword, setOpenResetPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const [values, setValues] = useState({
-        email: '',
         password: '',
+        confirmPassword: '',
     });
 
     useEffect(() => {
-        if (error) {
+        if (errorMessage) {
             const timer = setTimeout(() => {
-                setError(false);
+                setErrorMessage('');
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [error]);
-
-    const handleRegister = () => {
-        navigate("/register", { replace: true });
-    }
-
-    const openResetDialog = () => {
-        setOpenResetPassword(true);
-    }
-
-    const closeResetDialog = () => {
-        setOpenResetPassword(false);
-    }
-
-    const handleLogin = async () => {
-        try {
-            const response = await fetch('http://localhost:8000/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: values.email,
-                    password: values.password,
-                }),
-            })
-            if (!response.ok) {
-                throw new Error('Error en la autenticación');
-            }
-            const data = await response.json();
-            localStorage.setItem('token', data.access_token);
-            console.log(data);
-            navigate("/levels", { replace: true })
-        } catch (error) {
-            console.error('Error al iniciar sesión:', error);
-            setError(true);
-            setValues({ email: '', password: '' });
-        }
-    }
-
-    const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:8000/auth/login/google';
-    };
+    }, [errorMessage]);
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -84,14 +41,45 @@ function Auth() {
         setShowPassword((show) => !show);
     };
 
+    const handleClickShowConfirmPassword = () => {
+        setShowConfirmPassword((show) => !show);
+    };
+
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
+    };
+
+    const handleNewPassword = async () => {
+        if (values.password !== values.confirmPassword) {
+            setErrorMessage('Las contraseñas no coinciden.');
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:8000/auth/reset-password", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: token,
+                    new_password: values.password,
+                }),
+            })
+            if (!response.ok) {
+                throw new Error("Error al cambiar la contraseña")
+            }
+            navigate("/auth", { replace: true });
+        } catch (error) {
+            setErrorMessage(error.message || 'Error al cambiar la contraseña');
+            return;
+        }
     };
 
     return (
         <div>
             {/* Alert flotante */}
-            {error && (
+            {errorMessage && (
                 <Box
                     sx={{
                         position: 'fixed',
@@ -103,13 +91,13 @@ function Auth() {
                     <Alert
                         severity="error"
                         variant="filled"
-                        onClose={() => setError(false)}
+                        onClose={() => setErrorMessage(false)}
                         sx={{
                             color: 'black',
                             backgroundColor: '#f44336',
                         }}
                     >
-                        Error al iniciar sesión. Verifica tus credenciales.
+                        {errorMessage}
                     </Alert>
                 </Box>
             )}
@@ -144,12 +132,12 @@ function Auth() {
                         sx={{
                             textAlign: 'center',
                             color: 'white',
-                            mt: 4,
-                            mb: 2,
+                            mt: 5,
+                            mb: 3,
                             fontWeight: 300,
                         }}
                     >
-                        ¡Bienvenido de regreso!
+                        Recuperar contraseña
                     </Typography>
 
                     <Typography
@@ -160,7 +148,7 @@ function Auth() {
                             mb: 2,
                         }}
                     >
-                        Ingresa tus credenciales para acceder a tu cuenta
+                        Ingresa tu nueva contraseña
                     </Typography>
 
                     {/* Formulario */}
@@ -170,7 +158,7 @@ function Auth() {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            mt: 3,
+                            mt: 7,
                             '& .MuiTextField-root': {
                                 m: 2,
                                 width: '30ch',
@@ -179,35 +167,6 @@ function Auth() {
                         noValidate
                         autoComplete="off"
                     >
-                        <TextField
-                            id="email"
-                            label="Correo Electrónico"
-                            variant="standard"
-                            value={values.email}
-                            onChange={handleChange('email')}
-                            InputLabelProps={{
-                                sx: {
-                                    color: 'white',
-                                    '&.Mui-focused': {
-                                        color: 'white',
-                                    },
-                                },
-                            }}
-                            InputProps={{
-                                sx: {
-                                    color: 'white',
-                                    '&:before': {
-                                        borderBottomColor: 'rgba(255, 255, 255, 0.42)',
-                                    },
-                                    '&:hover:not(.Mui-disabled):before': {
-                                        borderBottomColor: 'rgba(255, 255, 255, 0.87)',
-                                    },
-                                    '&:after': {
-                                        borderBottomColor: 'white',
-                                    },
-                                },
-                            }}
-                        />
                         <TextField
                             id="password"
                             label="Contraseña"
@@ -252,12 +211,56 @@ function Auth() {
                                 },
                             }}
                         />
+                        <TextField
+                            id="confirmPassword"
+                            label="Confirmar contraseña"
+                            variant="standard"
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            value={values.confirmPassword}
+                            onChange={handleChange('confirmPassword')}
+                            InputProps={{
+                                sx: {
+                                    color: 'white',
+                                    '&:before': {
+                                        borderBottomColor: 'rgba(255, 255, 255, 0.42)',
+                                    },
+                                    '&:hover:not(.Mui-disabled):before': {
+                                        borderBottomColor: 'rgba(255, 255, 255, 0.87)',
+                                    },
+                                    '&:after': {
+                                        borderBottomColor: 'white',
+                                    },
+                                },
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label={
+                                                showConfirmPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+                                            }
+                                            onClick={handleClickShowConfirmPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            sx={{ color: 'white' }}
+                                        >
+                                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            InputLabelProps={{
+                                sx: {
+                                    color: 'white',
+                                    '&.Mui-focused': {
+                                        color: 'white',
+                                    },
+                                },
+                            }}
+                        />
 
                         {/* Botón de Iniciar Sesión */}
                         <Button
                             variant="contained"
                             sx={{
-                                mt: 3,
+                                mt: 10,
                                 mb: 1,
                                 width: '40ch',
                                 backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -268,82 +271,10 @@ function Auth() {
                                     backgroundColor: 'rgba(255, 255, 255, 0.3)',
                                 },
                             }}
-                            onClick={handleLogin}
+                            onClick={handleNewPassword}
                         >
-                            Iniciar Sesión
+                            Cambiar contraseña
                         </Button>
-
-                        {/* Divider */}
-                        <Box sx={{ width: '30ch', my: 2 }}>
-                            <Divider sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
-                                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                                    o
-                                </Typography>
-                            </Divider>
-                        </Box>
-
-                        {/* Botón de Google */}
-                        <Button
-                            variant="outlined"
-                            startIcon={<GoogleIcon />}
-                            sx={{
-                                mt: 1,
-                                mb: 4,
-                                width: '40ch',
-                                color: 'white',
-                                borderColor: 'rgba(255, 255, 255, 0.5)',
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '&:hover': {
-                                    borderColor: 'rgba(255, 255, 255, 0.8)',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                                },
-                            }}
-                            onClick={handleGoogleLogin}
-                        >
-                            Continuar con Google
-                        </Button>
-
-                        {/* Enlaces inferiores */}
-                        <Box sx={{ textAlign: 'center' }}>
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    color: 'rgba(255, 255, 255, 0.8)',
-                                    cursor: 'pointer',
-                                    mb: 1,
-                                    '&:hover': {
-                                        color: 'white',
-                                        textDecoration: 'underline',
-                                    },
-                                }}
-                                onClick={() => openResetDialog()}
-                            >
-                                ¿Olvidaste tu contraseña?
-                            </Typography>
-                            <ResetPassword
-                                open={openResetPassword}
-                                handleClose={closeResetDialog}
-                            />
-
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    color: 'rgba(255, 255, 255, 0.7)',
-                                }}
-                            >
-                                ¿No tienes cuenta?{' '}
-                                <span
-                                    style={{
-                                        color: 'white',
-                                        cursor: 'pointer',
-                                        textDecoration: 'underline',
-                                    }}
-                                    onClick={handleRegister}
-                                >
-                                    Regístrate
-                                </span>
-                            </Typography>
-                        </Box>
                     </Box>
                 </Paper>
             </Box>
@@ -351,4 +282,4 @@ function Auth() {
     )
 }
 
-export default Auth;
+export default ForgotPassword;

@@ -92,3 +92,18 @@ async def send_verification_email(email: EmailStr, pin: str):
         subtype="plain"
     )
     await fastmail.send_message(message)
+
+def create_reset_token(email: str) -> str:
+    expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    data = {"sub": email, "exp": expire}
+    return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+
+async def send_password_reset_email(email: EmailStr, token: str):
+    reset_url = f"http://localhost:5173/reset-password?token={token}"
+    message = MessageSchema(
+        subject="Recuperación de contraseña",
+        recipients=[email],
+        body=f"Para restablecer tu contraseña, haz clic en este enlace:\n{reset_url}\nEste enlace expirará en 15 minutos.",
+        subtype="plain"
+    )
+    await fastmail.send_message(message)
