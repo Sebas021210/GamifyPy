@@ -36,6 +36,7 @@ async def login(login_request: LoginRequest, db=Depends(get_db)):
 
     response = JSONResponse(content={
         "access_token": access_token,
+        "refresh_token": refresh_token,
         "token_type": "bearer",
         "user": {
             "nombre": user.nombre,
@@ -43,16 +44,6 @@ async def login(login_request: LoginRequest, db=Depends(get_db)):
             "id": user.id,
         }
     })
-
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        httponly=True,
-        secure=False, # Set to True in production
-        samesite="lax",
-        max_age=7 * 24 * 60 * 60,
-        path="/auth/refresh"
-    )
 
     return response
 
@@ -193,24 +184,13 @@ async def auth_callback(code: str, request: Request, db: Session = Depends(get_d
 
         query_data = {
             "access_token": access_token,
+            "refresh_token": refresh_token,
             "name": user.nombre,
             "email": user.email,
         }
 
         redirect_url = f"{frontend_callback_url}?{urlencode(query_data)}"
-
         redirect_response = RedirectResponse(url=redirect_url)
-
-        redirect_response.set_cookie(
-            key="refresh_token",
-            value=refresh_token,
-            httponly=True,
-            secure=False,
-            samesite="lax",
-            max_age=7 * 24 * 60 * 60,
-            path="/auth/refresh"
-        )
-
         return redirect_response
 
     except Exception:
@@ -246,9 +226,11 @@ async def reset_password(data: ResetPasswordRequest, db: Session = Depends(get_d
     return {"message": "Contraseña actualizada correctamente."}
 
 @router.post("/refresh")
-async def refresh_token(refresh_token: str = Cookie(None), db = Depends(get_db)):
-    """ Endpoint para refrescar el token de acceso usando el token de actualización. """
+async def refresh_token(body: dict, db: Session = Depends(get_db)):
+    """ Refresca el token de acceso usando un refresh token JWT """
+    refresh_token = body.get("refresh_token")
     print(f"Refresh token received: {refresh_token}")
+
     if not refresh_token:
         raise HTTPException(status_code=401, detail="Missing refresh token")
 
@@ -262,11 +244,10 @@ async def refresh_token(refresh_token: str = Cookie(None), db = Depends(get_db))
         if not user:
             raise HTTPException(status_code=401, detail="User not found")
 
-        new_access_token = create_access_token(data={"sub": user.email})
+        new_access_token = create_access_token(data={"sub": user.email}, expires_delta=timedelta(minutes=15))
         return {"access_token": new_access_token, "token_type": "bearer"}
 
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Refresh token expired")
-
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Invalid refresh token. Error: {str(e)}")

@@ -1,8 +1,12 @@
 export async function refreshAccessToken() {
     try {
+        const refreshToken = localStorage.getItem("refresh_token");
+        if (!refreshToken) return null;
+
         const res = await fetch("http://localhost:8000/auth/refresh", {
             method: "POST",
-            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ refresh_token: refreshToken }),
         });
 
         if (!res.ok) throw new Error("No se pudo refrescar el token");

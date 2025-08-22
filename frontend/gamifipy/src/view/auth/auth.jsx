@@ -63,6 +63,7 @@ function Auth() {
             }
             const data = await response.json();
             localStorage.setItem('token', data.access_token);
+            localStorage.setItem("refresh_token", data.refresh_token);
             console.log(data);
             navigate("/levels", { replace: true })
         } catch (error) {

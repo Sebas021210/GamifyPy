@@ -7,9 +7,11 @@ const GoogleCallback = () => {
 
     useEffect(() => {
         const accessToken = searchParams.get("access_token");
+        const refreshToken = searchParams.get("refresh_token")
 
-        if (accessToken) {
+        if (accessToken && refreshToken) {
             localStorage.setItem('token', accessToken);
+            localStorage.setItem("refresh_token", refreshToken);
             navigate('/levels', { replace: true });
         } else {
             navigate('/auth');
