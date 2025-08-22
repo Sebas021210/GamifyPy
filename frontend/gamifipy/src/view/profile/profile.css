@@ -47,3 +47,30 @@
 .profile-skills h2 {
     font-size: 2rem;
 }
+
+@media (max-width: 600px) {
+    .page-container {
+        padding: 2rem 2rem 0 2rem;
+    }
+
+    .profile-Header-user {
+        font-size: 1rem;
+        padding-top: 0.5rem;
+    }
+
+    .profile-statistics {
+        margin-top: 1.5rem;
+        gap: 1rem;
+    }
+
+    .profile-statistics p {
+        padding: 0.75rem 0.75rem;
+        font-size: 0.75rem;
+        min-width: 160px;
+    }
+
+    .profile-insignias h2,
+    .profile-skills h2 {
+        font-size: 1.4rem;
+    }
+}

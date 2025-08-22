@@ -16,12 +16,12 @@ const PythonLevelsMap = () => {
     const handleProfile = () => {
         navigate("/profile");
     };
-    
+
     const getIconForLevel = (id) => {
         const iconMap = { 1: Code, 2: Code, 3: Brain, 4: Brain, 5: Zap, 6: Rocket, 7: Code, 8: Brain, 9: Zap, 10: Rocket, 11: Star, 12: Star, 13: Star, 14: Star };
         return iconMap[id] || Lock;
     }
-    
+
     useEffect(() => {
         const getLevels = async () => {
             try {
@@ -87,8 +87,12 @@ const PythonLevelsMap = () => {
 
         const circleStyles = {
             position: 'relative',
-            width: '80px',
-            height: '80px',
+            width: '12vw',
+            height: '12vw',
+            maxWidth: '80px',
+            maxHeight: '80px',
+            minWidth: '50px',
+            minHeight: '50px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -123,11 +127,31 @@ const PythonLevelsMap = () => {
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}>
-                            <Lock size={24} color="#d1d5db" />
+                            <Lock
+                                style={{
+                                    width: '4vw',
+                                    height: '4vw',
+                                    minWidth: '20px',
+                                    minHeight: '20px',
+                                    maxWidth: '32px',
+                                    maxHeight: '32px'
+                                }}
+                                color="#d1d5db"
+                            />
                         </div>
                     )}
 
-                    <Icon size={32} color={unlocked ? 'white' : '#9ca3af'} />
+                    <Icon
+                        style={{
+                            width: '5vw',
+                            height: '5vw',
+                            minWidth: '24px',
+                            minHeight: '24px',
+                            maxWidth: '40px',
+                            maxHeight: '40px'
+                        }}
+                        color={unlocked ? 'white' : '#9ca3af'}
+                    />
 
                     {completed && (
                         <div style={{
@@ -193,7 +217,7 @@ const PythonLevelsMap = () => {
             <div style={overlayStyles} />
             <div style={{ textAlign: 'center', padding: '32px 0', position: 'relative', zIndex: 10 }}>
                 <h1 style={{
-                    fontSize: '3.5rem',
+                    fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
                     fontWeight: 'bold',
                     color: 'white',
                     marginBottom: '8px',
