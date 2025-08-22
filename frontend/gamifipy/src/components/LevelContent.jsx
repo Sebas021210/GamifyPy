@@ -324,7 +324,17 @@ const LevelContent = ({ id_nivel }) => {
                         <div className="level-section-header" onClick={() => setLeccionesExpanded(!leccionesExpanded)}>
                             <div className="level-section-header-left">
                                 <div className="level-section-icon level-lecciones-icon">
-                                    <BookOpen size={32} color="white" />
+                                    <BookOpen
+                                        style={{
+                                            width: '2.5vw',
+                                            height: '2.5vw',
+                                            minWidth: '24px',
+                                            minHeight: '24px',
+                                            maxWidth: '40px',
+                                            maxHeight: '40px',
+                                        }}
+                                        color="white"
+                                    />
                                 </div>
                                 <div>
                                     <h2 className="level-section-title">Lecciones</h2>
@@ -441,7 +451,17 @@ const LevelContent = ({ id_nivel }) => {
                         <div className="level-section-header">
                             <div className="level-section-header-left">
                                 <div className="level-section-icon level-ejercicios-icon">
-                                    <Code size={32} color="white" />
+                                    <Code
+                                        style={{
+                                            width: '2.5vw',
+                                            height: '2.5vw',
+                                            minWidth: '24px',
+                                            minHeight: '24px',
+                                            maxWidth: '40px',
+                                            maxHeight: '40px',
+                                        }}
+                                        color="white"
+                                    />
                                 </div>
                                 <div>
                                     <h2 className="level-section-title">Ejercicios</h2>
