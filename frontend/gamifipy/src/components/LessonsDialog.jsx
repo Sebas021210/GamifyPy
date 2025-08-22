@@ -27,7 +27,7 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
     useEffect(() => {
         if (!open || !leccion) return;
         setLessonCompleted(leccion.completada || false);
-        
+
         if (!leccion.completada) {
             setIsButtonDisabled(true);
             setProgress(0);
@@ -154,9 +154,23 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                         <Box sx={{ ml: 'auto', p: 2 }}>
                             <Box sx={{ position: 'relative', display: 'inline-block' }}>
                                 {leccion?.completada ? (
-                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-                                        <CheckCircleIcon sx={{ fontSize: '1.6rem' }} />
-                                        <p>¡Lección Completada!</p>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: 1,
+                                        }}
+                                    >
+                                        <CheckCircleIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.6rem' } }} />
+                                        <p
+                                            style={{
+                                                fontSize: 'clamp(0.8rem, 2.5vw, 1rem)',
+                                                margin: 0,
+                                            }}
+                                        >
+                                            ¡Lección Completada!
+                                        </p>
                                     </Box>
                                 ) : (
                                     <Button
@@ -172,7 +186,7 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                                         sx={{
                                             py: 1.5,
                                             px: 3,
-                                            fontSize: '0.9rem',
+                                            fontSize: { xs: '0.7rem', sm: '0.9rem' },
                                             fontWeight: 'bold',
                                             position: 'relative',
                                             overflow: 'hidden',
@@ -184,7 +198,7 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                                                 : '#fff',
                                             border: '2px solid rgba(102, 187, 106, 0.3)',
                                             borderRadius: '25px',
-                                            minWidth: '200px',
+                                            minWidth: { xs: '130px', sm: '200px' },
                                             transition: 'all 0.3s ease',
                                             display: 'flex',
                                             justifyContent: 'center',
@@ -193,12 +207,10 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                                                 boxShadow: isButtonDisabled
                                                     ? 'none'
                                                     : '0 8px 10px rgba(102, 187, 106, 0.4)',
-                                                transform: isButtonDisabled
-                                                    ? 'none'
-                                                    : 'translateY(-2px)',
+                                                transform: isButtonDisabled ? 'none' : 'translateY(-2px)',
                                             },
                                             '&:disabled': {
-                                                cursor: 'not-allowed'
+                                                cursor: 'not-allowed',
                                             },
                                             '&::before': {
                                                 content: '""',
@@ -211,14 +223,14 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                                                 transition: 'width 0.05s linear',
                                                 zIndex: -1,
                                                 opacity: isButtonDisabled ? 0.8 : 0,
-                                            }
+                                            },
                                         }}
                                     >
                                         {isButtonDisabled ? (
                                             <AccessTimeIcon
                                                 sx={{
                                                     color: 'rgba(255, 255, 255, 0.5)',
-                                                    fontSize: '1.5rem'
+                                                    fontSize: { xs: '1.2rem', sm: '1.5rem' },
                                                 }}
                                             />
                                         ) : (

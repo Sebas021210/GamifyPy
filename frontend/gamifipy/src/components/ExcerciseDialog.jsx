@@ -113,21 +113,53 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
 
         return (
             <Box sx={{ p: 3, textAlign: 'center' }}>
-                <Typography variant="h4" sx={{ color: '#81D4FA', mb: 3, fontFamily: "'Orbitron', sans-serif" }}>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        color: '#81D4FA',
+                        mb: 3,
+                        fontFamily: "'Orbitron', sans-serif",
+                        fontSize: { xs: '1.2rem', sm: '2rem' }
+                    }}
+                >
                     ¡Ejercicio Completado!
                 </Typography>
 
                 <Box sx={{ mb: 4 }}>
-                    <Typography variant="h2" sx={{ color: percentage >= 70 ? '#4CAF50' : '#ff9800', mb: 1, fontFamily: "'Orbitron', sans-serif" }}>
+                    <Typography
+                        variant="h2"
+                        sx={{
+                            color: percentage >= 70 ? '#4CAF50' : '#ff9800',
+                            mb: 1,
+                            fontFamily: "'Orbitron', sans-serif",
+                            fontSize: { xs: '2rem', sm: '3rem' }
+                        }}
+                    >
                         {percentage}%
                     </Typography>
-                    <Typography variant="h6" sx={{ color: 'white', mb: 3, fontFamily: "'Orbitron', sans-serif" }}>
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            color: 'white',
+                            mb: 3,
+                            fontFamily: "'Orbitron', sans-serif",
+                            fontSize: { xs: '0.9rem', sm: '1.1rem' }
+                        }}
+                    >
                         {correctAnswers} de {totalQuestions} respuestas correctas
                     </Typography>
                 </Box>
 
                 <Box sx={{ textAlign: 'left', mb: 3 }}>
-                    <Typography variant="h6" sx={{ color: '#81D4FA', mb: 2, fontFamily: "'Orbitron', sans-serif" }}>
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            color: '#81D4FA',
+                            mb: 2,
+                            fontFamily: "'Orbitron', sans-serif",
+                            fontSize: { xs: '1rem', sm: '1.2rem' }
+                        }}
+                    >
                         Resumen de respuestas:
                     </Typography>
                     {groupAnswers.map((answer, index) => (
@@ -141,22 +173,51 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                                 border: `1px solid ${answer.isCorrect ? '#4CAF50' : '#f44336'}`
                             }}
                         >
-                            <Typography sx={{ color: 'white', fontWeight: 'bold', mb: 1, fontFamily: "'Orbitron', sans-serif" }}>
+                            <Typography
+                                sx={{
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    mb: 1,
+                                    fontFamily: "'Orbitron', sans-serif",
+                                    fontSize: { xs: '0.85rem', sm: '1rem' }
+                                }}
+                            >
                                 Pregunta {index + 1}:
                             </Typography>
-                            <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)', mb: 1, fontSize: '0.9rem' }}>
+                            <Typography
+                                sx={{
+                                    color: 'rgba(255, 255, 255, 0.8)',
+                                    mb: 1,
+                                    fontSize: { xs: '0.8rem', sm: '0.95rem' }
+                                }}
+                            >
                                 {answer.question}
                             </Typography>
-                            <Typography sx={{ color: 'white', fontFamily: "'Orbitron', sans-serif" }}>
+                            <Typography
+                                sx={{
+                                    color: 'white',
+                                    fontFamily: "'Orbitron', sans-serif",
+                                    fontSize: { xs: '0.8rem', sm: '0.95rem' }
+                                }}
+                            >
                                 Tu respuesta: {answer.selectedOption}
                             </Typography>
-                            <Typography sx={{
-                                color: answer.isCorrect ? '#4CAF50' : '#f44336',
-                                fontWeight: 'bold'
-                            }}>
+                            <Typography
+                                sx={{
+                                    color: answer.isCorrect ? '#4CAF50' : '#f44336',
+                                    fontWeight: 'bold',
+                                    fontSize: { xs: '0.8rem', sm: '0.95rem' }
+                                }}
+                            >
                                 {answer.isCorrect ? '✓ Correcto' : '✗ Incorrecto'}
                             </Typography>
-                            <Typography sx={{ color: 'white', fontFamily: "'Orbitron', sans-serif" }}>
+                            <Typography
+                                sx={{
+                                    color: 'white',
+                                    fontFamily: "'Orbitron', sans-serif",
+                                    fontSize: { xs: '0.75rem', sm: '0.9rem' }
+                                }}
+                            >
                                 Retroalimentación: {answer.feedback || 'No hay retroalimentación disponible.'}
                             </Typography>
                         </Paper>
@@ -427,19 +488,37 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
     };
 
     const renderCodeExercise = () => (
-        <Box sx={{ p: 2, height: 'calc(100vh - 200px)', display: 'flex', flexDirection: 'column' }}>
+        <Box
+            sx={{
+                p: 2,
+                height: 'calc(100vh - 200px)',
+                display: 'flex',
+                flexDirection: 'column'
+            }}
+        >
+            {/* Pregunta */}
             <Typography
                 variant="h6"
                 sx={{
                     color: '#81D4FA',
                     mb: 3,
-                    fontFamily: "'Orbitron', sans-serif"
+                    fontFamily: "'Orbitron', sans-serif",
+                    fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' }
                 }}
             >
                 {ejercicio.pregunta}
             </Typography>
 
-            <Box sx={{ display: 'flex', gap: 2, flexGrow: 1, minHeight: 0 }}>
+            {/* Contenedor editor + consola */}
+            <Box
+                sx={{
+                    display: 'flex',
+                    gap: 2,
+                    flexGrow: 1,
+                    minHeight: 0,
+                    flexDirection: { xs: 'column', md: 'row' }
+                }}
+            >
                 {/* Editor de código */}
                 <Paper
                     elevation={3}
@@ -450,17 +529,20 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                         borderRadius: '12px',
                         overflow: 'hidden',
                         display: 'flex',
-                        flexDirection: 'column'
+                        flexDirection: 'column',
+                        minHeight: { xs: '250px', md: 'auto' }
                     }}
                 >
-                    <Box sx={{
-                        p: 1.5,
-                        background: 'rgba(129, 212, 250, 0.1)',
-                        borderBottom: '1px solid rgba(129, 212, 250, 0.2)',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                    }}>
+                    <Box
+                        sx={{
+                            p: 1.5,
+                            background: 'rgba(129, 212, 250, 0.1)',
+                            borderBottom: '1px solid rgba(129, 212, 250, 0.2)',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}
+                    >
                         <Typography
                             variant="caption"
                             sx={{
@@ -476,8 +558,8 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                             onClick={runCode}
                             disabled={isRunning || !codeAnswer.trim()}
                             sx={{
-                                opacity: (isRunning || !codeAnswer.trim()) ? 0.3 : 1,
-                                transition: 'opacity 0.3s ease',
+                                opacity: isRunning || !codeAnswer.trim() ? 0.3 : 1,
+                                transition: 'opacity 0.3s ease'
                             }}
                         >
                             <PlayArrowIcon />
@@ -518,20 +600,23 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                 <Paper
                     elevation={3}
                     sx={{
-                        width: '300px',
+                        width: { xs: '100%', md: '300px' },
                         background: 'rgba(0, 0, 0, 0.6)',
                         border: '1px solid rgba(255, 255, 255, 0.1)',
                         borderRadius: '12px',
                         overflow: 'hidden',
                         display: 'flex',
-                        flexDirection: 'column'
+                        flexDirection: 'column',
+                        minHeight: { xs: '200px', md: 'auto' }
                     }}
                 >
-                    <Box sx={{
-                        p: 1.5,
-                        background: 'rgba(0, 0, 0, 0.3)',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}>
+                    <Box
+                        sx={{
+                            p: 1.5,
+                            background: 'rgba(0, 0, 0, 0.3)',
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                        }}
+                    >
                         <Typography
                             variant="caption"
                             sx={{
@@ -545,20 +630,20 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                         </Typography>
                     </Box>
 
-                    <Box sx={{
-                        flexGrow: 1,
-                        p: 2,
-                        fontFamily: 'monospace',
-                        fontSize: '0.85rem',
-                        color: '#00ff00',
-                        backgroundColor: '#000',
-                        overflow: 'auto',
-                        minHeight: '200px'
-                    }}>
+                    <Box
+                        sx={{
+                            flexGrow: 1,
+                            p: 2,
+                            fontFamily: 'monospace',
+                            fontSize: '0.85rem',
+                            color: '#00ff00',
+                            backgroundColor: '#000',
+                            overflow: 'auto',
+                            minHeight: '150px'
+                        }}
+                    >
                         {output ? (
-                            <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
-                                {output}
-                            </pre>
+                            <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{output}</pre>
                         ) : (
                             <Typography
                                 sx={{
@@ -619,17 +704,31 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                             <CloseIcon />
                         </IconButton>
 
-                        <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', ml: { xs: 1, sm: 2 } }}>
                             {ejercicio?.tipo === 'grupo_opcion_multiple' ? (
-                                <QuizIcon sx={{ color: '#81D4FA', mr: 1 }} />
+                                <QuizIcon
+                                    sx={{
+                                        display: { xs: 'none', sm: 'inline-flex' },
+                                        color: '#81D4FA',
+                                        mr: { sm: 1 },
+                                        fontSize: { sm: '1.5rem' },
+                                    }}
+                                />
                             ) : (
-                                <CodeIcon sx={{ color: '#81D4FA', mr: 1 }} />
+                                <CodeIcon
+                                    sx={{
+                                        display: { xs: 'none', sm: 'inline-flex' },
+                                        color: '#81D4FA',
+                                        mr: { sm: 1 },
+                                        fontSize: { sm: '1.5rem' },
+                                    }}
+                                />
                             )}
                             <Typography
                                 sx={{
                                     color: '#81D4FA',
-                                    fontSize: '1.5rem',
-                                    fontFamily: "'Orbitron', sans-serif"
+                                    fontSize: { xs: '1rem', sm: '1.3rem', md: '1.5rem' },
+                                    fontFamily: "'Orbitron', sans-serif",
                                 }}
                                 variant="h6"
                                 component="div"
@@ -640,15 +739,17 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                                 label={`${ejercicio?.puntos || 0} pts`}
                                 size="small"
                                 sx={{
-                                    ml: 2,
+                                    display: { xs: 'none', sm: 'inline-flex' },
+                                    ml: { sm: 2 },
+                                    fontSize: { sm: '0.8rem' },
                                     backgroundColor: 'rgba(129, 212, 250, 0.2)',
                                     color: '#81D4FA',
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
                                 }}
                             />
                         </Box>
 
-                        <Box sx={{ ml: 'auto', p: 2 }}>
+                        <Box sx={{ ml: 'auto', p: { xs: 1, sm: 2 } }}>
                             <Button
                                 variant="contained"
                                 color="inherit"
@@ -661,14 +762,12 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                                     !(
                                         (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
                                         (ejercicio?.tipo === 'codigo' && output === '')
-                                    ) && (
-                                        <CheckCircleIcon sx={{ color: '#fff' }} />
-                                    )
+                                    ) && <CheckCircleIcon sx={{ color: '#fff', fontSize: { xs: '1rem', sm: '1.3rem' } }} />
                                 }
                                 sx={{
-                                    py: 1.5,
-                                    px: 3,
-                                    fontSize: '0.9rem',
+                                    py: { xs: 1, sm: 1.5 },
+                                    px: { xs: 2, sm: 3 },
+                                    fontSize: { xs: '0.65rem', sm: '0.9rem' },
                                     fontWeight: 'bold',
                                     position: 'relative',
                                     overflow: 'hidden',
@@ -676,26 +775,28 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                                     color: '#fff',
                                     border: '2px solid rgba(102, 187, 106, 0.3)',
                                     borderRadius: '25px',
-                                    minWidth: '200px',
+                                    minWidth: { xs: '130px', sm: '200px' },
                                     transition: 'all 0.3s ease',
                                     display: 'flex',
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     '&:hover': {
-                                        boxShadow: (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
-                                            (ejercicio?.tipo === 'codigo' && output === '')
-                                            ? 'none'
-                                            : '0 8px 10px rgba(102, 187, 106, 0.4)',
-                                        transform: (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
-                                            (ejercicio?.tipo === 'codigo' && output === '')
-                                            ? 'none'
-                                            : 'translateY(-2px)',
+                                        boxShadow:
+                                            (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
+                                                (ejercicio?.tipo === 'codigo' && output === '')
+                                                ? 'none'
+                                                : '0 8px 10px rgba(102, 187, 106, 0.4)',
+                                        transform:
+                                            (ejercicio?.tipo === 'grupo_opcion_multiple' && !showResults) ||
+                                                (ejercicio?.tipo === 'codigo' && output === '')
+                                                ? 'none'
+                                                : 'translateY(-2px)',
                                     },
                                     '&:disabled': {
                                         background: 'rgba(255, 255, 255, 0.1)',
                                         color: 'rgba(255, 255, 255, 0.3)',
                                         border: '2px solid rgba(255, 255, 255, 0.2)',
-                                        cursor: 'not-allowed'
+                                        cursor: 'not-allowed',
                                     },
                                 }}
                             >
