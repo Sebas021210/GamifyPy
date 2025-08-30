@@ -1,18 +1,13 @@
 # Backend Dockerfile
-FROM python:3.11-slim AS backend_build
+FROM python:3.11-slim
 
-# Directorio de trabajo
-WORKDIR /app
+WORKDIR /app/backend
 
-# Copiar requisitos e instalar
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar todo el backend
-COPY backend/ ./backend
+COPY backend/ .
 
-# Exponer puerto backend
 EXPOSE 8000
 
-# Comando para backend
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
