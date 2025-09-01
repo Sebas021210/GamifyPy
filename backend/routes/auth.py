@@ -132,11 +132,12 @@ async def login_google(request: Request):
 async def auth_callback(code: str, request: Request, db: Session = Depends(get_db)):
     try:
         token_request_uri = "https://oauth2.googleapis.com/token"
+        redirect_uri = str(request.url_for("auth_callback")).replace("http://", "https://")
         data = {
             'code': code,
             'client_id': GOOGLE_CLIENT_ID,
             'client_secret': GOOGLE_CLIENT_SECRET,
-            'redirect_uri': request.url_for('auth_callback'),
+            'redirect_uri': redirect_uri,
             'grant_type': 'authorization_code',
         }
 
