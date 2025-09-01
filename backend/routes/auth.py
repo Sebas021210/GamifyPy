@@ -118,7 +118,7 @@ async def verify_pin(email: EmailStr = Body(...), pin: str = Body(...)):
 
 @router.get("/login/google")
 async def login_google(request: Request):
-    redirect_uri = request.url_for('auth_callback')
+    redirect_uri = str(request.url_for("auth_callback")).replace("http://", "https://")
     google_auth_url = (
         f"https://accounts.google.com/o/oauth2/auth"
         f"?client_id={GOOGLE_CLIENT_ID}"
