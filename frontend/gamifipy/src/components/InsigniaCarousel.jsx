@@ -73,7 +73,7 @@ function Insignias() {
             }}
         >
             <img
-                src={`https://gamifypy.online/api${item.icono.replace('/backend', '')}`}
+                src={`https://gamifypy.online/${item.icono.replace('/backend', '')}`}
                 alt={item.nombre}
                 style={{ width: '160px', height: '160px', objectFit: 'contain' }}
             />
