@@ -21,7 +21,7 @@ app.include_router(category_level_router, prefix="/category-level", tags=["categ
 app.include_router(lessons_router, prefix="/lessons", tags=["lessons"])
 app.include_router(questions_router, prefix="/questions", tags=["questions"])
 app.include_router(insignias_router, prefix="/insignias", tags=["insignias"])
-app.mount("/static", StaticFiles(directory="backend/static"), name="static")
+app.mount("/api/static", StaticFiles(directory="backend/static"), name="static")
 
 if __name__ == "__main__":
     uvicorn.run(
