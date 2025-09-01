@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 import uvicorn
 from backend.routes import auth_router, user_router, category_level_router, lessons_router, questions_router, insignias_router
 
-app = FastAPI(title="GamifyPy")
+app = FastAPI(title="GamifyPy", openapi_prefix="/api")
 
 origins = ["*"]
 app.add_middleware(
