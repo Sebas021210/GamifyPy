@@ -180,7 +180,7 @@ async def auth_callback(code: str, request: Request, db: Session = Depends(get_d
         access_token = create_access_token(data={"sub": user.email}, expires_delta=timedelta(minutes=15))
         refresh_token = create_refresh_token(data={"sub": user.email}, expires_delta=timedelta(days=7))
 
-        frontend_callback_url = os.getenv("FRONTEND_CALLBACK", "http://localhost:5173/auth/callback")
+        frontend_callback_url = os.getenv("FRONTEND_CALLBACK", "https://gamifypy.online/auth/callback")
 
         query_data = {
             "access_token": access_token,

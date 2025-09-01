@@ -99,7 +99,7 @@ def create_reset_token(email: str) -> str:
     return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
 async def send_password_reset_email(email: EmailStr, token: str):
-    reset_url = f"http://localhost:5173/reset-password?token={token}"
+    reset_url = f"https://gamifypy.online/reset-password?token={token}"
     message = MessageSchema(
         subject="Recuperación de contraseña",
         recipients=[email],
