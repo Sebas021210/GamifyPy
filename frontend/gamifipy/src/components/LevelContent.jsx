@@ -631,7 +631,7 @@ const LevelContent = ({ id_nivel }) => {
                                 }}
                             >
                                 <img
-                                    src={`https://gamifypy.online/api${insignia.icono.replace('/backend', '')}`}
+                                    src={`https://gamifypy.online${insignia.icono.replace('/backend', '')}`}
                                     alt={insignia.nombre}
                                     style={{
                                         width: "148px",
