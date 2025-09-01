@@ -21,7 +21,7 @@ const LevelContent = ({ id_nivel }) => {
     {/* Funciones para el manejo de Dialog */ }
     const handleOpenLessonsDialog = async (leccion) => {
         try {
-            const response = await fetch(`http://localhost:8000/lessons/${leccion.id}`, {
+            const response = await fetch(`https://gamifypy.online/api/lessons/${leccion.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const LevelContent = ({ id_nivel }) => {
     {/* Funciones para el manejo de Insignias */ }
     const checkInsignias = async () => {
         try {
-            const res = await fetch(`http://localhost:8000/insignias/assign`, {
+            const res = await fetch(`https://gamifypy.online/api/insignias/assign`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -90,7 +90,7 @@ const LevelContent = ({ id_nivel }) => {
                     throw new Error("No token found");
                 }
 
-                const response = await fetch(`http://localhost:8000/category-level/${id_nivel}/lecciones`, {
+                const response = await fetch(`https://gamifypy.online/api/category-level/${id_nivel}/lecciones`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const LevelContent = ({ id_nivel }) => {
             const nextLesson = lecciones[nextIndex];
             if (!nextLesson.bloqueada) {
                 try {
-                    const response = await fetch(`http://localhost:8000/lessons/${nextLesson.id}`, {
+                    const response = await fetch(`https://gamifypy.online/api/lessons/${nextLesson.id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -195,14 +195,14 @@ const LevelContent = ({ id_nivel }) => {
     useEffect(() => {
         const getEjercicios = async () => {
             const [resOpciones, resCodigo] = await Promise.all([
-                fetch(`http://localhost:8000/questions/${id_nivel}/preguntas/opcion-multiple`, {
+                fetch(`https://gamifypy.online/api/questions/${id_nivel}/preguntas/opcion-multiple`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }),
-                fetch(`http://localhost:8000/questions/${id_nivel}/preguntas/codigo`, {
+                fetch(`https://gamifypy.online/api/questions/${id_nivel}/preguntas/codigo`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -631,7 +631,7 @@ const LevelContent = ({ id_nivel }) => {
                                 }}
                             >
                                 <img
-                                    src={`http://localhost:8000${insignia.icono.replace('/backend', '')}`}
+                                    src={`https://gamifypy.online/api${insignia.icono.replace('/backend', '')}`}
                                     alt={insignia.nombre}
                                     style={{
                                         width: "148px",

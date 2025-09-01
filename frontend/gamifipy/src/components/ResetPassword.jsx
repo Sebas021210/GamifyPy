@@ -11,7 +11,7 @@ export default function ResetPassword({ open, handleClose }) {
 
     const handleSend = async () => {
         try {
-            const response = await fetch("http://localhost:8000/auth/forgot-password", {
+            const response = await fetch("https://gamifypy.online/api/auth/forgot-password", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

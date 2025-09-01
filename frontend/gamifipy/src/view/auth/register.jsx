@@ -70,7 +70,7 @@ function Register() {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/auth/send-pin', {
+            const response = await fetch('https://gamifypy.online/api/auth/send-pin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ function Register() {
         }
 
         try {
-            const verifyResponse = await fetch('http://localhost:8000/auth/verify-pin', {
+            const verifyResponse = await fetch('https://gamifypy.online/api/auth/verify-pin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ function Register() {
             }
             console.log('Pin verificado');
 
-            const registerResponse = await fetch('http://localhost:8000/auth/register', {
+            const registerResponse = await fetch('https://gamifypy.online/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -78,7 +78,7 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                 throw new Error("No token found");
             }
 
-            const response = await fetch(`http://localhost:8000/lessons/${leccion.id}/completar`, {
+            const response = await fetch(`https://gamifypy.online/api/lessons/${leccion.id}/completar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

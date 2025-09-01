@@ -393,7 +393,7 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
             setAnswerConfirmed(true);
 
             try {
-                const response = await fetch(`http://localhost:8000/questions/${currentQuestion.id}/evaluar`, {
+                const response = await fetch(`https://gamifypy.online/api/questions/${currentQuestion.id}/evaluar`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -465,7 +465,7 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
         console.log('Ejercicio:', ejercicio);
 
         try {
-            const response = await fetch(`http://localhost:8000/questions/${ejercicio.id}/evaluar`, {
+            const response = await fetch(`https://gamifypy.online/api/questions/${ejercicio.id}/evaluar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ function LevelView() {
     useEffect(() => {
         const getLevelInfo = async () => {
             try {
-                const respone = await fetch(`http://localhost:8000/category-level/niveles/${levelId}`, {
+                const respone = await fetch(`https://gamifypy.online/api/category-level/niveles/${levelId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

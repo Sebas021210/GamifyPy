@@ -39,7 +39,7 @@ function Insignias() {
                     throw new Error("No token found");
                 }
 
-                const response = await fetch('http://localhost:8000/user/insignias', {
+                const response = await fetch('https://gamifypy.online/api/user/insignias', {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ function Insignias() {
             }}
         >
             <img
-                src={`http://localhost:8000${item.icono.replace('/backend', '')}`}
+                src={`https://gamifypy.online/api${item.icono.replace('/backend', '')}`}
                 alt={item.nombre}
                 style={{ width: '160px', height: '160px', objectFit: 'contain' }}
             />

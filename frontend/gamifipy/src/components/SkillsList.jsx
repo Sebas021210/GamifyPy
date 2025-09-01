@@ -8,7 +8,7 @@ const generateSkills = async () => {
             throw new Error("No token found");
         }
 
-        const response = await fetch('http://localhost:8000/user/habilidades', {
+        const response = await fetch('https://gamifypy.online/api/user/habilidades', {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,

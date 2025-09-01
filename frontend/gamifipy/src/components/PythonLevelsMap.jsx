@@ -30,7 +30,7 @@ const PythonLevelsMap = () => {
                     throw new Error("No token found");
                 }
 
-                const response = await fetch('http://localhost:8000/category-level/niveles', {
+                const response = await fetch('https://gamifypy.online/api/category-level/niveles', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,

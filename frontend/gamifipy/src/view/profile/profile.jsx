@@ -22,7 +22,7 @@ function Profile() {
                 throw new Error("No token found");
             }
 
-            const responseMe = await fetch('http://localhost:8000/user/me', {
+            const responseMe = await fetch('https://gamifypy.online/api/user/me', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ function Profile() {
                 throw new Error("No token found");
             }
 
-            const responseProgreso = await fetch(`http://localhost:8000/user/progreso`, {
+            const responseProgreso = await fetch(`https://gamifypy.online/api/user/progreso`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,

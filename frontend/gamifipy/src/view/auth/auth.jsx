@@ -74,7 +74,7 @@ function Auth() {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:8000/auth/login/google';
+        window.location.href = 'https://gamifypy.online/api/auth/login/google';
     };
 
     const handleChange = (prop) => (event) => {
