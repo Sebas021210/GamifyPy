@@ -15,13 +15,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(user_router, prefix="/user", tags=["user"])
 app.include_router(category_level_router, prefix="/category-level", tags=["category_level"])
 app.include_router(lessons_router, prefix="/lessons", tags=["lessons"])
 app.include_router(questions_router, prefix="/questions", tags=["questions"])
 app.include_router(insignias_router, prefix="/insignias", tags=["insignias"])
-app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 
 if __name__ == "__main__":
     uvicorn.run(
