@@ -101,7 +101,6 @@ const LevelContent = ({ id_nivel }) => {
                     throw new Error('Error fetching lessons data');
                 }
                 const data = await response.json();
-                console.log('Lecciones data:', data);
                 setLecciones(data.lecciones);
             } catch (error) {
                 console.error('Error fetching lessons data:', error);
@@ -218,9 +217,6 @@ const LevelContent = ({ id_nivel }) => {
             const todosEjercicios = [...dataOpciones.preguntas, ...dataCodigo.preguntas];
             const ejerciciosAgrup = agruparEjercicios(todosEjercicios);
             setEjercicios(ejerciciosAgrup);
-
-            console.log('Ejercicios data:', todosEjercicios);
-            console.log('Ejercicios agrupados:', ejerciciosAgrup);
         }
         getEjercicios();
     }, [id_nivel]);
@@ -385,7 +381,6 @@ const LevelContent = ({ id_nivel }) => {
                                                 onClick={() => {
                                                     if (!leccion.bloqueada) {
                                                         setLeccionSeleccionada(leccion);
-                                                        console.log('Selected lesson:', leccion);
                                                         handleOpenLessonsDialog(leccion);
                                                     }
                                                 }}

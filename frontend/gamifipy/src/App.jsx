@@ -16,7 +16,6 @@ function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       refreshAccessToken();
-      console.log('Access token refreshed');
     }, 14 * 60 * 1000);
 
     return () => clearInterval(interval);

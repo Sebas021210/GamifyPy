@@ -117,7 +117,6 @@ function Register() {
             if (!verifyResponse.ok) {
                 throw new Error(verifyData.detail || 'Error al verificar el pin');
             }
-            console.log('Pin verificado');
 
             const registerResponse = await fetch('https://gamifypy.online/api/auth/register', {
                 method: 'POST',
@@ -134,7 +133,6 @@ function Register() {
             if (!registerResponse.ok) {
                 throw new Error(registerData.detail || 'Error al registrar el usuario');
             }
-            console.log('Usuario registrado:');
             setIsModalOpen(false);
             navigate("/auth", { replace: true });
         } catch (error) {

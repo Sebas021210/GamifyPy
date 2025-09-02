@@ -406,11 +406,9 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
                 }
 
                 const data = await response.json();
-                console.log('Respuesta enviada correctamente:', data);
                 setGroupAnswers(prev => prev.map(a =>
                     a.questionId === currentQuestion.id ? { ...a, feedback: data.retroalimentacion } : a
                 ));
-                console.log('New answer con feedback:', { ...newAnswer, feedback: data.retroalimentacion });
             } catch (error) {
                 console.error("Error guardando intento:", error);
             }
@@ -461,8 +459,6 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
     const runCode = async () => {
         setIsRunning(true);
         setOutput('Ejecutando código...');
-        console.log('Ejecutando código:', codeAnswer);
-        console.log('Ejercicio:', ejercicio);
 
         try {
             const response = await fetch(`https://gamifypy.online/api/questions/${ejercicio.id}/evaluar`, {
@@ -478,7 +474,6 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
             }
 
             const data = await response.json();
-            console.log('Respuesta del servidor:', data);
             setOutput(data.retroalimentacion || 'No se recibió salida del servidor.');
         } catch (error) {
             setOutput('Error al ejecutar el código: ' + error.message);

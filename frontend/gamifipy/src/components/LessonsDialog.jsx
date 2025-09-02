@@ -88,8 +88,6 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
             if (!response.ok) {
                 throw new Error('Error al completar la lección');
             }
-            const data = await response.json();
-            console.log('Lección completada:', data);
             updateLecciones(leccion.id);
         } catch (error) {
             console.error('Error al completar la lección:', error);

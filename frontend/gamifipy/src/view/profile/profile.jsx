@@ -35,8 +35,6 @@ function Profile() {
 
             const dataMe = await responseMe.json();
             setUserData(dataMe);
-            console.log("User data:", dataMe);
-
             setLoading(false);
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -64,8 +62,6 @@ function Profile() {
 
             const dataProgreso = await responseProgreso.json();
             setProgresoData(dataProgreso);
-            console.log("Progreso data:", dataProgreso);
-
             setLoading(false);
         } catch (error) {
             console.error("Error fetching progreso data:", error);
