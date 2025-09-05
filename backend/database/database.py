@@ -27,7 +27,7 @@ class Database:
     def connect(self):
         """Conecta a la base de datos PostgreSQL y crea un motor."""
         connection_string = os.getenv("DATABASE_URL_HETZNER")
-        self.engine = create_engine(connection_string, echo=True)
+        self.engine = create_engine(connection_string, echo=False)
 
     def create_tables(self):
         """Crea las tablas en la base de datos si no existen."""
