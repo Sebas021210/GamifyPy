@@ -4,6 +4,7 @@ import { Lock, Star, Play, Trophy, Zap, Code, Brain, Rocket } from 'lucide-react
 import IconButton from '@mui/material/IconButton';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LoadingBackdrop from './LoadingBackdrop';
+import { API_URL } from '../config';
 
 const PythonLevelsMap = () => {
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ const PythonLevelsMap = () => {
                     throw new Error("No token found");
                 }
 
-                const response = await fetch('https://gamifypy.online/api/category-level/niveles', {
+                const response = await fetch(`${API_URL}/category-level/niveles`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,

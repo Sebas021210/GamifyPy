@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Zap } from 'lucide-react';
+import { API_URL } from '../config';
 
 const generateSkills = async () => {
     try {
@@ -8,7 +9,7 @@ const generateSkills = async () => {
             throw new Error("No token found");
         }
 
-        const response = await fetch('https://gamifypy.online/api/user/habilidades', {
+        const response = await fetch(`${API_URL}/user/habilidades`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,

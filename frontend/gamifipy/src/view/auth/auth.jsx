@@ -14,6 +14,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Alert from '@mui/material/Alert';
 import ResetPassword from '../../components/ResetPassword';
 import './auth.css'
+import { API_URL } from '../../config';
 
 function Auth() {
     const navigate = useNavigate();
@@ -48,7 +49,7 @@ function Auth() {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('https://gamifypy.online/api/auth/login', {
+            const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ function Auth() {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = 'https://gamifypy.online/api/auth/login/google';
+        window.location.href = `${API_URL}/auth/login/google`;
     };
 
     const handleChange = (prop) => (event) => {

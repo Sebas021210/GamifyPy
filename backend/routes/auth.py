@@ -6,7 +6,7 @@ from backend.database import get_db, Usuario, ProgresoUsuario
 from sqlalchemy.orm import Session
 from backend.controllers.auth import ( create_access_token, create_refresh_token, verify_password, hash_password, 
                                       send_verification_email, create_reset_token, send_password_reset_email, 
-                                      SECRET_KEY, ALGORITHM )
+                                      SECRET_KEY, ALGORITHM, FRONTEND_URL )
 from backend.controllers.user_insignias import assign_insignia
 from backend.models.auth import LoginRequest, RegisterRequest, EmailRequest, ResetPasswordRequest
 from google.oauth2 import id_token
@@ -181,7 +181,7 @@ async def auth_callback(code: str, request: Request, db: Session = Depends(get_d
         access_token = create_access_token(data={"sub": user.email}, expires_delta=timedelta(minutes=15))
         refresh_token = create_refresh_token(data={"sub": user.email}, expires_delta=timedelta(days=7))
 
-        frontend_callback_url = os.getenv("FRONTEND_CALLBACK", "https://gamifypy.online/auth/callback")
+        frontend_callback_url = f"{FRONTEND_URL}/auth/callback"
 
         query_data = {
             "access_token": access_token,

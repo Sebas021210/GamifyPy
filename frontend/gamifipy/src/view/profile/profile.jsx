@@ -8,6 +8,7 @@ import Insignias from "../../components/InsigniaCarousel";
 import Skills from "../../components/SkillsList";
 import LoadingBackdrop from "../../components/LoadingBackdrop";
 import './profile.css'
+import { API_URL } from '../../config';
 
 function Profile() {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ function Profile() {
                 throw new Error("No token found");
             }
 
-            const responseMe = await fetch('https://gamifypy.online/api/user/me', {
+            const responseMe = await fetch(`${API_URL}/user/me`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -49,7 +50,7 @@ function Profile() {
                 throw new Error("No token found");
             }
 
-            const responseProgreso = await fetch(`https://gamifypy.online/api/user/progreso`, {
+            const responseProgreso = await fetch(`${API_URL}/user/progreso`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,

@@ -1,9 +1,11 @@
+import { API_URL } from '../config';
+
 export async function refreshAccessToken() {
     try {
         const refreshToken = localStorage.getItem("refresh_token");
         if (!refreshToken) return null;
 
-        const res = await fetch("https://gamifypy.online/api/auth/refresh", {
+        const res = await fetch(`${API_URL}/auth/refresh`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ refresh_token: refreshToken }),

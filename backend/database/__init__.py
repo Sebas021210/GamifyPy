@@ -4,10 +4,15 @@ from backend.database.schemas import (
     IntentoPregunta, OpcionPregunta, Insignia, InsigniaUsuario
 )
 
+_db = None
+
 def get_db():
     """Get the database session."""
-    db = Database()
-    session = db.get_session()
+    # Se reutiliza una sola conexión (engine) en lugar de crear una nueva en cada petición.
+    global _db
+    if _db is None:
+        _db = Database()
+    session = _db.get_session()
     try:
         yield session
     finally:

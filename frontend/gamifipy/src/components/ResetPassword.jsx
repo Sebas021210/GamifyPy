@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, TextField, Alert, Box } from '@mui/material';
+import { API_URL } from '../config';
 
 export default function ResetPassword({ open, handleClose }) {
     const [email, setEmail] = useState("")
@@ -11,7 +12,7 @@ export default function ResetPassword({ open, handleClose }) {
 
     const handleSend = async () => {
         try {
-            const response = await fetch("https://gamifypy.online/api/auth/forgot-password", {
+            const response = await fetch(`${API_URL}/auth/forgot-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

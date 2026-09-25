@@ -11,6 +11,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Alert from '@mui/material/Alert';
 import './auth.css'
+import { API_URL } from '../../config';
 
 function ForgotPassword() {
     const navigate = useNavigate();
@@ -56,7 +57,7 @@ function ForgotPassword() {
         }
 
         try {
-            const response = await fetch("https://gamifypy.online/api/auth/reset-password", {
+            const response = await fetch(`${API_URL}/auth/reset-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -13,6 +13,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Slide from '@mui/material/Slide';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { API_URL } from '../config';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -78,7 +79,7 @@ function LessonsDialog({ open, handleClose, leccion, lessonContent, updateLeccio
                 throw new Error("No token found");
             }
 
-            const response = await fetch(`https://gamifypy.online/api/lessons/${leccion.id}/completar`, {
+            const response = await fetch(`${API_URL}/lessons/${leccion.id}/completar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

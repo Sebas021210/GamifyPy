@@ -11,7 +11,8 @@ from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 import os
 
-SECRET_KEY = "clave_secreta_super_segura"
+SECRET_KEY = os.getenv("SECRET_KEY", "clave_secreta_super_segura")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
 ALGORITHM = "HS256"
 ph = PasswordHasher()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -99,7 +100,7 @@ def create_reset_token(email: str) -> str:
     return jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
 async def send_password_reset_email(email: EmailStr, token: str):
-    reset_url = f"https://gamifypy.online/reset-password?token={token}"
+    reset_url = f"{FRONTEND_URL}/reset-password?token={token}"
     message = MessageSchema(
         subject="Recuperación de contraseña",
         recipients=[email],

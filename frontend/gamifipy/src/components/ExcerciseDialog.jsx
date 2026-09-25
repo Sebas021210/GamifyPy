@@ -21,6 +21,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Editor from '@monaco-editor/react';
 import Slide from '@mui/material/Slide';
+import { API_URL } from '../config';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -393,7 +394,7 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
             setAnswerConfirmed(true);
 
             try {
-                const response = await fetch(`https://gamifypy.online/api/questions/${currentQuestion.id}/evaluar`, {
+                const response = await fetch(`${API_URL}/questions/${currentQuestion.id}/evaluar`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -461,7 +462,7 @@ function ExerciseDialog({ open, handleClose, ejercicio, updateEjercicios }) {
         setOutput('Ejecutando código...');
 
         try {
-            const response = await fetch(`https://gamifypy.online/api/questions/${ejercicio.id}/evaluar`, {
+            const response = await fetch(`${API_URL}/questions/${ejercicio.id}/evaluar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,12 +1,17 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-import uvicorn
+import uvicorn, os
 from backend.routes import auth_router, user_router, category_level_router, lessons_router, questions_router, insignias_router
 
-app = FastAPI(title="GamifyPy", openapi_prefix="/api")
+# ROOT_PATH solo se usa si el backend está detrás de un proxy que le quita un prefijo (ej. "/api").
+app = FastAPI(title="GamifyPy", root_path=os.getenv("ROOT_PATH", ""))
 
-origins = ["*"]
+# CORS_ORIGINS: dominios separados por coma (ej. "https://gamifypy.vercel.app"). Por defecto "*".
+origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "*").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

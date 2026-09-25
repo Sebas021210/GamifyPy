@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { Carousel } from 'primereact/carousel';
 import 'primereact/resources/themes/lara-light-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
+import { API_URL } from '../config';
 
 const responsiveOptions = [
     {
@@ -39,7 +40,7 @@ function Insignias() {
                     throw new Error("No token found");
                 }
 
-                const response = await fetch('https://gamifypy.online/api/user/insignias', {
+                const response = await fetch(`${API_URL}/user/insignias`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -73,7 +74,7 @@ function Insignias() {
             }}
         >
             <img
-                src={`https://gamifypy.online${item.icono.replace('/backend', '')}`}
+                src={`${API_URL}${item.icono.replace('/backend', '')}`}
                 alt={item.nombre}
                 style={{ width: '160px', height: '160px', objectFit: 'contain' }}
             />

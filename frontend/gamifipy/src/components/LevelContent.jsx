@@ -4,6 +4,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/
 import LessonsDialog from './LessonsDialog';
 import ExerciseDialog from './ExcerciseDialog';
 import './LevelContent.css';
+import { API_URL } from '../config';
 
 const LevelContent = ({ id_nivel }) => {
     const [leccionesExpanded, setLeccionesExpanded] = useState(false);
@@ -21,7 +22,7 @@ const LevelContent = ({ id_nivel }) => {
     {/* Funciones para el manejo de Dialog */ }
     const handleOpenLessonsDialog = async (leccion) => {
         try {
-            const response = await fetch(`https://gamifypy.online/api/lessons/${leccion.id}`, {
+            const response = await fetch(`${API_URL}/lessons/${leccion.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,7 +62,7 @@ const LevelContent = ({ id_nivel }) => {
     {/* Funciones para el manejo de Insignias */ }
     const checkInsignias = async () => {
         try {
-            const res = await fetch(`https://gamifypy.online/api/insignias/assign`, {
+            const res = await fetch(`${API_URL}/insignias/assign`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -90,7 +91,7 @@ const LevelContent = ({ id_nivel }) => {
                     throw new Error("No token found");
                 }
 
-                const response = await fetch(`https://gamifypy.online/api/category-level/${id_nivel}/lecciones`, {
+                const response = await fetch(`${API_URL}/category-level/${id_nivel}/lecciones`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -138,7 +139,7 @@ const LevelContent = ({ id_nivel }) => {
             const nextLesson = lecciones[nextIndex];
             if (!nextLesson.bloqueada) {
                 try {
-                    const response = await fetch(`https://gamifypy.online/api/lessons/${nextLesson.id}`, {
+                    const response = await fetch(`${API_URL}/lessons/${nextLesson.id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -194,14 +195,14 @@ const LevelContent = ({ id_nivel }) => {
     useEffect(() => {
         const getEjercicios = async () => {
             const [resOpciones, resCodigo] = await Promise.all([
-                fetch(`https://gamifypy.online/api/questions/${id_nivel}/preguntas/opcion-multiple`, {
+                fetch(`${API_URL}/questions/${id_nivel}/preguntas/opcion-multiple`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }),
-                fetch(`https://gamifypy.online/api/questions/${id_nivel}/preguntas/codigo`, {
+                fetch(`${API_URL}/questions/${id_nivel}/preguntas/codigo`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -626,7 +627,7 @@ const LevelContent = ({ id_nivel }) => {
                                 }}
                             >
                                 <img
-                                    src={`https://gamifypy.online${insignia.icono.replace('/backend', '')}`}
+                                    src={`${API_URL}${insignia.icono.replace('/backend', '')}`}
                                     alt={insignia.nombre}
                                     style={{
                                         width: "148px",

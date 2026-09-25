@@ -6,6 +6,7 @@ import Alert from '@mui/material/Alert';
 import TokenVerificationModal from '../../components/TokenVerificationModal';
 import TermsPrivacyModal from '../../components/TermsPrivacyModal';
 import './auth.css'
+import { API_URL } from '../../config';
 
 function Register() {
     const navigate = useNavigate();
@@ -70,7 +71,7 @@ function Register() {
         }
 
         try {
-            const response = await fetch('https://gamifypy.online/api/auth/send-pin', {
+            const response = await fetch(`${API_URL}/auth/send-pin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +104,7 @@ function Register() {
         }
 
         try {
-            const verifyResponse = await fetch('https://gamifypy.online/api/auth/verify-pin', {
+            const verifyResponse = await fetch(`${API_URL}/auth/verify-pin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -118,7 +119,7 @@ function Register() {
                 throw new Error(verifyData.detail || 'Error al verificar el pin');
             }
 
-            const registerResponse = await fetch('https://gamifypy.online/api/auth/register', {
+            const registerResponse = await fetch(`${API_URL}/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

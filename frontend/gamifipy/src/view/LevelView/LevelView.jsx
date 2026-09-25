@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LevelContent from "../../components/LevelContent";
 import './LevelView.css'
+import { API_URL } from '../../config';
 
 function LevelView() {
     const { levelId } = useParams();
@@ -14,7 +15,7 @@ function LevelView() {
     useEffect(() => {
         const getLevelInfo = async () => {
             try {
-                const respone = await fetch(`https://gamifypy.online/api/category-level/niveles/${levelId}`, {
+                const respone = await fetch(`${API_URL}/category-level/niveles/${levelId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
