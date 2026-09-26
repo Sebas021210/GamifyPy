@@ -11,6 +11,8 @@ import Divider from '@mui/material/Divider';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import GoogleIcon from '@mui/icons-material/Google';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import ResetPassword from '../../components/ResetPassword';
 import './auth.css'
@@ -20,6 +22,7 @@ function Auth() {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(false);
+    const [guestLoading, setGuestLoading] = useState(false);
     const [openResetPassword, setOpenResetPassword] = useState(false);
     const [values, setValues] = useState({
         email: '',
@@ -68,8 +71,27 @@ function Auth() {
             navigate("/levels", { replace: true })
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            setError(true);
+            setError('Error al iniciar sesión. Verifica tus credenciales.');
             setValues({ email: '', password: '' });
+        }
+    }
+
+    const handleGuestLogin = async () => {
+        setGuestLoading(true);
+        try {
+            const response = await fetch(`${API_URL}/auth/guest`, { method: 'POST' });
+            if (!response.ok) {
+                throw new Error('Error al crear la cuenta de invitado');
+            }
+            const data = await response.json();
+            localStorage.setItem('token', data.access_token);
+            localStorage.setItem("refresh_token", data.refresh_token);
+            navigate("/levels", { replace: true })
+        } catch (error) {
+            console.error('Error al entrar como invitado:', error);
+            setError('No se pudo entrar como invitado. Intenta de nuevo en unos segundos.');
+        } finally {
+            setGuestLoading(false);
         }
     }
 
@@ -110,7 +132,7 @@ function Auth() {
                             backgroundColor: '#f44336',
                         }}
                     >
-                        Error al iniciar sesión. Verifica tus credenciales.
+                        {error}
                     </Alert>
                 </Box>
             )}
@@ -128,7 +150,7 @@ function Auth() {
                     elevation={8}
                     sx={{
                         width: 600,
-                        height: 700,
+                        minHeight: 700,
                         backgroundColor: 'transparent',
                         backdropFilter: 'blur(10px)',
                         padding: 3,
@@ -289,7 +311,7 @@ function Auth() {
                             startIcon={<GoogleIcon />}
                             sx={{
                                 mt: 1,
-                                mb: 4,
+                                mb: 1,
                                 width: '40ch',
                                 color: 'white',
                                 borderColor: 'rgba(255, 255, 255, 0.5)',
@@ -303,6 +325,36 @@ function Auth() {
                         >
                             Continuar con Google
                         </Button>
+
+                        {/* Botón de Invitado */}
+                        <Button
+                            variant="text"
+                            startIcon={guestLoading ? <CircularProgress size={18} sx={{ color: 'white' }} /> : <PersonOutlineIcon />}
+                            disabled={guestLoading}
+                            sx={{
+                                mt: 0,
+                                mb: guestLoading ? 1 : 3,
+                                width: '40ch',
+                                color: 'rgba(255, 255, 255, 0.85)',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                },
+                                '&.Mui-disabled': {
+                                    color: 'rgba(255, 255, 255, 0.6)',
+                                },
+                            }}
+                            onClick={handleGuestLogin}
+                        >
+                            {guestLoading ? 'Preparando la demo...' : 'Probar como invitado'}
+                        </Button>
+                        {guestLoading && (
+                            <Typography
+                                variant="caption"
+                                sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 3, textAlign: 'center' }}
+                            >
+                                El servidor puede tardar hasta 1 minuto en despertar la primera vez.
+                            </Typography>
+                        )}
 
                         {/* Enlaces inferiores */}
                         <Box sx={{ textAlign: 'center' }}>

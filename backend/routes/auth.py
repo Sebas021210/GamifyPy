@@ -14,7 +14,8 @@ from google.auth.transport import requests
 from urllib.parse import urlencode
 from jose import JWTError
 from random import randint
-import jwt, os, httpx, traceback
+from sqlalchemy import func
+import jwt, os, httpx, traceback, uuid
 
 router = APIRouter()
 
@@ -22,6 +23,11 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 verification_codes = {}
 reset_token = {}
+
+# Cuentas temporales de invitado. ".invalid" es un dominio reservado: nunca recibe correos
+# y la validación de EmailStr lo rechaza, así que no se puede usar en recuperar contraseña.
+GUEST_EMAIL_DOMAIN = "invitado.gamifypy.invalid"
+GUEST_TTL = timedelta(days=7)
 
 @router.post("/login")
 async def login(login_request: LoginRequest, db=Depends(get_db)):
@@ -46,6 +52,51 @@ async def login(login_request: LoginRequest, db=Depends(get_db)):
     })
 
     return response
+
+@router.post("/guest")
+async def guest_login(db: Session = Depends(get_db)):
+    """ Crea una cuenta temporal de invitado para probar la plataforma sin registrarse. """
+    # Limpieza: elimina los invitados con más de 7 días (su progreso se borra en cascada).
+    db.query(Usuario).filter(
+        Usuario.email.like(f"%@{GUEST_EMAIL_DOMAIN}"),
+        Usuario.fecha_registro < func.now() - GUEST_TTL
+    ).delete(synchronize_session=False)
+    db.commit()
+
+    guest_id = uuid.uuid4().hex[:8]
+    user = Usuario(
+        nombre=f"Invitado {guest_id[:4].upper()}",
+        email=f"guest-{guest_id}@{GUEST_EMAIL_DOMAIN}",
+        password=None
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    primer_progreso = ProgresoUsuario(
+        id_usuario=user.id,
+        id_leccion=1,
+        completado=False
+    )
+    db.add(primer_progreso)
+    db.commit()
+
+    id_insignia = 53
+    assign_insignia(user.id, id_insignia, db)
+
+    access_token = create_access_token(data={"sub": user.email}, expires_delta=timedelta(minutes=15))
+    refresh_token = create_refresh_token(data={"sub": user.email}, expires_delta=GUEST_TTL)
+
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+        "user": {
+            "nombre": user.nombre,
+            "email": user.email,
+            "id": user.id,
+        }
+    }
 
 @router.post("/register")
 async def register(register_request: RegisterRequest, db=Depends(get_db)):
