@@ -27,12 +27,15 @@ Crea (o inicia sesión) con tu cuenta de **GitHub** en todas; así se conectan s
 - https://console.cloud.google.com (ya lo tienes si configuraste el login con Google)
 
 ### Sube los cambios a GitHub
-Render y Vercel despliegan **desde GitHub**, así que el código con la URL centralizada debe estar en el repo:
+Render y Vercel despliegan **desde GitHub**, así que el código con la URL centralizada debe estar en el repo.
+
+Esta guía usa una rama aparte, **`deploy`**, para no tocar `main` mientras pruebas. Cuando todo funcione, se hace merge a `main` (ver sección 9).
 
 ```bash
+git checkout -b deploy
 git add .
 git commit -m "Centralizar URL de la API y preparar despliegue"
-git push origin main
+git push -u origin deploy
 ```
 
 > El archivo `.env` está en `.gitignore`, así que tus claves **no** se suben. Las claves se escriben directamente en el panel de cada servicio.
@@ -150,7 +153,7 @@ Render va a construir la imagen con el `Dockerfile` de la raíz del repo y ejecu
    |---|---|
    | Name | `gamifypy-api` (esto define la URL: `https://gamifypy-api.onrender.com`) |
    | Language / Runtime | **Docker** |
-   | Branch | `main` |
+   | Branch | **`deploy`** |
    | Region | **Ohio (US East)** o **Virginia**, la más cercana a tu región de Neon |
    | Root Directory | *(vacío)* |
    | Dockerfile Path | `./Dockerfile` |
@@ -180,7 +183,7 @@ Render va a construir la imagen con el `Dockerfile` de la raíz del repo y ejecu
 ### Cosas que debes saber del plan gratis de Render
 - **Se duerme tras ~15 minutos sin tráfico.** La primera visita después de eso tarda **~30–60 segundos** en responder (*cold start*). Luego va normal.
 - Tienes ~750 horas gratis al mes por cuenta, suficiente para **un** servicio encendido todo el mes.
-- Cada `git push` a `main` redespliega automáticamente (*Auto-Deploy*). Si no quieres eso, desactívalo en *Settings*.
+- Cada `git push` a la rama configurada (`deploy`) redespliega automáticamente (*Auto-Deploy*). Si no quieres eso, desactívalo en *Settings*.
 - **Correos (SMTP):** Render ha restringido el tráfico SMTP saliente (puertos 25/465/587) en los servicios **gratuitos**. Si al registrarte **no llega el PIN** o el correo de recuperación, esa es la causa. Soluciones:
   - Usar el **login con Google** o el acceso de invitado (recomendado para el portafolio).
   - Cambiar el envío de correos a una API HTTP con plan gratis (Resend, Brevo, etc.).
@@ -209,6 +212,31 @@ Render va a construir la imagen con el `Dockerfile` de la raíz del repo y ejecu
    | `VITE_API_URL` | `https://gamifypy-api.onrender.com` (tu URL de Render, **sin** `/` al final) |
 
 5. **Deploy**. En uno o dos minutos te da la URL, por ejemplo `https://gamifypy.vercel.app`.
+
+### 4.1 Hacer que Vercel use la rama `deploy`
+
+Al importar el proyecto, Vercel **no** te deja escoger la rama: siempre despliega la rama por defecto del repo (`main`). Ese primer deploy tiene el código viejo (URLs a `gamifypy.online`), así que no va a funcionar. Es normal; hay que decirle a Vercel que use `deploy`.
+
+**¿Por qué no basta con subir la rama?** En Vercel, cualquier rama que no sea la de producción genera un *Preview deployment*, y los previews:
+- tienen **protección activada** (quien abra el link debe iniciar sesión en Vercel con acceso al proyecto), así que no sirven para el portafolio;
+- tienen una URL larga (`gamifypy-git-deploy-<usuario>.vercel.app`);
+- usan variables de entorno del entorno *Preview*, no las de *Production*.
+
+Por eso la solución es convertir `deploy` en la rama de **producción**:
+
+1. En el proyecto de Vercel: **Settings → Environments → Production**.
+   (En versiones anteriores del panel está en **Settings → Git → Production Branch**.)
+2. En **Branch Tracking**, cambia `main` por **`deploy`** y guarda (*Save*).
+3. Verifica que `VITE_API_URL` esté marcada para el entorno **Production** (Settings → Environment Variables).
+4. Cambiar la rama no redespliega por sí solo. Lanza un deploy nuevo desde `deploy` con un commit vacío:
+   ```bash
+   git checkout deploy
+   git commit --allow-empty -m "Redeploy en Vercel desde la rama deploy"
+   git push
+   ```
+5. En **Deployments** debe aparecer un deploy nuevo con la etiqueta **Production** y la rama `deploy`. Cuando termine, `https://gamifypy.vercel.app` ya tiene el código nuevo.
+
+> Para confirmar que el frontend llama al backend correcto: abre la página, F12 → pestaña **Network**, y revisa que las peticiones vayan a `https://gamifypy-api.onrender.com/...` y no a `gamifypy.online` ni a `localhost`.
 
 > **Importante:** las variables `VITE_...` se "incrustan" en el código al compilar. Si cambias `VITE_API_URL`, tienes que ir a *Deployments → ⋯ → Redeploy* para que surta efecto.
 
@@ -304,3 +332,25 @@ npm run dev                   # http://localhost:5173
 | Las imágenes de insignias no cargan | `VITE_API_URL` apunta mal | Deben cargar desde `https://<tu-backend>.onrender.com/static/insignias/...` |
 | Los ejercicios de código no dan retroalimentación | `OPENAI_API_KEY` inválida o sin saldo | Revisa *Billing* en OpenAI y los logs de Render |
 | Datos duplicados | Se corrió `seed_all` dos veces | Resetea la BD y córrelo una sola vez |
+| Vercel sigue llamando a `gamifypy.online` | Está desplegando `main` en lugar de `deploy` | Ver sección 4.1 |
+| El link de Vercel pide iniciar sesión en Vercel | Estás abriendo un *Preview*, no Production | Usa la URL de producción o cambia la rama de producción (4.1) |
+
+---
+
+## 9. Cuando todo funcione: pasar los cambios a `main`
+
+1. Haz merge de `deploy` a `main`:
+   ```bash
+   git checkout main
+   git pull
+   git merge deploy
+   git push
+   ```
+   (O en GitHub abre un *Pull Request* de `deploy` → `main` y dale *Merge*.)
+2. **Render:** tu servicio → **Settings → Build & Deploy → Branch** → cambia a `main` → guarda. Redespliega solo.
+3. **Vercel:** **Settings → Environments → Production → Branch Tracking** → cambia a `main` → guarda. Luego redespliega (*Deployments → ⋯ → Redeploy* sobre el último deploy, o haz cualquier push a `main`).
+4. Si ya no la necesitas, borra la rama:
+   ```bash
+   git branch -d deploy
+   git push origin --delete deploy
+   ```
