@@ -108,7 +108,8 @@ python -c "import secrets; print(secrets.token_urlsafe(48))"
 
 Las tablas se crean solas la primera vez que el backend se conecta (`Base.metadata.create_all`). El contenido (niveles, lecciones, preguntas, habilidades e insignias) se carga con un script. Lo más sencillo es hacerlo **una sola vez desde tu computadora**, apuntando a la base de datos en la nube.
 
-1. En la **raíz del proyecto** crea (o edita) el archivo `.env` y pon la cadena de Neon/Supabase:
+1. Crea el archivo **`backend/.env`** (copia `backend/.env.example`) y pon la cadena de Neon/Supabase en `DATABASE_URL`.
+   El backend busca el `.env` empezando en la carpeta `backend/`, así que ese es el que se usa (un `.env` en la raíz se ignora si existe `backend/.env`):
    ```env
    DATABASE_URL=postgresql://neondb_owner:XXXX@ep-...-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
    ```
@@ -119,7 +120,7 @@ Las tablas se crean solas la primera vez que el backend se conecta (`Base.metada
    pip install -r backend/requirements.txt
    ```
 
-3. Desde la **raíz del proyecto** ejecuta:
+3. Desde la **raíz del proyecto** (no desde `backend/`, porque el script lee las carpetas `Docs/` y `Content/`) ejecuta:
    ```bash
    python -m backend.database.seed_all
    ```
@@ -273,7 +274,7 @@ Si algo falla, abre las herramientas de desarrollador del navegador (F12 → *Co
 ## 7. Desarrollo local
 
 ```bash
-# Backend (desde la raíz del proyecto, con el .env en la raíz)
+# Backend (desde la raíz del proyecto; las variables van en backend/.env)
 pip install -r backend/requirements.txt
 uvicorn backend.main:app --reload --port 8000
 
