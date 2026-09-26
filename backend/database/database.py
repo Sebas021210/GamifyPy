@@ -5,7 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from backend.database.schemas import Base
 from dotenv import load_dotenv
-load_dotenv()
+from pathlib import Path
+# Siempre se usa backend/.env, sin importar desde dónde se ejecute Python.
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

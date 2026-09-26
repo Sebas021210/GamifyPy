@@ -1,5 +1,7 @@
 from dotenv import load_dotenv
-load_dotenv()
+from pathlib import Path
+# Siempre se usa backend/.env, sin importar desde dónde se ejecute Python.
+load_dotenv(Path(__file__).resolve().parent / ".env")
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

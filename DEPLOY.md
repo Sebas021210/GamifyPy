@@ -109,7 +109,8 @@ python -c "import secrets; print(secrets.token_urlsafe(48))"
 Las tablas se crean solas la primera vez que el backend se conecta (`Base.metadata.create_all`). El contenido (niveles, lecciones, preguntas, habilidades e insignias) se carga con un script. Lo más sencillo es hacerlo **una sola vez desde tu computadora**, apuntando a la base de datos en la nube.
 
 1. Crea el archivo **`backend/.env`** (copia `backend/.env.example`) y pon la cadena de Neon/Supabase en `DATABASE_URL`.
-   El backend busca el `.env` empezando en la carpeta `backend/`, así que ese es el que se usa (un `.env` en la raíz se ignora si existe `backend/.env`):
+   El backend **siempre** lee `backend/.env` (el `.env` de la raíz ya no se usa). Al correr el script verás `🔌 Conectando a: ...`: confirma que sea el host de Neon/Supabase y no `localhost`.
+   Si la base ya tiene contenido, el script se detiene sin cambiar nada.
    ```env
    DATABASE_URL=postgresql://neondb_owner:XXXX@ep-...-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
    ```

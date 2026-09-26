@@ -2,9 +2,11 @@ from backend.database import Pregunta, OpcionPregunta
 from sqlalchemy.orm import Session
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
+from pathlib import Path
 import os
 
-load_dotenv()
+# Siempre se usa backend/.env, sin importar desde dónde se ejecute Python.
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
